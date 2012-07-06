@@ -1,0 +1,12 @@
+AddDefaultCharset UTF-8
+ErrorDocument 401 /errors/401.html
+ErrorDocument 403 /errors/403.html
+ErrorDocument 404 /errors/404.html
+ErrorDocument 410 /errors/410.html
+ErrorDocument 501 /errors/501.html
+Options +FollowSymlinks -Indexes
+RewriteEngine on
+RewriteBase /
+RewriteRule ^(css|files|images|script)/(.*)$ $1/$2 [NE,NC,PT]
+RewriteRule ^(templates|components|modules|swap)/(.*).(css|png|jpg|gif|js|ico|swf|xml|xsl|flv|mp3|mp4|ttf)$ $1/$2.$3 [NE,NC,PT]
+RewriteRule ^(.*)$ http.php?%{QUERY_STRING}

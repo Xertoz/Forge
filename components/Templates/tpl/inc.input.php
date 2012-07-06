@@ -1,0 +1,1 @@
+<input <?php foreach ($attributes as $attr => $value) echo self::html($attr).'="'.self::html($value).'" '?>/>

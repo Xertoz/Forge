@@ -1,0 +1,20 @@
+div#components > div,
+div#modules > div {
+    float:left;
+    text-align:center;
+    margin-right:10px;
+    margin-bottom:10px;
+    padding-bottom:5px;
+    border:1px solid #fff;
+}
+
+div#components > div:hover,
+div#modules > div:hover {
+    font-weight:bold;
+    border:1px solid #efefef;
+}
+
+div#components > div img,
+div#modules > div img {
+    margin:15px;
+}

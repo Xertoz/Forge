@@ -1,0 +1,70 @@
+@import 'controller.css';
+@import 'messages.css';
+
+.admin table {
+    margin:15px 0;
+    border:1px solid #ccc;
+	border-collapse:collapse;
+    width:100%;
+}
+
+.admin table > thead {
+    background:#006699;
+    font:11px verdana,arial,helvetica,sans-serif;
+    line-height:22px;
+    border-bottom:1px solid #ccc;
+    color:#fff;
+}
+
+.admin table > tbody > tr {
+    background:#fff;
+    border:1px dashed #ccc;
+}
+
+.admin table > tbody > tr:hover {
+    background:#ffffcc;
+}
+
+.admin table > tbody > tr > td {
+    font:14px arial,helvetica,sans-serif;
+    line-height:30px;
+}
+
+.admin table > tbody > tr > td.actions {
+	width:0;
+	white-space:nowrap;	
+}
+
+.admin table > tbody > tr > td.actions > form {
+	display:inline;
+	vertical-align:middle;
+}
+
+.admin table > tfoot {
+    background:#d7d7d7;
+    font:11px verdana,arial,helvetica,sans-serif;
+    line-height:22px;
+    border-top:1px solid #ccc;
+}
+
+.admin table td,
+.admin table th {
+    padding:2px 5px;
+}
+
+.admin table th {
+    text-align:left;
+}
+
+.admin table img {
+    vertical-align:middle;
+}
+
+.admin table td.action {
+    width:16px;
+    margin:0 5px;
+}
+
+.admin .warning {
+    color:red;
+}

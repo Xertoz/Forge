@@ -1,0 +1,13 @@
+.controller {
+	padding:5px;
+}
+
+.controller.error {
+	border:1px dashed red;
+	background:#fcc;
+}
+
+.controller.success {
+	border:1px dashed green;
+	background:#cfc;
+}
