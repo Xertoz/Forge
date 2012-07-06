@@ -9,14 +9,11 @@
     */
     
     namespace forge\modules\Text\pages;
-    use \forge\components\SiteMap\Page;
-    use \forge\modules\Text\db\tables\TextEntry;
-    use \forge\components\Templates;
 
     /**
     * A text page definition
     */
-    class TextPage extends Page {
+    class Text extends \forge\components\SiteMap\Page {
         /**
         * Title
         * @var string
@@ -42,7 +39,7 @@
         * @return string
         */
         public function getEditForm($id) {
-            $text = new TextEntry();
+            $text = new \forge\modules\Text\db\Text();
             $text->page_id = $id;
             $text->select('page_id');
             return \forge\components\Templates::display('modules/Text/tpl/inc.edit.php',array('text'=>$text));
@@ -56,7 +53,7 @@
         * @throws Exception
         */
         public function edit($pageId,$pageData) {
-            $text = new TextEntry();
+            $text = new \forge\modules\Text\db\Text();
             $text->page_id = $pageId;
             $text->select('page_id');
             $text->text_content = $pageData;
@@ -71,7 +68,7 @@
         * @throws Exception
         */
         public function create($id,$page) {
-            $text = new TextEntry();
+            $text = new \forge\modules\Text\db\Text();
             $text->page_id = $id;
             $text->text_content = $page;
             $text->insert();
@@ -84,7 +81,7 @@
         * @throws Exception
         */
         public function delete($id) {
-            $page = new TextEntry();
+            $page = new \forge\modules\Text\db\Text();
             $page->page_id = $id;
             try {
                 $page->select('page_id');
@@ -103,7 +100,7 @@
         * @throws Exception
         */
         public function view($id,$vars) {
-            $page = new TextEntry();
+            $page = new \forge\modules\Text\db\Text();
             $page->page_id = $id;
             $page->select('page_id');
             return \forge\components\Templates::display(

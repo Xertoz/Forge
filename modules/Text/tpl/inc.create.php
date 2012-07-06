@@ -1,1 +1,1 @@
-<?php echo self::editor(array('name'=>'page[page][TextPage]')); ?>
+<?php echo self::editor(array('name'=>'plugin')); ?>

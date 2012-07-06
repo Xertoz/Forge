@@ -8,12 +8,12 @@
     * to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
     */
 
-    namespace forge\modules\Text\db\tables;
+    namespace forge\modules\Text\db;
 
     /**
     * Definition of the data for each page in the site map
     */
-    class TextEntry extends \forge\components\Databases\Table {
+    class Text extends \forge\components\Databases\Table {
         /**
         * Table name
         * @var string
@@ -24,7 +24,10 @@
         * Page ID
         * @var int
         */
-        public $page_id = 'Int';
+        public $page_id = [
+        	'Int',
+        	'index' => true
+        ];
 
         /**
         * Page contents

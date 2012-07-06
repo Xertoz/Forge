@@ -9,23 +9,11 @@
     */
 
     namespace forge\modules;
-    use \forge\Module;
-
-    require_once 'modules/Text/db/tbl.textpages.php';
-
-    require_once 'modules/Text/ajax.Text.php';
-    require_once 'modules/Text/api/page.Text.php';
 
     /**
     * A text page module for Forge 4
     */
-    class Text extends Module {
-        /**
-        * Component name
-        * @var string
-        */
-        protected $name = 'Text';
-
+    class Text extends \forge\Module {
         /**
         * Component version
         * @var string

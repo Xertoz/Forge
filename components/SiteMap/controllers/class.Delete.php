@@ -23,13 +23,21 @@
     		
     		try {
     			if (empty($_POST['page']['id']))
-    				throw new \Exception(_('The ID must not be empty'));
-    		
+    				throw new \forge\HttpException(_('The ID must not be empty'), \forge\HttpException::HTTP_BAD_REQUEST);
+    			
+    			\forge\components\Databases::DB()->beginTransaction();
+    			
     			$entry = new \forge\components\SiteMap\db\Page($_POST['page']['id']);
+    			(new $entry->page_type)->delete($entry->getID());
     			$entry->delete();
+    			
+    			\forge\components\Databases::DB()->commit();
     		}
     		catch (\Exception $e) {
-    			self::setResponse($e->getMessage(), self::RESULT_BAD);
+    			if (\forge\components\Databases::DB()->inTransaction())
+    				\forge\components\Databases::DB()->rollBack();
+    			
+    			throw $e;
     		}
     	}
     }

@@ -36,7 +36,7 @@
     			
     			\forge\components\Databases::DB()->beginTransaction();
     		
-    			$entry = new \forge\components\SiteMap\db\Page(empty($_POST['page']['id'])?null:$_POST['page']['id']);
+    			$entry = new \forge\components\SiteMap\db\Page($id=empty($_POST['page']['id'])?null:$_POST['page']['id']);
     		
     			$urlOriginal = $entry->page_url;
     		
@@ -50,13 +50,11 @@
     			$entry->meta_description = !isset($_POST['page']['meta_description'])?null:$_POST['page']['meta_description'];
     			$entry->meta_keywords = !isset($_POST['page']['meta_keywords'])?null:$_POST['page']['meta_keywords'];
     		
-    			$ref = explode('\\',$_POST['page']['type']);
-    			$data = array_pop($ref);
-    			$data = isset($_POST['plugin'][$data]) ? $_POST['plugin'][$data] : null;
+    			$data = isset($_POST['plugin']) ? $_POST['plugin'] : null;
     			
     			$entry->write();
     			
-    			if ($entry->getId())
+    			if ($id)
     				$instance->edit($entry->getId(),$data);
     			else
     				$instance->create($entry->getId(),$data);
@@ -91,6 +89,7 @@
     				\forge\components\Databases::DB()->rollBack();
     			
     			self::setResponse($e->getMessage(), self::RESULT_BAD);
+    			throw $e;
     		}
     	}
     }
