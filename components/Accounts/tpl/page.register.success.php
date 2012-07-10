@@ -1,3 +1,3 @@
 <div class="accounts thankyou">
-    <?php echo $message; ?>
+	<?php echo $message; ?>
 </div>

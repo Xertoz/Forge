@@ -20,12 +20,12 @@ forge.dom = {};
  * @return Element
  */
 forge.dom.next = function(elem) {
-    do {
-        elem = elem.nextSibling;
-    }
-    while (elem && elem.nodeType != 1);
+	do {
+		elem = elem.nextSibling;
+	}
+	while (elem && elem.nodeType != 1);
 
-    return elem;
+	return elem;
 };
 
 /**
@@ -34,10 +34,10 @@ forge.dom.next = function(elem) {
  * @return Element
  */
 forge.dom.prev = function(elem) {
-    do {
-        elem = elem.previousSibling;
-    }
-    while (elem && elem.nodeType != 1);
+	do {
+		elem = elem.previousSibling;
+	}
+	while (elem && elem.nodeType != 1);
 
-    return elem;
+	return elem;
 };

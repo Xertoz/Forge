@@ -1,20 +1,20 @@
 <div class="admin sitemap menu">
-    <h1><?php echo _('Pages'); ?></h1>
-    <?php if (\forge\Controller::getCode() == \forge\Controller::RESULT_BAD): ?>
-    	<p class="error"><?php echo self::html(\forge\Controller::getMessage()); ?></p>
-    <?php endif; ?>
-    <?php echo $pages->drawTable(
-    	array(
-    		'page_title' => _('Title'),
-    		'page_url' => _('URL'),
-    		'actions' => null
-    	),
-    	array(
-    		'page_url' => function($r) {
+	<h1><?php echo _('Pages'); ?></h1>
+	<?php if (\forge\Controller::getCode() == \forge\Controller::RESULT_BAD): ?>
+		<p class="error"><?php echo self::html(\forge\Controller::getMessage()); ?></p>
+	<?php endif; ?>
+	<?php echo $pages->drawTable(
+		array(
+			'page_title' => _('Title'),
+			'page_url' => _('URL'),
+			'actions' => null
+		),
+		array(
+			'page_url' => function($r) {
 				return '<a href="/'.self::html($r['page_url']).'">/'.self::html($r['page_url']).'</a>';
-    		},
-    		'actions' => function($r) {
-    			$output = '<a href="/admin/SiteMap/page?id='.$r['forge_id'].'"><img src="/images/led/application_edit.png" alt="'._('Edit').'" title="'._('Edit').'" /></a>'.PHP_EOL;
+			},
+			'actions' => function($r) {
+				$output = '<a href="/admin/SiteMap/page?id='.$r['forge_id'].'"><img src="/images/led/application_edit.png" alt="'._('Edit').'" title="'._('Edit').'" /></a>'.PHP_EOL;
 				$output .= '<form action="/admin/SiteMap" method="POST">';
 				$output .= '<input type="hidden" name="forge[controller]" value="SiteMap\Delete" />';
 				$output .= self::input('hidden', 'page[id]', $r['forge_id'], false);
@@ -23,6 +23,6 @@
 				return $output;
 			}
 		)
-    ); ?>
-    <a href="/admin/SiteMap/page"><img src="/images/led/add.png" alt="<?php echo _('New page'); ?>" title="<?php echo _('New page'); ?>"></a>
+	); ?>
+	<a href="/admin/SiteMap/page"><img src="/images/led/add.png" alt="<?php echo _('New page'); ?>" title="<?php echo _('New page'); ?>"></a>
 </div>

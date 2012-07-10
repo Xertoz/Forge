@@ -1,13 +1,13 @@
 div.admin.templates > div.template {
-    width:300px;
-    height:250px;
-    text-align:center;
-    line-height:250px;
-    float:left;
+	width:300px;
+	height:250px;
+	text-align:center;
+	line-height:250px;
+	float:left;
 }
 
 div.admin.templates > div.template > a > img {
-    max-height:200px;
-    max-width:250px;
-    vertical-align:middle;
+	max-height:200px;
+	max-width:250px;
+	vertical-align:middle;
 }

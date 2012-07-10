@@ -1,27 +1,27 @@
 <?php
-    /**
-    * ajax.Accounts.php
-    * Copyright 2009-2012 Mattias Lindholm
-    *
-    * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
-    * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
-    * to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
-    */
+	/**
+	* ajax.Accounts.php
+	* Copyright 2009-2012 Mattias Lindholm
+	*
+	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
+	* to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
+	*/
 
-    namespace forge\components\Accounts;
-    use \forge\components\Accounts;
-    use \forge\HttpException;
+	namespace forge\components\Accounts;
+	use \forge\components\Accounts;
+	use \forge\HttpException;
 
-    /**
-    * Accounts AJAX plugin
-    */
-    class Ajax extends \forge\components\XML\controllers\XML {
+	/**
+	* Accounts AJAX plugin
+	*/
+	class Ajax extends \forge\components\XML\controllers\XML {
 
-        /**
-        * Send a link to a password reset page to the user
-        */
-        static public function sendLostPasswordLink(\XMLWriter $xml) {
-        	// Make sure we have a valid email address
+		/**
+		* Send a link to a password reset page to the user
+		*/
+		static public function sendLostPasswordLink(\XMLWriter $xml) {
+			// Make sure we have a valid email address
 			if (empty($_POST['email']))
 				throw new \forge\HttpException(_('No email address was set'), \forge\HttpException::HTTP_BAD_REQUEST);
 			if (!\forge\components\Mailer::isMail($_POST['email']))
@@ -59,13 +59,13 @@
 
 			// Tell the client we succeeded
 			$xml->writeElement('lostpassword');
-        }
+		}
 
-        /**
-        * Recover a password
-        */
-        static public function recoverPassword(\XMLWriter $xml) {
-        	// Make sure we have valid fields
+		/**
+		* Recover a password
+		*/
+		static public function recoverPassword(\XMLWriter $xml) {
+			// Make sure we have valid fields
 			if (empty($_POST['passwd1']) || empty($_POST['passwd2']))
 				throw new \forge\HttpException(_('Both password fields must be set'), \forge\HttpException::HTTP_BAD_REQUEST);
 			if ($_POST['passwd1'] != $_POST['passwd2'])
@@ -91,4 +91,4 @@
 			// Tell the client OK
 			$xml->writeElement('recover');
 		}
-    }
+	}

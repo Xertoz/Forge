@@ -5,22 +5,22 @@
 ?>
 
 function recover() {
-    $('#accountsRecover').attr('disabled', 'disabled');
+	$('#accountsRecover').attr('disabled', 'disabled');
 
-    $.ajax({
-        url: '/xml/Accounts/sendLostPasswordLink',
-        type: 'post',
-        data: {
-            email: $('#lost_password_email').val()
-        },
-        error: function() {
-    		$('#accountsRecover').removeAttr('disabled');
-    		forge.toast('We could not find an account for the given email address!', 'bad');
-    	},
-        success: function() {
-            window.location = '/user/recover-password';
-        }
-    });
+	$.ajax({
+		url: '/xml/Accounts/sendLostPasswordLink',
+		type: 'post',
+		data: {
+			email: $('#lost_password_email').val()
+		},
+		error: function() {
+			$('#accountsRecover').removeAttr('disabled');
+			forge.toast('We could not find an account for the given email address!', 'bad');
+		},
+		success: function() {
+			window.location = '/user/recover-password';
+		}
+	});
 
-    return false;
+	return false;
 }

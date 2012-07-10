@@ -16,22 +16,22 @@
 	// As a time zone must be set, use UTC for convenience
 	date_default_timezone_set('UTC');
 
-    /**
-    * Throw errors generated
-    * This function will ALWAYS throw an Exception
-    * @param int $errno
-    * @param string $msg
-    * @param string $file
-    * @param int $line
-    * @return void
-    * @throws Exception
-    */
-    function error_handler($errno, $msg, $file, $line) {
-        throw new \Exception($file.'('.$line.'): '.$msg, $errno);
-    }
-    
-    // Bind the error handler
-    set_error_handler('forge\error_handler', E_ALL);
+	/**
+	* Throw errors generated
+	* This function will ALWAYS throw an Exception
+	* @param int $errno
+	* @param string $msg
+	* @param string $file
+	* @param int $line
+	* @return void
+	* @throws Exception
+	*/
+	function error_handler($errno, $msg, $file, $line) {
+		throw new \Exception($file.'('.$line.'): '.$msg, $errno);
+	}
+	
+	// Bind the error handler
+	set_error_handler('forge\error_handler', E_ALL);
 	
 	/**
 	 * An autoloader for the Forge environment

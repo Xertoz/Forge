@@ -1,3 +1,3 @@
 <div class="accounts confirmation">
-    <?php echo $message; ?>
+	<?php echo $message; ?>
 </div>

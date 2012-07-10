@@ -1,18 +1,18 @@
 <?php
-    /**
-    * class.Interface.php
-    * Copyright 2012 Mattias Lindholm
-    *
-    * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
-    * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
-    * to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
-    */
+	/**
+	* class.Interface.php
+	* Copyright 2012 Mattias Lindholm
+	*
+	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
+	* to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
+	*/
 
-    namespace forge\components\Admin;
+	namespace forge\components\Admin;
 
-    /**
-    * The view that accounts for administration requests.
-    */
-    interface Administration {
-    	static public function index();
-    }
+	/**
+	* The view that accounts for administration requests.
+	*/
+	interface Administration {
+		static public function index();
+	}

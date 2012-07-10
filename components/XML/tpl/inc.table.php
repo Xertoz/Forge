@@ -1,35 +1,35 @@
 <table class="matrix">
-    <thead>
-        <tr>
-            <?php foreach ($columns as $title): ?>
-                <th><?php echo $title; ?></th>
-            <?php endforeach; ?>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($rows as $row): ?>
-            <tr>
-                <?php foreach ($columns as $key => $title): ?>
-                    <?php if (isset($row[$key])): ?>
-                        <td class="<?php echo $key; ?>"><?php echo isset($stylize[$key]) ? $stylize[$key]($row) : self::html($row[$key]); ?></td>
-                    <?php elseif (isset($stylize[$key])): ?>
-                        <td class="<?php echo $key; ?>"><?php echo $stylize[$key]($row); ?></td>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-    <tfoot>
-        <tr>
-            <th colspan="100%">
-                <?php if ($matrix->getPage() > 1): ?>
-                    <a href="?<?php foreach ($_GET as $key => $value) if ($key != 'page') echo urlencode($key).'='.urlencode($value).'&'; ?>page=<?php echo $matrix->getPage()-1; ?>"><?php echo _('Previous'); ?></a>
-                <?php endif; ?>
-                <span><?php echo $matrix->getPage(); ?>/<?php echo $matrix->getPages(); ?></span>
-                <?php if ($matrix->getPage() < $matrix->getPages()): ?>
-                    <a href="?<?php foreach ($_GET as $key => $value) if ($key != 'page') echo urlencode($key).'='.urlencode($value).'&'; ?>page=<?php echo $matrix->getPage()+1; ?>"><?php echo _('Next'); ?></a>
-                <?php endif; ?>
-            </th>
-        </tr>
-    </tfoot>
+	<thead>
+		<tr>
+			<?php foreach ($columns as $title): ?>
+				<th><?php echo $title; ?></th>
+			<?php endforeach; ?>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach ($rows as $row): ?>
+			<tr>
+				<?php foreach ($columns as $key => $title): ?>
+					<?php if (isset($row[$key])): ?>
+						<td class="<?php echo $key; ?>"><?php echo isset($stylize[$key]) ? $stylize[$key]($row) : self::html($row[$key]); ?></td>
+					<?php elseif (isset($stylize[$key])): ?>
+						<td class="<?php echo $key; ?>"><?php echo $stylize[$key]($row); ?></td>
+					<?php endif; ?>
+				<?php endforeach; ?>
+			</tr>
+		<?php endforeach; ?>
+	</tbody>
+	<tfoot>
+		<tr>
+			<th colspan="100%">
+				<?php if ($matrix->getPage() > 1): ?>
+					<a href="?<?php foreach ($_GET as $key => $value) if ($key != 'page') echo urlencode($key).'='.urlencode($value).'&'; ?>page=<?php echo $matrix->getPage()-1; ?>"><?php echo _('Previous'); ?></a>
+				<?php endif; ?>
+				<span><?php echo $matrix->getPage(); ?>/<?php echo $matrix->getPages(); ?></span>
+				<?php if ($matrix->getPage() < $matrix->getPages()): ?>
+					<a href="?<?php foreach ($_GET as $key => $value) if ($key != 'page') echo urlencode($key).'='.urlencode($value).'&'; ?>page=<?php echo $matrix->getPage()+1; ?>"><?php echo _('Next'); ?></a>
+				<?php endif; ?>
+			</th>
+		</tr>
+	</tfoot>
 </table>
