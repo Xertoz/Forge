@@ -75,7 +75,8 @@
 				null => 'forge\components\SiteMap\PageHandler',
 				'robots.txt' => 'forge\components\SiteMap\SiteMapHandler',
 				'sitemap' => 'forge\components\SiteMap\SiteMapHandler',
-				'xml' => 'forge\components\XML\XMLHandler'
+				'xml' => 'forge\components\XML\XMLHandler',
+				'json' => 'forge\components\JSON\JSONHandler'
 		);
 		foreach ($handlers as $base => $handler)
 			\forge\RequestHandler::register($base, $handler);
