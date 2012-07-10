@@ -42,43 +42,6 @@
         );
 
         /**
-        * Initiate the component
-        * @ignore
-        * @return void
-        */
-        static public function init() {
-            // If we have a cookie, utilize it.
-            if (!is_null($uid = \forge\Memory::cookie('account')) && !is_null($password = \forge\Memory::cookie('password')))
-                try {
-                    // Get the account in question
-                    $account = new \forge\components\Accounts\db\Account($uid);
-
-                    // Get all valid cookies associated with this account
-                    $cookies = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
-                        'type' => new \forge\components\Accounts\db\Cookie,
-                        'where' => array(
-                            'account' => $uid,
-                            'expire' => array('gt'=>time())
-                        )
-                    ]));
-
-                    // Loop over the cookies and see if any matches the requested one
-                    foreach ($cookies as /** @var \forge\components\Accounts\db\tables\Cookie **/ $cookie)
-                        if (md5($account->user_password.$cookie->salt) == $password) {
-                            // Trigger an extension of the cookie
-                            $cookie->save();
-                            \forge\Memory::cookie('account',$uid);
-                            \forge\Memory::cookie('password',$password);
-
-                            // If this is the first access of this session, log us in!
-                            if (!self::isAuthenticated())
-                                self::login($account->getID());
-                        }
-                }
-                catch (\Exception $e) {}
-        }
-
-        /**
         * Attempt to login a user into the current session
         * @param string Account / E-mail
         * @param string Password (clear text)
@@ -358,7 +321,6 @@
                 return;
             }
 
-
             // If not logged in, error it!
             throw new \forge\HttpException('AUTHORIZATION_REQUIRED', \forge\HttpException::HTTP_UNAUTHORIZED);
         }
@@ -510,3 +472,33 @@
         	), true);
         }
     }
+    
+    // If we have a cookie, utilize it.
+    if (!is_null($uid = \forge\Memory::cookie('account')) && !is_null($password = \forge\Memory::cookie('password')))
+    	try {
+    	// Get the account in question
+	    $account = new \forge\components\Accounts\db\Account($uid);
+	    
+	    // Get all valid cookies associated with this account
+	    $cookies = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
+	    		'type' => new \forge\components\Accounts\db\Cookie,
+	    		'where' => array(
+	    				'account' => $uid,
+	    				'expire' => array('gt'=>time())
+	    		)
+	    		]));
+	    
+	    // Loop over the cookies and see if any matches the requested one
+	    foreach ($cookies as /** @var \forge\components\Accounts\db\tables\Cookie **/ $cookie)
+	    	if (md5($account->user_password.$cookie->salt) == $password) {
+		    	// Trigger an extension of the cookie
+			    $cookie->save();
+			    \forge\Memory::cookie('account',$uid);
+			    \forge\Memory::cookie('password',$password);
+			    
+			    // If this is the first access of this session, log us in!
+			    if (!self::isAuthenticated())
+			    	self::login($account->getID());
+	    	}
+    }
+    catch (\Exception $e) {}
