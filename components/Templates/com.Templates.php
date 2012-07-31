@@ -164,7 +164,10 @@
 					throw new \forge\HttpException('You are requesting a non-existant template',\forge\HttpException::HTTP_NOT_IMPLEMENTED);
 			}
 
-			return self::getConfig('templates', array())[$hostname ? $hostname : $_SERVER['HTTP_HOST']];
+			$templates = self::getConfig('templates', array());
+			$key = $hostname ? $hostname : $_SERVER['HTTP_HOST'];
+			
+			return isset($templates[$key]) ? $templates[$key] : 'anvil';
 		}
 
 		/**
