@@ -44,6 +44,17 @@
 
 			self::$scripts[] = $script;
 		}
+		
+		/**
+		 * Add an external JavaScript file to the header element
+		 * @param string $file File name
+		 * @return void
+		 */
+		static public function addScriptFile($file) {
+			$script = '<script src="'.self::html($file).'" type="text/javascript"></script>';
+			
+			self::addScript($script);
+		}
 
 		/**
 		* Add some CSS to the header element
@@ -111,7 +122,7 @@
 		 * @return void
 		 */
 		static public function forgeJS($api) {
-			self::addScript('<script src="/script/forge/'.$api.'.js" type="text/javascript"></script>');
+			self::addScriptFile('/script/'.$api.'.js');
 		}
 
 		/**

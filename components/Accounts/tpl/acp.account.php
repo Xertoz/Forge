@@ -46,13 +46,13 @@
 								<td><?php echo $field; ?></td>
 								<td class="permissive">
 									<input type="hidden" name="permissions[<?php echo $domain; ?>][<?php echo $category; ?>][<?php echo $field; ?>][read]" value="<?php echo $read; ?>" />
-									<img src="/images/accept.png" alt="<?php echo _('Yes'); ?>" onclick="revoke(this);"<?php if (!$read): ?> style="display:none;"<?php endif; ?> />
-									<img src="/images/cross.png" alt="<?php echo _('No'); ?>" onclick="grant(this);"<?php if ($read): ?> style="display:none;"<?php endif; ?> />
+									<img src="/images/led/accept.png" alt="<?php echo _('Yes'); ?>" onclick="revoke(this);"<?php if (!$read): ?> style="display:none;"<?php endif; ?> />
+									<img src="/images/led/cross.png" alt="<?php echo _('No'); ?>" onclick="grant(this);"<?php if ($read): ?> style="display:none;"<?php endif; ?> />
 								</td>
 								<td class="permissive">
 									<input type="hidden" name="permissions[<?php echo $domain; ?>][<?php echo $category; ?>][<?php echo $field; ?>][write]" value="<?php echo $write; ?>" />
-									<img src="/images/accept.png" alt="<?php echo _('Yes'); ?>" onclick="revoke(this);"<?php if (!$write): ?> style="display:none;"<?php endif; ?> />
-									<img src="/images/cross.png" alt="<?php echo _('No'); ?>" onclick="grant(this);"<?php if ($write): ?> style="display:none;"<?php endif; ?> />
+									<img src="/images/led/accept.png" alt="<?php echo _('Yes'); ?>" onclick="revoke(this);"<?php if (!$write): ?> style="display:none;"<?php endif; ?> />
+									<img src="/images/led/cross.png" alt="<?php echo _('No'); ?>" onclick="grant(this);"<?php if ($write): ?> style="display:none;"<?php endif; ?> />
 								</td>
 							</tr>
 						<?php endforeach; ?>
