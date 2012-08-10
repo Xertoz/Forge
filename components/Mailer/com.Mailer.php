@@ -46,7 +46,7 @@
 		 * @return string
 		 */
 		static public function getFromAddress() {
-			return self::getConfig('FROM_ADDRESS', 'noreply@'.$_SERVER['HTTP_HOST']);
+			return self::getConfig('from.address', 'noreply@'.$_SERVER['HTTP_HOST']);
 		}
 		
 		/**
@@ -54,7 +54,7 @@
 		 * @return string
 		 */
 		static public function getFromName() {
-			return self::getConfig('FROM_NAME', 'Forge '.FORGE_VERSION);
+			return self::getConfig('from.name', 'Forge '.FORGE_VERSION);
 		}
 		
 		/**
@@ -62,7 +62,7 @@
 		 * @return string
 		 */
 		static public function getSMTPPassword() {
-			return self::getConfig('SMTP_PASSWORD');
+			return self::getConfig('smtp.password');
 		}
 		
 		/**
@@ -70,7 +70,7 @@
 		 * @return string
 		 */
 		static public function getSMTPServer() {
-			return self::getConfig('SMTP_SERVER');
+			return self::getConfig('smtp.hostname');
 		}
 		
 		/**
@@ -78,7 +78,7 @@
 		 * @return string
 		 */
 		static public function getSMTPUsername() {
-			return self::getConfig('SMTP_SERVER');
+			return self::getConfig('smtp.username');
 		}
 		
 		/**
@@ -86,7 +86,7 @@
 		 * @return bool
 		 */
 		static public function getSMTPUsage() {
-			return self::getConfig('USE_SMTP', false);
+			return self::getConfig('smtp', false);
 		}
 
 		/**
@@ -96,5 +96,27 @@
 		*/
 		static public function isMail($string) {
 			return (bool)preg_match('/^[A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/',$string);
+		}
+		
+		/**
+		 * Set the from field
+		 * @return string
+		 */
+		static public function setSender($name, $address) {
+			self::setConfig('from.name', $name);
+			self::setConfig('from.address', $address);
+			self::writeConfig();
+		}
+		
+		/**
+		 * Set the SMTP info
+		 * @return string
+		 */
+		static public function setSMTP($use=false, $hostname=null, $username=null, $password=null) {
+			self::setConfig('smtp', (bool)$use);
+			self::setConfig('smtp.hostname', $hostname);
+			self::setConfig('smtp.username', $username);
+			self::setConfig('smtp.password', $password);
+			self::writeConfig();
 		}
 	}

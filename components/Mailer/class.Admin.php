@@ -22,15 +22,15 @@
 			Accounts::restrict('Mailer','admin','settings','r');
 
 			$mailcfg = array(
-				'address' => array(
-					'from' => Mailer::getFromAddress(),
+				'from' => array(
+					'address' => Mailer::getFromAddress(),
 					'name' => Mailer::getFromName()
 				),
-				'server' => array(
-					'smtp' => Mailer::getSMTPUsage(),
+				'smtp' => array(
+					'use' => (int)Mailer::getSMTPUsage(),
 					'hostname' => Mailer::getSMTPServer(),
 					'username' => Mailer::getSMTPUsername(),
-					'password' => 'DO_NOT_CHANGE_PASSWORD'
+					'password' => null
 				)
 			);
 

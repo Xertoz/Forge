@@ -215,13 +215,28 @@
 		 * @return string
 		 */
 		static public function input($type, $name, $value, $auto=true, $attr=array()) {
-			return self::display('components/Templates/tpl/inc.input.php',array(
-				'attributes' => array_merge($attr, array(
-					'name' => $name,
-					'type' => $type,
-					'value' => $auto ? self::getRequestField($name, $value) : $value
-				))
-			));
+			$attr['name'] = $name;
+			$attr['type'] = $type;
+			
+			switch ($attr['type']) {
+				case 'password':
+					$attr['value'] = null;
+					break;
+				
+				case 'checkbox':
+					$attr['value'] = $value;
+					
+					if (self::getRequestField($name, false) !== false || $value)
+						$attr['checked'] = 'checked';
+					
+					break;
+				
+				default:
+					$attr['value'] = $auto ? self::getRequestField($name, $value) : $value;
+					break;
+			}
+			
+			return self::display('components/Templates/tpl/inc.input.php', ['attributes' => $attr]);
 		}
 
 		/**
