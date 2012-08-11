@@ -1,35 +1,34 @@
 <div class="accounts register">
 	<h1><?php echo _('Register'); ?></h1>
 	<form action="/user/register" method="POST">
+		<input type="hidden" name="forge[controller]" value="Accounts\Register" />
+		<?php echo self::response('Accounts\Register'); ?>
 		<table>
 			<tr>
 				<td><p><?php echo _('Account'); ?>:</p></td>
-				<td><input type="text" name="account"></td>
+				<td><?php echo self::input('text', 'account'); ?></td>
 			</tr>
 			<tr>
 				<td><p><?php echo _('Email'); ?>:</p></td>
-				<td><input type="text" name="email"></td>
+				<td><?php echo self::input('text', 'email'); ?></td>
 			</tr>
 			<tr>
 				<td><p><?php echo _('First name'); ?>:</p></td>
-				<td><input type="text" name="name_first"></td>
+				<td><?php echo self::input('text', 'name_first'); ?></td>
 			</tr>
 			<tr>
 				<td><p><?php echo _('Last name'); ?>:</p></td>
-				<td><input type="text" name="name_last"></td>
+				<td><?php echo self::input('text', 'name_last'); ?></td>
 			</tr>
 			<tr>
 				<td><p><?php echo _('Password'); ?>:</p></td>
-				<td><input type="password" name="password"></td>
+				<td><?php echo self::input('password', 'password'); ?></td>
 			</tr>
 			<tr>
 				<td><p><?php echo _('Confirm'); ?>:</p></td>
-				<td><input type="password" name="password_confirm"></td>
+				<td><?php echo self::input('password', 'password_confirm'); ?></td>
 			</tr>
 		</table>
 		<p><input type="submit" value="<?php echo _('Save'); ?>" /></p>
-		<?php if ($exception): ?>
-			<p class="error"><?php echo self::html($exception->getMessage()); ?></p>
-		<?php endif; ?>
 	</form>
 </div>

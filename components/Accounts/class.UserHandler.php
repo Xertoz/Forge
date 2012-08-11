@@ -29,20 +29,16 @@
 						$confirmed = \forge\components\Accounts::confirm($_GET['id'],$_GET['key']);
 					}
 					catch (\Exception $e) {
-						throw new \forge\HttpException(
-							'The account could not be activated.',
-							\forge\HttpException::HTTP_NOT_FOUND
-						);
+						$confirmed = false;
 					}
 
 					echo \forge\components\Templates::display(
 						array(
-							'%T/page.confirmation.php',
-							'components/Accounts/tpl/page.confirmation.php'
+							'%T/page.activated.php',
+							'components/Accounts/tpl/page.activated.php'
 						),
 						array(
-							'confirmed' => $confirmed,
-							'message' => \forge\components\Accounts::config('activation')
+							'confirmed' => $confirmed
 						)
 					);
 				break;
@@ -89,29 +85,30 @@
 
 				// Show a form for resetting an account password
 				case 'recover-password':
-					$key = isset($_GET['key']) ? $_GET['key'] : null;
+					if (empty($_GET['key']))
+						throw new \forge\HttpException(_('No key provided'),
+								\forge\HttpException::HTTP_BAD_REQUEST);
 
-					if (!empty($key)) {
-						try {
-							$entry = new \forge\components\Accounts\db\LostPassword();
-							$entry->key = $key;
-							$entry->select('key');
-						}
-						catch (\Exception $e) {
-							throw new \forge\HttpException('The key requested could not be found', \forge\HttpException::HTTP_NOT_FOUND);
-						}
+					try {
+						$entry = new \forge\components\Accounts\db\LostPassword();
+						$entry->key = $_GET['key'];
+						$entry->select('key');
+						
+						if ($entry->until < time())
+							throw new \Exception();
 					}
-					else
-						$entry = null;
+					catch (\Exception $e) {
+						throw new \forge\HttpException('The key requested could not be found',
+								\forge\HttpException::HTTP_NOT_FOUND);
+					}
 
 					echo \forge\components\Templates::display(
 						array(
-							'%T/page.lost-password.php',
+							'%T/page.recover-password.php',
 							'components/Accounts/tpl/page.recover-password.php'
 						),
 						array(
-							'entry' => $entry,
-							'key' => $key
+							'entry' => $entry
 						)
 					);
 				break;
@@ -122,25 +119,11 @@
 					if (\forge\components\Accounts::getUserId())
 						\forge\components\SiteMap::redirect('/');
 
-					// Register the user?
-					$exception = false;
-					if (count($_POST))
-						try {
-							\forge\components\Accounts::handleRegistration();
-							\forge\components\SiteMap::redirect('/user/register/success', 307);
-						}
-						catch (\Exception $e) {
-							$exception = $e;
-						}
-
 					// Show the registration
 					echo \forge\components\Templates::display(
 						array(
 							'%T/page.register.php',
 							'components/Accounts/tpl/page.register.php'
-						),
-						array(
-							'exception' => $exception
 						)
 					);
 				break;
@@ -152,9 +135,6 @@
 						array(
 							'%T/page.register.success.php',
 							'components/Accounts/tpl/page.register.success.php'
-						),
-						array(
-							'message' => \forge\components\Accounts::config('thankyou')
 						)
 					);
 				break;

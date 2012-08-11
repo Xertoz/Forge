@@ -214,7 +214,7 @@
 		 * @param $attr array Additional key-value array of attributes
 		 * @return string
 		 */
-		static public function input($type, $name, $value, $auto=true, $attr=array()) {
+		static public function input($type, $name, $value=null, $auto=true, $attr=array()) {
 			$attr['name'] = $name;
 			$attr['type'] = $type;
 			

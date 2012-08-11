@@ -20,8 +20,12 @@
 		 */
 		public function process() {
 			// We are either setting our own account, or have admin access
-			if ($_REQUEST['account']['id'] != \forge\components\Accounts::getUserId())
+			if ($_REQUEST['account']['id'] != \forge\components\Accounts::getUserId()) {
+				$admin = true;
 				\forge\components\Accounts::Restrict('Accounts','admin','list','w');
+			}
+			else
+				$admin = false;
 
 			// Init the account we use to edit
 			$account = new \forge\components\Accounts\db\Account($_REQUEST['account']['id']);
@@ -35,18 +39,22 @@
 			}
 
 			// All required fields must be set
-			if (empty($_REQUEST['account']['account']))
-				throw new \forge\HttpException(_('You must specify an account name'),\forge\HttpException::HTTP_BAD_REQUEST);
-			if (empty($_REQUEST['account']['email']))
-				throw new \forge\HttpException(_('You must specify an e-mail address'),\forge\HttpException::HTTP_BAD_REQUEST);
+			if ($admin) {
+				if (empty($_REQUEST['account']['account']))
+					throw new \forge\HttpException(_('You must specify an account name'),\forge\HttpException::HTTP_BAD_REQUEST);
+				if (empty($_REQUEST['account']['email']))
+					throw new \forge\HttpException(_('You must specify an e-mail address'),\forge\HttpException::HTTP_BAD_REQUEST);
+			}
 			if (empty($_REQUEST['account']['name_first']))
 				throw new \forge\HttpException(_('You must specify a first name'),\forge\HttpException::HTTP_BAD_REQUEST);
 			if (empty($_REQUEST['account']['name_last']))
 				throw new \forge\HttpException(_('You must specify a last name'),\forge\HttpException::HTTP_BAD_REQUEST);
 
 			// Set the account settings
-			$account->user_account = $_REQUEST['account']['account'];
-			$account->user_email = $_REQUEST['account']['email'];
+			if ($admin) {
+				$account->user_account = $_REQUEST['account']['account'];
+				$account->user_email = $_REQUEST['account']['email'];
+			}
 			$account->user_name_first = $_REQUEST['account']['name_first'];
 			$account->user_name_last = $_REQUEST['account']['name_last'];
 

@@ -119,6 +119,23 @@
 				)
 			);
 		}
+		
+		/**
+		 * Get the mail message to send for lost password requests
+		 * @param \forge\components\Accounts\db\Account $account
+		 * @param \forge\components\Accounts\db\LostPassword $lost
+		 * @return type
+		 */
+		static public function getLostPasswordMessage(Accounts\db\Account $account,
+		Accounts\db\LostPassword $lost) {
+			return \forge\components\Templates::display([
+				'%T/mail.lost-password.php',
+				'components/Accounts/tpl/mail.lost-password.php'
+			], [
+				'account' => $account,
+				'lost' => $lost
+			]);
+		}
 
 		/**
 		* Get the current user ID
@@ -126,52 +143,6 @@
 		*/
 		static public function getUserId() {
 			return (int)\forge\Memory::session('USER_AUTHENTICATION');
-		}
-
-		/**
-		 * Handle a registration attempt from the client
-		 * @return void
-		 */
-		static public function handleRegistration() {
-			if (empty($_POST['account']))
-				throw new \forge\HttpException(_('You must specify an account name'), \forge\HttpException::HTTP_BAD_REQUEST);
-			if (empty($_POST['email']))
-				throw new \forge\HttpException(_('You must specify an e-mail address'), \forge\HttpException::HTTP_BAD_REQUEST);
-			if (!\forge\components\Mailer::isMail($_POST['email']))
-				throw new \forge\HttpException(_('You must specify a proper e-mail address'), \forge\HttpException::HTTP_BAD_REQUEST);
-			if (empty($_POST['name_first']))
-				throw new \forge\HttpException(_('You must specify a first name'), \forge\HttpException::HTTP_BAD_REQUEST);
-			if (empty($_POST['name_last']))
-				throw new \forge\HttpException(_('You must specify a last name'), \forge\HttpException::HTTP_BAD_REQUEST);
-			if (empty($_POST['password']))
-				throw new \forge\HttpException(_('You must specify a password'), \forge\HttpException::HTTP_BAD_REQUEST);
-			if (empty($_POST['password_confirm']))
-				throw new \forge\HttpException(_('You must confirm the password'), \forge\HttpException::HTTP_BAD_REQUEST);
-
-			try {
-				self::createAccount(
-					$_POST['account'],
-					$_POST['name_first'],
-					$_POST['name_last'],
-					$_POST['email'],
-					$_POST['password'],
-					$_POST['password_confirm']
-				);
-			}
-			catch (\Exception $e) {
-				switch ($e->getMessage()) {
-					default:
-						throw $e;
-					case 'EMAIL_ALREADY_REGISTERED':
-						throw new \forge\HttpException(_('This e-mail address is already registered with us.'),\forge\HttpException::HTTP_BAD_REQUEST);
-					case 'ACCOUNT_ALREADY_REGISTERED':
-						throw new \forge\HttpException(_('This account name is already registered with us.'),\forge\HttpException::HTTP_BAD_REQUEST);
-					case 'BAD_PASSWORD':
-						throw new \forge\HttpException(_('The requested password was too short.'),\forge\HttpException::HTTP_BAD_REQUEST);
-					case 'BAD_CONFIRM':
-						throw new \forge\HttpException(_('The passwords are not equal'),\forge\HttpException::HTTP_BAD_REQUEST);
-				}
-			}
 		}
 
 		/**
@@ -212,33 +183,16 @@
 		* @throws Exception
 		*/
 		static public function confirm($id,$key) {
-			$user = new \forge\components\Accounts\Account($id);
+			$user = new \forge\components\Accounts\db\Account($id);
 
-			if ($user->account->user_state == 'created' && $key==md5($user->account->user_password.$user->account->getID())) {
-				$user->account->user_state = 'active';
-				$user->account->save();
-				$domains = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
-					'type' => new \forge\components\Websites\db\Website,
-					'where' => array('alias'=>'')
-				]));
-				$sites = array();
-				foreach ($domains as $i => $site)
-					$sites[$i] = '<a href="http://'.$site->domain.'/">http://'.$site->domain.'/</a>';
-				$sites = implode('<br>',$sites);
-				$tpl = array(
-					'%account%' => $user->account->user_account,
-					'%name%' => $user->account->user_name_first.' '.$user->account->user_name_last,
-					'%email%' => $user->account->user_email,
-					'%sites%' => $sites
-				);
-				$mail = new \forge\components\Mailer\Mail();
-				$mail->AddAddress($user->account->user_email,$user->account->user_name_first.' '.$user->account->user_name_last);
-				$mail->Subject = _('Confirm your new account');
-				$mail->Body = str_replace(array_keys($tpl),array_values($tpl),\forge\components\Accounts::config('confirmation'));
-				$mail->Send();
+			if ($user->user_state == 'created' && $key==md5($user->user_password.$user->getID())) {
+				$user->user_state = 'active';
+				$user->save();
 
 				return true;
 			}
+			elseif ($user->user_state == 'active')
+				return true;
 
 			return false;
 		}
@@ -267,11 +221,28 @@
 			if (md5($password) != md5($passwordConfirm))
 				throw new \Exception('BAD_CONFIRM');
 
-			// Create a new row in the database table
+			// Look for duplicates
 			$accountInstance = new \forge\components\Accounts\db\Account();
-			$accountInstance->makeSalt();
 			$accountInstance->user_account = $account;
 			$accountInstance->user_email = $email;
+			try {
+				$accountInstance->select('user_account');
+			}
+			catch (\Exception $e) {}
+			if ($accountInstance->getId())
+				throw new \forge\HttpException(_('There is already an account known by that name. Select something else!'),
+						\forge\HttpException::HTTP_CONFLICT);
+			try {
+				$accountInstance->select('user_email');
+			}
+			catch (\Exception $e) {}
+			if ($accountInstance->getId())
+				throw new \forge\HttpException(_('There is already an account using that email address. Use another one!'),
+						\forge\HttpException::HTTP_CONFLICT);
+			
+			// Create the account
+			$accountInstance->user_state = 'created';
+			$accountInstance->makeSalt();
 			$accountInstance->user_name_first = $nameFirst;
 			$accountInstance->user_name_last = $nameLast;
 			$accountInstance->user_password = $accountInstance->hashPassword($password);
@@ -297,7 +268,7 @@
 			$mail = new \forge\components\Mailer\Mail();
 			$mail->AddAddress($email,$nameFirst.' '.$nameLast);
 			$mail->Subject = _('Account registered');
-			$mail->Body = str_replace(array_keys($tpl),array_values($tpl),\forge\components\Accounts::config('registration'));
+			$mail->Body = str_replace(array_keys($tpl),array_values($tpl),self::getRegisteredMessage());
 			$mail->Send();
 		}
 
@@ -363,6 +334,17 @@
 				$evaluate = false;
 
 			return $evaluate;
+		}
+		
+		/**
+		 * Get the message to display when someone registers
+		 * @return string
+		 */
+		static public function getRegisteredMessage() {
+			return \forge\components\Templates::display([
+				'%T/mail.registered.php',
+				'components/Accounts/tpl/mail.registered.php'
+			]);
 		}
 
 		/**
