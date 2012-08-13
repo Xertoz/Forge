@@ -106,13 +106,13 @@
 			$indexes = array();
 
 			if ($this->primary)
-				$indexes[] = 'PRIMARY KEY (`'.$column.'`)';
+				$indexes['primary'][] = 'PRIMARY KEY (`'.$column.'`)';
 
 			if ($this->index)
-				$indexes[] = 'KEY `'.$column.'` (`'.$column.'`)';
+				$indexes['key'][] = 'KEY `'.$column.'` (`'.$column.'`)';
 
 			if ($this->unique)
-				$indexes[] = 'UNIQUE KEY `'.$column.'` (`'.$column.'`)';
+				$indexes['unique'][] = 'UNIQUE KEY `'.$column.'` (`'.$column.'`)';
 
 			return $indexes;
 		}

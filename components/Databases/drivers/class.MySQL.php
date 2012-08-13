@@ -59,13 +59,19 @@
 		*/
 		public function buildCreate(\forge\components\Databases\Table $table) {
 			$create = 'CREATE TABLE `'.$this->prefix.$table->getTable().'` (';
-			$lines = $indexes = array();
+			$lines = array();
+			$indexes = ['primary' => [], 'key' => [], 'unique' => []];
 			foreach ($table->getColumns(true) as $column => $object) {
-				$lines[] = "\n  ".$object->buildCreate($column);
-				foreach ($object->buildIndexes($column) as $index)
-					$indexes[] = "\n  ".$index;
+				$lines[] = $object->buildCreate($column);
+				foreach ($object->buildIndexes($column) as $key => $array)
+					foreach ($array as $index)
+						$indexes[$key][] = $index;
 			}
-			$create .= implode(',',array_merge($lines,$indexes))."\n) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+			sort($indexes['primary']);
+			sort($indexes['unique']);
+			sort($indexes['key']);
+			$indexes = array_merge($indexes['primary'], $indexes['unique'], $indexes['key']);
+			$create .= "\n  ".implode(",\n  ",array_merge($lines,$indexes))."\n) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 
 			return $create;
 		}
