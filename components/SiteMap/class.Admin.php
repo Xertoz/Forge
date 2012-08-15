@@ -32,8 +32,10 @@
 			\forge\components\Accounts::restrict('SiteMap','admin','pages','r');
 			
 			$pages = new \forge\components\Databases\ListMatrix(new \forge\components\Databases\Params([
-				'type' => new \forge\components\SiteMap\db\Page
+				'type' => new \forge\components\SiteMap\db\Page,
+				'order' => ['page_order' => 'DESC']
 			]));
+			$pages->isDraggable(true);
 
 			return \forge\components\Templates::display('components/SiteMap/tpl/acp.menu.php',[
 				'pages' => $pages

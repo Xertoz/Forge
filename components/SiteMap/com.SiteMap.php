@@ -58,7 +58,7 @@
 			$pages = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
 				'type' => new \forge\components\SiteMap\db\Page,
 				'where' => array('page_parent'=>$parent,'page_publish'=>1,'page_menu'=>1),
-				'order' => array('page_order'=>'ASC')
+				'order' => array('page_order'=>'DESC')
 			]));
 			return $pages;
 		}

@@ -33,6 +33,12 @@
 		public $limit = false;
 		
 		/**
+		 * Order by specific columns?
+		 * @var array
+		 */
+		public $order = [];
+		
+		/**
 		 * Get which page of the result set?
 		 * @var int
 		 */

@@ -1,4 +1,5 @@
-<table class="matrix">
+<table class="matrix"<?php foreach ($attributes as $attr => $value): ?>
+	<?php echo $attr; ?>="<?php echo self::html($value); ?>"<?php endforeach; ?>>
 	<thead>
 		<tr>
 			<?php foreach ($columns as $title): ?>
@@ -8,7 +9,14 @@
 	</thead>
 	<tbody>
 		<?php foreach ($rows as $row): ?>
-			<tr>
+			<tr<?php if ($matrix->isDraggable()): ?> draggable="true"
+				ondragstart="forge.dragsort.start(event);"
+				ondragend="forge.dragsort.end(event);"
+				ondragenter="forge.dragsort.enter(event);"
+				ondragleave="forge.dragsort.leave(event);"
+				ondragover="forge.dragsort.over(event);"
+				ondrop="forge.dragsort.drop(event);"
+				style="cursor:move;"<?php endif; ?>>
 				<?php foreach ($columns as $key => $title): ?>
 					<?php if (isset($row[$key])): ?>
 						<td class="<?php echo $key; ?>"><?php echo isset($stylize[$key]) ? $stylize[$key]($row) : self::html($row[$key]); ?></td>

@@ -66,6 +66,15 @@
 		* @return \PDOStatement
 		*/
 		abstract public function buildInsert(Params $params);
+		
+		final public function buildOrder(Params $params) {
+			$order = 'ORDER BY';
+			
+			foreach ($params->order as $column => $type)
+				$order .= ' `'.$column.'` '.$type;
+			
+			return count($params->order) ? $order : null;
+		}
 
 		/**
 		* Prepare a query for selection

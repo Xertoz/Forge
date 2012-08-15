@@ -1,8 +1,7 @@
 <div class="admin sitemap menu">
 	<h1><?php echo _('Pages'); ?></h1>
-	<?php if (\forge\Controller::getCode() == \forge\Controller::RESULT_BAD): ?>
-		<p class="error"><?php echo self::html(\forge\Controller::getMessage()); ?></p>
-	<?php endif; ?>
+	<?php echo self::response('SiteMap\Delete'); ?>
+	<?php echo self::response('SiteMap\Organize'); ?>
 	<?php echo $pages->drawTable(
 		array(
 			'page_title' => _('Title'),
@@ -14,7 +13,8 @@
 				return '<a href="/'.self::html($r['page_url']).'">/'.self::html($r['page_url']).'</a>';
 			},
 			'actions' => function($r) {
-				$output = '<a href="/admin/SiteMap/page?id='.$r['forge_id'].'"><img src="/images/led/application_edit.png" alt="'._('Edit').'" title="'._('Edit').'" /></a>'.PHP_EOL;
+				$output = '<input type="hidden" name="menu[]" value="'.$r['forge_id'].'" class="forge-sitemap-menu-row" />';
+				$output .= '<a href="/admin/SiteMap/page?id='.$r['forge_id'].'"><img src="/images/led/application_edit.png" alt="'._('Edit').'" title="'._('Edit').'" /></a>'.PHP_EOL;
 				$output .= '<form action="/admin/SiteMap" method="POST">';
 				$output .= '<input type="hidden" name="forge[controller]" value="SiteMap\Delete" />';
 				$output .= self::input('hidden', 'page[id]', $r['forge_id'], false);
@@ -22,7 +22,10 @@
 				$output .= '</form>';
 				return $output;
 			}
-		)
+		),
+		array('id' => 'forge-sitemap-menu')
 	); ?>
+	<form action="/admin/SiteMap" method="POST" name="sitemap_menu"></form>
+	<a href="javascript:organize();"><img src="/images/led/accept.png" title="<?php echo _('Save'); ?>" alt="<?php echo _('Save'); ?>" /></a>
 	<a href="/admin/SiteMap/page"><img src="/images/led/add.png" alt="<?php echo _('New page'); ?>" title="<?php echo _('New page'); ?>"></a>
 </div>

@@ -126,6 +126,7 @@
 				'SELECT *
 				FROM '.$this->prefix.$params->table.'
 				'.self::buildWhere($params).'
+				'.self::buildOrder($params).'
 				'.($params->limit !== false ? 'LIMIT '.intval(($params->page-1)*$params->limit).','.(int)$params->limit : null)
 			);
 		}

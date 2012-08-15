@@ -19,6 +19,12 @@
 		* @var array
 		*/
 		protected $columns = array();
+		
+		/**
+		 * Is this matrix draggable?
+		 * @var bool
+		 */
+		private $draggable = false;
 
 		/**
 		* Array of the data in this matrix
@@ -64,14 +70,21 @@
 		* @param array Columns to draw and their titles
 		* @return string
 		*/
-		final public function drawTable($columns=array(),$stylize=array()) {
+		final public function drawTable($columns=array(),$stylize=array(), $attr=array()) {
 			// If we have a specific page, get it.
 			if (isset($_GET['page']))
 				$this->browse((int)$_GET['page']);
+			
+			// Do we require any JS libraries?
+			if ($this->isDraggable()) {
+				\forge\components\Templates\Engine::addScriptFile('/script/dom.js');
+				\forge\components\Templates\Engine::addScriptFile('/script/dragsort.js');
+			}
 
 			return \forge\components\Templates::display(
 				'components/XML/tpl/inc.table.php',
 				array(
+					'attributes' => $attr,
 					'columns' => $columns,
 					'matrix' => $this,
 					'rows' => $this->getRows(),
@@ -99,5 +112,17 @@
 
 			// We're finished with the root element
 			$xml->endElement();
+		}
+		
+		/**
+		 * Is this matrix' rows draggable?
+		 * @param bool $draggable If set, will change the draggable state
+		 * @return bool The current (after any update) state
+		 */
+		final public function isDraggable($draggable=null) {
+			if ($draggable !== null)
+				$this->draggable = (bool)$draggable;
+			
+			return $this->draggable;
 		}
 	}
