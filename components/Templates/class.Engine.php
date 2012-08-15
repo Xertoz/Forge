@@ -230,6 +230,14 @@
 						$attr['checked'] = 'checked';
 					
 					break;
+					
+				case 'radio':
+					$attr['value'] = $value;
+					
+					if ($auto && self::getRequestField($name, false) === $value)
+						$attr['checked'] = 'checked';
+					
+					break;
 				
 				default:
 					$attr['value'] = $auto ? self::getRequestField($name, $value) : $value;

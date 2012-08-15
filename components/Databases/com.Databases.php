@@ -135,10 +135,9 @@
 		static public function deleteConnection($connId) {
 			self::SecureConnectionId($connId);
 
-			$config = self::config('connections');
+			$config = self::getConfig('connections');
 			unset($config[$connId]);
-			self::config(array('connections'=>$config));
-			self::configure(true);
+			self::setConfig('connections', $config, true);
 
 			if (isset(self::$engines[$connId]))
 				unset(self::$engines[$connId]);
@@ -265,7 +264,7 @@
 		* @return array
 		*/
 		static public function getDatabaseList() {
-			return self::config('connections');
+			return self::getConfig('connections');
 		}
 
 		/**

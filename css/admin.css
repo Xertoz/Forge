@@ -65,6 +65,14 @@
 	margin:0 5px;
 }
 
+.admin table td.actions {
+	text-align:right;
+}
+
+.admin table td.actions form {
+	display:inline;
+}
+
 .admin .warning {
 	color:red;
 }

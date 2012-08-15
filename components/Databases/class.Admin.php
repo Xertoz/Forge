@@ -1,6 +1,6 @@
 <?php
 	/**
-	* acp.Databases.php
+	* class.Admin.php
 	* Copyright 2010-2012 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
@@ -14,7 +14,7 @@
 	* Software component of Forge 4
 	* Administration interface
 	*/
-	class adminInterface {
+	class Admin implements \forge\components\Admin\Administration {
 		/**
 		* Show the connection list
 		*/
