@@ -44,6 +44,11 @@
 		\forge\RequestHandler::setContentType('text/html;charset=UTF-8');
 		header('HTTP/1.1 500 Internal Server Error');
 		
+		// Tell any caring code about what happened
+		$event = new Event('UncaughtException');
+		$event->exception = $e;
+		$event->fire();
+		
 		if (\forge\components\Accounts::isDeveloper())
 			require 'errors/dump.php';
 		else

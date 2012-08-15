@@ -15,5 +15,5 @@
 	* Addons that implements this class will be able to listen to events thrown.
 	*/
 	interface EventListener {
-		public function event(Event $event);
+		static public function event(Event $event);
 	}
