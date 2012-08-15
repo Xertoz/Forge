@@ -1,5 +1,5 @@
 <?php
-	function stack($array,$title) {
+	$stack = function($array,$title) {
 ?>
 		<h1><?php echo htmlentities($title); ?></h1>
 		<table>
@@ -72,11 +72,11 @@
 				</tr>
 			<?php endforeach; ?>
 		</table>
-		<?php stack($_SERVER,'$_SERVER'); ?>
-		<?php stack($_SESSION,'$_SESSION'); ?>
-		<?php stack($_COOKIE,'$_COOKIE'); ?>
-		<?php stack($_POST,'$_POST'); ?>
-		<?php stack($_GET,'$_GET'); ?>
-		<?php stack($_FILES,'$_FILES'); ?>
+		<?php $stack($_SERVER,'$_SERVER'); ?>
+		<?php $stack($_SESSION,'$_SESSION'); ?>
+		<?php $stack($_COOKIE,'$_COOKIE'); ?>
+		<?php $stack($_POST,'$_POST'); ?>
+		<?php $stack($_GET,'$_GET'); ?>
+		<?php $stack($_FILES,'$_FILES'); ?>
 	</body>
 </html>
