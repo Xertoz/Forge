@@ -95,7 +95,7 @@
 		* @param int ID
 		* @return void
 		*/
-		static private function login($uid) {
+		static public function login($uid) {
 			\forge\Memory::session('USER_AUTHENTICATION',(int)$uid);
 		}
 
@@ -464,23 +464,26 @@
 		// Get all valid cookies associated with this account
 		$cookies = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
 				'type' => new \forge\components\Accounts\db\Cookie,
-				'where' => array(
-						'account' => $uid,
-						'expire' => array('gt'=>time())
-				)
+				'where' => array('account' => $uid)
 				]));
 		
 		// Loop over the cookies and see if any matches the requested one
 		foreach ($cookies as /** @var \forge\components\Accounts\db\tables\Cookie **/ $cookie)
-			if (md5($account->user_password.$cookie->salt) == $password) {
+			if ($cookie->expire < time())
+				$cookie->delete();
+			elseif (md5($account->user_password.$cookie->salt) == $password) {
 				// Trigger an extension of the cookie
 				$cookie->save();
 				\forge\Memory::cookie('account',$uid);
 				\forge\Memory::cookie('password',$password);
 				
 				// If this is the first access of this session, log us in!
-				if (!self::isAuthenticated())
-					self::login($account->getID());
+				if (!Accounts::isAuthenticated())
+					Accounts::login($account->getID());
+				
+				break;
 			}
+		
+		unset($cookies, $cookie, $account, $uid, $password);
 	}
 	catch (\Exception $e) {}
