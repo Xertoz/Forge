@@ -103,7 +103,7 @@
 			$config = '<?php static::makeConfig('.var_export(static::$__config[get_called_class()], true).');';
 			
 			// Finally, put it in place
-			components\Files::create($path);
+			touch($path);
 			file_put_contents($path, $config);
 		}
 	}
