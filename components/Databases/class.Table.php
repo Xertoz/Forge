@@ -370,8 +370,12 @@
 		* @throws Exception
 		*/
 		final public function select($columns) {
+			$columns = !is_array($columns) ? array($columns) : $columns;
+			if (!$this->isGlobal() && !in_array(static::$id, $columns))
+				$columns[] = 'forge_website';
+			
 			$params = new Params();
-			$params->where = is_string($columns) ? array($columns) : $columns;
+			$params->where = $columns;
 			$params->table = static::$table;
 
 			$query = $this->__engine->buildSelect($params);
