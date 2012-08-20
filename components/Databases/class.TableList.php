@@ -199,7 +199,7 @@
 
 			// Set the parameters
 			foreach ($this->params->where as $column => $value)
-				$query->bindParam($column, $value);
+				$query->bindValue($column, $value);
 
 			$query->execute();
 			$this->result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, get_class($this->params->type));
