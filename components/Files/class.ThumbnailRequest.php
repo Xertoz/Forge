@@ -43,7 +43,10 @@
 			
 			$finfo = new \finfo(\FILEINFO_MIME_TYPE);
 			$thumb = new Thumbnail($file->getRealPath());
-			$this->setContentType($finfo->file($parsed = $thumb->Get($width, $height)));
+			$this->setContentType($finfo->file($parsed = $thumb->Get(
+				$width,
+				$height,
+				isset($_GET['dimension']) ? (int)$_GET['dimension'] : Thumbnail::DIMENSION_STATIC)));
 			echo new File(substr($parsed, strlen('files/')));
 		}
 	}
