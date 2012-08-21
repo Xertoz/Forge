@@ -224,9 +224,9 @@
 					break;
 				
 				case 'checkbox':
-					$attr['value'] = $value;
+					$attr['value'] = 1;
 					
-					if (self::getRequestField($name, false) !== false || $value)
+					if ($auto && (self::getRequestField($name, false) !== false || $value))
 						$attr['checked'] = 'checked';
 					
 					break;
