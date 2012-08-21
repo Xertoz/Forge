@@ -139,6 +139,15 @@
 		}
 		
 		/**
+		 * Get the real (physical) path to the file
+		 * Never store this value - only access it on on-use basis!
+		 * @return string
+		 */
+		public function getRealPath() {
+			return $this->location;
+		}
+		
+		/**
 		 * Is this a directory?
 		 * @return bool
 		 */

@@ -71,7 +71,7 @@
 				'user' => 'forge\components\Accounts\UserHandler',
 				'admin' => 'forge\components\Admin\AdminHandler',
 				//'files' => 'forge\components\Files\FileRequest',
-				//'thumbnail' => 'forge\components\Files\views\Thumbnail',
+				'thumbnail' => 'forge\components\Files\ThumbnailRequest',
 				null => 'forge\components\SiteMap\PageHandler',
 				'robots.txt' => 'forge\components\SiteMap\SiteMapHandler',
 				'sitemap' => 'forge\components\SiteMap\SiteMapHandler',
