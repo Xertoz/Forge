@@ -76,3 +76,8 @@
 .admin .warning {
 	color:red;
 }
+
+.admin .return {
+	color:inherit;
+	text-decoration:inherit;
+}
