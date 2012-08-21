@@ -8,7 +8,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($rows as $row): ?>
+		<?php foreach ($rows as $row_key => $row): ?>
 			<tr<?php if ($matrix->isDraggable()): ?> draggable="true"
 				ondragstart="forge.dragsort.start(event);"
 				ondragend="forge.dragsort.end(event);"
@@ -19,9 +19,9 @@
 				style="cursor:move;"<?php endif; ?>>
 				<?php foreach ($columns as $key => $title): ?>
 					<?php if (isset($row[$key])): ?>
-						<td class="<?php echo $key; ?>"><?php echo isset($stylize[$key]) ? $stylize[$key]($row) : self::html($row[$key]); ?></td>
+						<td class="<?php echo $key; ?>"><?php echo isset($stylize[$key]) ? $stylize[$key]($row, $items[$row_key]) : self::html($row[$key]); ?></td>
 					<?php elseif (isset($stylize[$key])): ?>
-						<td class="<?php echo $key; ?>"><?php echo $stylize[$key]($row); ?></td>
+						<td class="<?php echo $key; ?>"><?php echo $stylize[$key]($row, $items[$row_key]); ?></td>
 					<?php endif; ?>
 				<?php endforeach; ?>
 			</tr>

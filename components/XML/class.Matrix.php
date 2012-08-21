@@ -43,6 +43,15 @@
 		* @return int
 		*/
 		abstract public function getPage();
+		
+		/**
+		 * Return an array with all source items
+		 * This method must return the items in the same ordered array as getRows
+		 * @return array
+		 */
+		public function getItems() {
+			return $this->getRows();
+		}
 
 		/**
 		* Get the total available pages
@@ -86,6 +95,7 @@
 				array(
 					'attributes' => $attr,
 					'columns' => $columns,
+					'items' => $this->getItems(),
 					'matrix' => $this,
 					'rows' => $this->getRows(),
 					'stylize' => $stylize

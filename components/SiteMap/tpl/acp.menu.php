@@ -12,8 +12,10 @@
 			'page_url' => function($r) {
 				return '<a href="/'.self::html($r['page_url']).'">/'.self::html($r['page_url']).'</a>';
 			},
-			'actions' => function($r) {
+			'actions' => function($r, $item) {
 				$output = '<input type="hidden" name="menu[]" value="'.$r['forge_id'].'" class="forge-sitemap-menu-row" />';
+				if ($item->getChildren()->length())
+					$output .= '<a href="?parent='.$r['forge_id'].'"><img src="/images/led/find.png" alt="'._('View children')." title="._('View children').'" /></a> ';
 				$output .= '<a href="/admin/SiteMap/page?id='.$r['forge_id'].'"><img src="/images/led/application_edit.png" alt="'._('Edit').'" title="'._('Edit').'" /></a>'.PHP_EOL;
 				$output .= '<form action="/admin/SiteMap" method="POST">';
 				$output .= '<input type="hidden" name="forge[controller]" value="SiteMap\Delete" />';

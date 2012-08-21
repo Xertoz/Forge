@@ -34,6 +34,18 @@
 		public function browse($page) {
 			$this->rows->browse($page);
 		}
+		
+		/**
+		 * Return an array with all source items
+		 * This method must return the items in the same ordered array as getRows
+		 * @return array
+		 */
+		public function getItems() {
+			$items = [];
+			foreach ($this->rows as $row)
+				$items[] = $row;
+			return $items;
+		}
 
 		/**
 		* Get the current page number

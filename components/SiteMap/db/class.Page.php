@@ -121,4 +121,12 @@
 		protected function beforeSave() {
 			$this->__set('page_updated',time());
 		}
+		
+		public function getChildren() {
+			return new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
+				'type' => new Page,
+				'order' => ['page_order' => 'DESC'],
+				'where' => ['page_parent' => $this->getId()]
+			]));
+		}
 	}

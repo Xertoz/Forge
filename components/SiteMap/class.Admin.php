@@ -33,7 +33,8 @@
 			
 			$pages = new \forge\components\Databases\ListMatrix(new \forge\components\Databases\Params([
 				'type' => new \forge\components\SiteMap\db\Page,
-				'order' => ['page_order' => 'DESC']
+				'order' => ['page_order' => 'DESC'],
+				'where' => ['page_parent' => empty($_GET['parent']) ? 0 : (int)$_GET['parent']]
 			]));
 			$pages->isDraggable(true);
 

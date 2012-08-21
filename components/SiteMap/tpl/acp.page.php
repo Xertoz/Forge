@@ -29,7 +29,7 @@
 			<tr>
 				<td><?php echo _('Parent'); ?>:</td>
 				<td>
-					<select name="page[hierarchy][parent]" onchange="determineUri();">
+					<select name="page[parent]" onchange="determineUri();">
 						<option value="0"></option>
 						<?php foreach ($pages as $page): ?>
 							<option value="<?php echo $page->getId(); ?>" title="<?php echo $page->page_url; ?>" value="<?php echo $page->getId(); ?>"<?php if($entry->page_parent == $page->getId()): ?> selected="selected"<?php endif; ?>><?php echo $page->page_title; ?></option>
