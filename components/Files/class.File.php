@@ -86,6 +86,13 @@
 		static public function create($name, $type=self::TYPE_FILE) {
 			$target = self::jail($name);
 			
+			$folders = explode('/', $target);
+			array_pop($folders);
+			$path = '';
+			foreach ($folders as $folder)
+				if (!file_exists($path.=$folder.'/'))
+					mkdir($path);
+			
 			if (file_exists($target))
 				return new File($name);
 			
