@@ -143,7 +143,7 @@
 		 * @return bool
 		 */
 		public function isDirectory() {
-			return $this->type | self::TYPE_DIR;
+			return $this->type & self::TYPE_DIR;
 		}
 		
 		/**
@@ -151,7 +151,7 @@
 		 * @return bool
 		 */
 		public function isFile() {
-			return $this->type | self::TYPE_FILE;
+			return $this->type & self::TYPE_FILE;
 		}
 		
 		/**
