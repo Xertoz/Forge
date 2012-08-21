@@ -81,3 +81,11 @@
 	color:inherit;
 	text-decoration:inherit;
 }
+
+.forge-dragsort-top {
+	border-top:2px dotted #000 !important;
+}
+
+.forge-dragsort-bottom {
+	border-bottom:2px dotted #000 !important;
+}
