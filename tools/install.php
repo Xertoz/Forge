@@ -34,6 +34,10 @@
 	// Make sure we're not reinstalling
 	if (count(glob('config/*')))
 		die("Forge has already been installed\n");
+	
+	// Make sure we can write to files
+	if (!is_writable('config') || !is_writeable('files'))
+		die("Required writing permissions were not given\n");
 
 	// Get the initial hostname to listen on
 	$hostname = param('Hostname');
