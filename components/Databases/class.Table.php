@@ -114,7 +114,12 @@
 			if (static::$global === false) {
 				$globalType = $this->__engine->getNamespace().'\Int';
 				$this->__columns['forge_website'] = new $globalType(new Params(['index'=>true]));
-				$this->__columns['forge_website']->set(\forge\components\Websites::getId());
+				try {
+					$this->__columns['forge_website']->set(\forge\components\Websites::getId());
+				}
+				catch (\Exception $e) {
+					$this->__columns['forge_website']->set(0);
+				}
 			}
 
 			// Loop over the members of this class for declared columns
