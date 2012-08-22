@@ -59,4 +59,4 @@
 	}
 	
 	// Start the session
-	session_start();
+	try { session_start(); } catch (\Exception $e) { }
