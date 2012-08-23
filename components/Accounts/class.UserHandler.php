@@ -34,8 +34,8 @@
 
 					echo \forge\components\Templates::display(
 						array(
-							'%T/page.activated.php',
-							'components/Accounts/tpl/page.activated.php'
+							'%T/page.confirmation.php',
+							'components/Accounts/tpl/page.confirmation.php'
 						),
 						array(
 							'confirmed' => $confirmed
@@ -133,8 +133,8 @@
 					// Show the page
 					echo \forge\components\Templates::display(
 						array(
-							'%T/page.register.success.php',
-							'components/Accounts/tpl/page.register.success.php'
+							'%T/page.registered.php',
+							'components/Accounts/tpl/page.registered.php'
 						)
 					);
 				break;
