@@ -38,12 +38,11 @@
 		 * @return string
 		 */
 		static private function getConfigPath() {
-			$path = 'config';
+			$path = [];
 			foreach (explode('\\',get_called_class()) as $piece)
-				$path .= '/'.$piece;
-			$path .= '.php';
+				$path[] = $piece;
 			
-			return $path;
+			return implode('/', $path).'.php';
 		}
 		
 		/**
@@ -51,7 +50,7 @@
 		 * @return bool
 		 */
 		static public function isConfigured() {
-			return file_exists(self::getConfigPath());
+			return file_exists('config/'.self::getConfigPath());
 		}
 		
 		/**
@@ -60,7 +59,7 @@
 		 */
 		static private function loadConfig() {
 			// Produce a path depending on the namespace
-			$path = self::getConfigPath();
+			$path = 'config/'.self::getConfigPath();
 			
 			if (file_exists($path))
 				require_once $path;
@@ -103,7 +102,6 @@
 			$config = '<?php static::makeConfig('.var_export(static::$__config[get_called_class()], true).');';
 			
 			// Finally, put it in place
-			touch($path);
-			file_put_contents($path, $config);
+			components\Files\ConfigFile::create($path)->set($config, true);
 		}
 	}

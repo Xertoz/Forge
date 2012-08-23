@@ -54,7 +54,7 @@
 		 * @throws \Exception
 		 */
 		public function __construct($location) {
-			$this->location = self::jail($location);
+			$this->location = static::jail($location);
 			
 			if (!file_exists($this->location))
 				throw new \Exception(_('File not found'));
@@ -84,7 +84,8 @@
 		 * @throws \Exception
 		 */
 		static public function create($name, $type=self::TYPE_FILE) {
-			$target = self::jail($name);
+			$cls = get_called_class();
+			$target = static::jail($name);
 			
 			$folders = explode('/', $target);
 			array_pop($folders);
@@ -94,7 +95,7 @@
 					mkdir($path);
 			
 			if (file_exists($target))
-				return new File($name);
+				return new $cls($name);
 			
 			switch ($type) {
 				case self::TYPE_DIR:
@@ -110,7 +111,7 @@
 			}
 			
 			try {
-				return new File($name);
+				return new $cls($name);
 			}
 			catch (\Exception $e) {
 				throw new \Exception(_('File could not be created'));
@@ -168,7 +169,7 @@
 		 * @param string $name
 		 * @return string
 		 */
-		static private function jail($name) {
+		static protected function jail($name) {
 			$parts = explode('/', $name);
 			
 			foreach ($parts as $key => $item)
@@ -183,7 +184,7 @@
 		 * @param string $to
 		 */
 		public function rename($to) {
-			$new = self::jail($to);
+			$new = static::jail($to);
 			rename($this->location, $new);
 			$this->location = $new;
 		}

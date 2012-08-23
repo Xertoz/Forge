@@ -116,12 +116,12 @@
 		// Remove any configured files
 		if (($files = glob('config/*')) !== false)
 			foreach ($files as $file)
-				\forge\components\Files::remove($file);
+				(new \forge\components\Files\ConfigFile(substr($file, strlen('config/'))))->delete();
 
 		// Tell the developer about this!
 		echo "Something went wrong during the installation. Exception thrown:\n";
 		echo $e->getMessage()."\n";
-		echo $e->getTraceAsString();
+		echo $e->getTraceAsString().PHP_EOL;
 
 		die(1);
 	}
