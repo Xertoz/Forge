@@ -14,7 +14,7 @@
 	* Dashboard component of Forge 4
 	* Administration interface
 	*/
-	class Admin implements \forge\components\admin\Administration {
+	class Admin implements \forge\components\Admin\Administration {
 		static public function index() {
 			$infoboxes = array();
 
