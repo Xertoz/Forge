@@ -142,10 +142,11 @@
 			$classes = array();
 			$path = str_replace('\\', '/', substr(get_called_class(), strlen('forge\\'))).'/'.str_replace('\\', '/', $subspace).'/';
 			
-			foreach (glob($path.'class.*.php') as $file) {
-				preg_match_all('#'.$path.'class.(\w+).php#', $file, $matches);
-				$classes[] = get_called_class().'\\'.(strlen($subspace) ? $subspace.'\\' : null).array_pop($matches[1]);
-			}
+			if (($files = glob($path.'class.*.php')) !== false)
+				foreach ($files as $file) {
+					preg_match_all('#'.$path.'class.(\w+).php#', $file, $matches);
+					$classes[] = get_called_class().'\\'.(strlen($subspace) ? $subspace.'\\' : null).array_pop($matches[1]);
+				}
 			
 			return $classes;
 		}
