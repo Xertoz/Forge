@@ -52,7 +52,7 @@
 		* The ID column of the row
 		* @var string
 		*/
-		static protected $id = 'forge_id';
+		protected $__id = 'forge_id';
 
 		/**
 		* Add a column to this table model
@@ -100,7 +100,7 @@
 			$this->__engine = $engine !== false ? $engine : \forge\components\Databases::getEngine();
 
 			// Make sure that we have an ID column
-			if (static::$id == 'forge_id') {
+			if ($this->__id == 'forge_id') {
 				$idType = $this->__engine->getNamespace().'\Int';
 				$params = new Params();
 				$params->default = null;
@@ -136,8 +136,8 @@
 
 			// Was a specific ID requested?
 			if ($id !== false && !is_null($id)) {
-				$this->__columns[static::$id]->set($id);
-				$this->select(static::$id);
+				$this->__columns[$this->__id]->set($id);
+				$this->select($this->__id);
 			}
 		}
 
@@ -206,14 +206,14 @@
 			$params = new Params();
 
 			$params->table = static::$table;
-			$params->where = array(static::$id);
+			$params->where = array($this->__id);
 
 			$query = $this->__engine->buildDelete($params);
 
 			$query->bindValue(
 				1,
-				$this->__columns[static::$id]->get(),
-				$this->__columns[static::$id]->getDataType()
+				$this->__columns[$this->__id]->get(),
+				$this->__columns[$this->__id]->getDataType()
 			);
 
 			$query->execute();
@@ -246,10 +246,10 @@
 
 		/**
 		* Get the row ID
-		* @return int
+		* @return mixed
 		*/
 		final public function getId() {
-			return $this->__columns[static::$id]->get();
+			return $this->__columns[$this->__id]->get();
 		}
 
 		/**
@@ -301,7 +301,7 @@
 			$params->table = static::$table;
 			$params->columns = array();
 			foreach ($this->__columns as $column => $type)
-				if ($column != static::$id)
+				if ($column != $this->__id || !$this->__columns[$column]->getIncrement())
 					$params->columns[] = $column;
 
 			$query = $this->__engine->buildInsert($params);
@@ -316,7 +316,8 @@
 			$query->execute();
 
 			$this->__changed = false;
-			$this->__columns[static::$id]->set($this->__engine->getPDO()->lastInsertId());
+			if ($this->__columns[$this->__id]->getIncrement())
+				$this->__columns[$this->__id]->set($this->__engine->getPDO()->lastInsertId());
 		}
 
 		/**
@@ -350,7 +351,7 @@
 
 			$params->columns = array_keys($this->__columns);
 			$params->table = static::$table;
-			$params->where = array(static::$id);
+			$params->where = array($this->__id);
 			$query = $this->__engine->buildUpdate($params);
 
 			$i = 1;
@@ -358,8 +359,8 @@
 				$query->bindValue($i++,$type->get(),$type->getDataType());
 			$query->bindValue(
 				$i,
-				$this->__columns[static::$id]->get(),
-				$this->__columns[static::$id]->getDataType()
+				$this->__columns[$this->__id]->get(),
+				$this->__columns[$this->__id]->getDataType()
 			);
 
 			$query->execute();
@@ -376,7 +377,7 @@
 		*/
 		final public function select($columns) {
 			$columns = !is_array($columns) ? array($columns) : $columns;
-			if (!$this->isGlobal() && !in_array(static::$id, $columns))
+			if (!$this->isGlobal() && !in_array($this->__id, $columns))
 				$columns[] = 'forge_website';
 			
 			$params = new Params();
@@ -409,7 +410,7 @@
 		* @throws Exception
 		*/
 		final public function write() {
-			if ($this->__columns[static::$id]->get() == 0)
+			if ($this->__columns[$this->__id]->get() == 0)
 				$this->insert();
 			else
 				$this->save();

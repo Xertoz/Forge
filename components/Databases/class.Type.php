@@ -124,6 +124,13 @@
 		public function get() {
 			return $this->value;
 		}
+		
+		/**
+		 * Is this column automatically incremented?
+		 */
+		public function getIncrement() {
+			return (bool)$this->increment;
+		}
 
 		/**
 		* Get the PDO data type of this column
