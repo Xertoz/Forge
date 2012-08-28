@@ -149,6 +149,24 @@
 		}
 		
 		/**
+		 * Get a handle for this file
+		 * @param $mode string Mode
+		 * @return resource
+		 */
+		public function getHandle($mode='r') {
+			return fopen($this->location, $mode);
+		}
+		
+		/**
+		 * Get the file name
+		 * @return string
+		 */
+		public function getName() {
+			$parts = explode('/', $this->location);
+			return array_pop($parts);
+		}
+		
+		/**
 		 * Is this a directory?
 		 * @return bool
 		 */
@@ -177,6 +195,14 @@
 					unset($parts[$key]);
 			
 			return 'files/'.implode('/', $parts);
+		}
+		
+		/**
+		 * Get the byte length of this file
+		 * @return int
+		 */
+		public function length() {
+			return filesize($this->location);
 		}
 		
 		/**
