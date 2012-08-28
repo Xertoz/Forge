@@ -68,6 +68,10 @@
 
 			self::$styles[] = $style;
 		}
+		
+		static public function addStyleFile($file) {
+			self::addStyle('<link href="'.self::html($file).'" rel="stylesheet" media="screen" />');
+		}
 
 		/**
 		* Create a date picker instance
@@ -198,9 +202,29 @@
 
 			if (empty($vars['value']))
 				$vars['value'] = null;
-
+			
+			self::addScriptFile('http://cdn.aloha-editor.org/latest/lib/vendor/jquery-1.7.2.js');
+			self::addScriptFile('http://cdn.aloha-editor.org/latest/lib/require.js');
+			self::addScript(
+				'<script src="http://cdn.aloha-editor.org/latest/lib/aloha.js"
+					data-aloha-plugins="common/ui,
+					common/format,
+					common/list,
+					common/link,
+					common/highlighteditables"></script>'
+			);
+			self::addScript(
+				'<script type="text/javascript">
+					Aloha.ready(function() {
+						var $ = Aloha.jQuery;
+						$(".editable").aloha();
+					});
+				</script>'
+			);
+			self::addStyleFile('http://cdn.aloha-editor.org/latest/css/aloha.css');
+			
 			$id = uniqid();
-			$textarea = '<textarea name="'.htmlspecialchars($vars['name']).'" class="ckeditor" id="'.$id.'">'.htmlentities($vars['value']).'</textarea>';
+			$textarea = '<textarea name="'.htmlspecialchars($vars['name']).'" class="editable" id="'.$id.'">'.htmlentities($vars['value']).'</textarea>';
 
 			return $textarea;
 		}
