@@ -107,6 +107,14 @@
 		final static public function setContentType($type) {
 			header('Content-Type: '.$type, true);
 		}
+		
+		/**
+		 * Tell the client what the attached file is named
+		 * @param string $name File name
+		 */
+		final static public function setAttachment($name) {
+			header('Content-disposition: attachment; filename='.$name);
+		}
 
 		/**
 		 * Register a child RequestHandler class to handle a certain base URL
