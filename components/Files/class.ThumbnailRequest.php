@@ -20,7 +20,7 @@
 		 * @throws \Exception
 		 */
 		public function handle() {
-			$parts = explode('/', $this->getPath());
+			$parts = explode('/', $this->getPathDecoded());
 			
 			if (count($parts) < 3)
 				throw new \forge\HttpException(_('Invalid URL'),

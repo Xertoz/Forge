@@ -67,6 +67,14 @@
 		final protected function getPath() {
 			return $this->path;
 		}
+		
+		/**
+		 * Get this request's decoded path
+		 * @returns tring
+		 */
+		final protected function getPathDecoded() {
+			return urldecode($this->path);
+		}
 
 		/**
 		 * Get this request's prefix
