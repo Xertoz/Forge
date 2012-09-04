@@ -211,7 +211,8 @@
 					common/format,
 					common/list,
 					common/link,
-					common/highlighteditables"></script>'
+					common/highlighteditables,
+					common/table"></script>'
 			);
 			self::addScript(
 				'<script type="text/javascript">
