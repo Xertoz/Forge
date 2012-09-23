@@ -32,6 +32,7 @@
 					return $_COOKIE[(string)func_get_arg(0)];
 	
 				case 2:
+					$_COOKIE[(string)func_get_arg(0)] = (string)func_get_arg(1);
 					return setcookie((string)func_get_arg(0),(string)func_get_arg(1),time()+30*24*3600,'/');
 			}
 		}
