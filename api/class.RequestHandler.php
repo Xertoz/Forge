@@ -73,7 +73,7 @@
 		 * @returns tring
 		 */
 		final protected function getPathDecoded() {
-			return urldecode($this->path);
+			return rawurldecode($this->path);
 		}
 
 		/**
