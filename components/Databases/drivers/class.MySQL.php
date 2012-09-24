@@ -139,12 +139,12 @@
 		public function buildUpdate(\forge\components\Databases\Params $params) {
 			$set = array();
 			foreach ($params->columns as $column)
-				$set[] = $column.' = ?';
+				$set[] = '`'.$column.'` = ?';
 			$set = implode(', ',$set);
 
 			$where = array();
 			foreach ($params->where as $column)
-				$where[] = $column.' = ?';
+				$where[] = '`'.$column.'` = ?';
 			$where = implode(' AND ',$where);
 
 			return $this->pdo->prepare(
