@@ -216,7 +216,7 @@
 					$this->pdo->query('SHOW COLUMNS IN `'.$name.'_tmp`')->fetchAll(\PDO::FETCH_COLUMN)
 				);
 
-				$this->pdo->query('INSERT INTO `'.$name.'` SELECT `'.implode('`, `', $columns).'` FROM `'.$name.'_tmp`');
+				$this->pdo->query('INSERT INTO `'.$name.'` ('.implode('`, `', $columns).') SELECT `'.implode('`, `', $columns).'` FROM `'.$name.'_tmp`');
 				$this->pdo->query('DROP TABLE `'.$name.'_tmp`');
 			}
 		}
