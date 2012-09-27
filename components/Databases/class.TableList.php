@@ -83,8 +83,7 @@
 		private function count() {
 			if ($this->count === false) {
 				$query = $this->params->engine->buildCount($this->params);
-				foreach ($this->params->where as $column => $value)
-					$query->bindParam($column, $value);
+				$this->params->engine->bindWhere($query, $this->params);
 				$query->execute();
 			
 				$this->count = $query->fetch(\PDO::FETCH_COLUMN);
@@ -198,9 +197,9 @@
 			$query = $this->params->engine->buildSelect($this->params);
 
 			// Set the parameters
-			foreach ($this->params->where as $column => $value)
-				$query->bindValue($column, $value);
-
+			$this->params->engine->bindWhere($query, $this->params);
+			
+			// Run the query & fetch the results
 			$query->execute();
 			$this->result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, get_class($this->params->type));
 		}

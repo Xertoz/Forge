@@ -381,18 +381,13 @@
 				$columns[] = 'forge_website';
 			
 			$params = new Params();
-			$params->where = $columns;
+			$params->type = $this;
+			foreach ($columns as $column)
+				$params->where[$column] = $this->__columns[$column]->get();
 			$params->table = static::$table;
 
 			$query = $this->__engine->buildSelect($params);
-
-			for ($i=0;$i<count($params->where);$i++)
-				$query->bindValue(
-					$params->where[$i],
-					$this->__columns[$params->where[$i]]->get(),
-					$this->__columns[$params->where[$i]]->getDataType()
-				);
-
+			$this->__engine->bindWhere($query, $params);
 			$query->execute();
 			$result = $query->fetch(\PDO::FETCH_ASSOC);
 			if ($result === false)

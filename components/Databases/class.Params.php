@@ -83,4 +83,9 @@
 		public function __get($member) {
 			return null;
 		}
+		
+		static public function getColumnOperator($column) {
+			$array = explode(':', $column, 2);
+			return count($array) < 2 ? ['is', $column] : $array;
+		}
 	}

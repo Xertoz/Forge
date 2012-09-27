@@ -38,6 +38,49 @@
 		* @return void
 		*/
 		abstract public function __construct(Params $params);
+		
+		/**
+		 * Bind values to the WHERE clause of a query
+		 * @param \PDOStatement $query The query to bind to
+		 * @param Params $params The parameters to run off of
+		 * @param int $n Start at this column
+		 * @return void
+		 */
+		public function bindWhere(\PDOStatement $query, Params $params) {
+			$bind = function(\PDOStatement $query, $where, &$n=1) use (&$bind, $params) {
+				foreach ($where as $column => $value) {
+					list($operator, $column) = $params->getColumnOperator($column);
+					
+					switch ($operator) {
+						default:
+							if (is_array($value))
+								$bind($query, $value, $n);
+							else
+								$query->bindValue(
+									$n++,
+									$value,
+									$params->type->getType(
+											$column
+									)->getDataType()
+								);
+							break;
+						
+						case 'in':
+							foreach ($value as $item)
+								$query->bindValue(
+									$n++,
+									$item,
+									$params->type->getType(
+											$column
+									)->getDataType()
+								);
+							break;
+					}
+				}
+			};
+			
+			$bind($query, $params->where);
+		}
 
 		/**
 		* Build a SELECT COUNT(*) statement for a table
@@ -151,37 +194,46 @@
 		* @param array
 		* @param string
 		* @return string
-		* @todo IN operator needs implementation
 		*/
 		final private function makeWhere($where,$parent=false) {
 			$sql = null;
 			$statements = array();
 
 			if ($parent === false || is_int($parent))
-				foreach ($where as $key => $value)
-					if (is_array($value))
+				foreach ($where as $key => $value) {
+					$column = !is_int($key) ? $key : $value;
+					$t = Params::getColumnOperator($column);
+
+					if ($t[0] == 'is' && is_array($value))
 						$statements[] = '('.self::makeWhere($value,$key).')';
 					else {
-						$column = !is_int($key) ? $key : $value;
-						$t = explode(':',$column);
-						if (count($t) == 2) {
-							$param = ':'.$t[1];
-							$operators = array(
-								'is' => '=',
-								'gt' => '>',
-								'lt' => '<',
-								'in' => 'IN'
-							);
+						$operators = array(
+							'is' => '=',
+							'gt' => '>',
+							'lt' => '<',
+							'in' => 'IN'
+						);
 
-							$operator = in_array($t[0],array_keys($operators)) ? $operators[$t[0]] : $operators['is'];
-						}
-						else {
-							$param = ':'.$t[0];
-							$operator = '=';
+						$operator = in_array($t[0],array_keys($operators)) ? $operators[$t[0]] : $operators['is'];
+						
+						switch ($operator) {
+							default:
+								$param = '?';
+								break;
+							
+							case 'IN':
+								if (count($value))
+									$param = '('.implode(', ', array_fill(0, count($value), '?')).')';
+								else {
+									// Make an impossible statement for null IN values
+									$operator = '!=';
+									$param = $t[1];
+								}
 						}
 
-						$statements[] = '`'.$column.'` '.$operator.' '.$param;
+						$statements[] = '`'.$t[1].'` '.$operator.' '.$param;
 					}
+				}
 
 			$sql = implode(' AND ',$statements);
 
