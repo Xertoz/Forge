@@ -265,7 +265,7 @@
 					'-',
 					null
 				),
-				mb_strtolower($source,'UTF-8')
+				strtolower($source)
 			);
 		}
 
