@@ -20,7 +20,7 @@
 		 */
 		public function process() {
 			// We are either setting our own account, or have admin access
-			if ($_REQUEST['account']['id'] != \forge\components\Accounts::getUserId()) {
+			if ($_POST['account']['id'] != \forge\components\Accounts::getUserId()) {
 				$admin = true;
 				\forge\components\Accounts::Restrict('Accounts','admin','list','w');
 			}
@@ -28,7 +28,7 @@
 				$admin = false;
 
 			// Init the account we use to edit
-			$account = new \forge\components\Accounts\db\Account($_REQUEST['account']['id']);
+			$account = new \forge\components\Accounts\db\Account($_POST['account']['id']);
 			
 			// Delete the account?
 			if (isset($_POST['delete'])) {
@@ -40,29 +40,29 @@
 
 			// All required fields must be set
 			if ($admin) {
-				if (empty($_REQUEST['account']['account']))
+				if (empty($_POST['account']['account']))
 					throw new \forge\HttpException(_('You must specify an account name'),\forge\HttpException::HTTP_BAD_REQUEST);
-				if (empty($_REQUEST['account']['email']))
+				if (empty($_POST['account']['email']))
 					throw new \forge\HttpException(_('You must specify an e-mail address'),\forge\HttpException::HTTP_BAD_REQUEST);
 			}
-			if (empty($_REQUEST['account']['name_first']))
+			if (empty($_POST['account']['name_first']))
 				throw new \forge\HttpException(_('You must specify a first name'),\forge\HttpException::HTTP_BAD_REQUEST);
-			if (empty($_REQUEST['account']['name_last']))
+			if (empty($_POST['account']['name_last']))
 				throw new \forge\HttpException(_('You must specify a last name'),\forge\HttpException::HTTP_BAD_REQUEST);
 
 			// Set the account settings
 			if ($admin) {
-				$account->user_account = $_REQUEST['account']['account'];
-				$account->user_email = $_REQUEST['account']['email'];
+				$account->user_account = $_POST['account']['account'];
+				$account->user_email = $_POST['account']['email'];
 			}
-			$account->user_name_first = $_REQUEST['account']['name_first'];
-			$account->user_name_last = $_REQUEST['account']['name_last'];
+			$account->user_name_first = $_POST['account']['name_first'];
+			$account->user_name_last = $_POST['account']['name_last'];
 
 			// Save it
 			$account->save();
 
 			// If we're an admin, we should manage the permissions
-			if (isset($_REQUEST['permissions'])) {
+			if (isset($_POST['permissions'])) {
 				\forge\components\Accounts::Restrict('Accounts','admin','list','w');
 
 				// Remove any existant permissions
@@ -73,14 +73,14 @@
 				foreach (\forge\components\Accounts::getDomains() as $domain => $list1)
 					foreach ($list1 as $category => $list2)
 						foreach ($list2 as $field)
-							if (isset($_REQUEST['permissions'][$domain][$category][$field])) {
+							if (isset($_POST['permissions'][$domain][$category][$field])) {
 								$permission = new \forge\components\Accounts\db\Permissions();
 								$permission->user_id = $account->getId();
 								$permission->permission_domain = $domain;
 								$permission->permission_category = $category;
 								$permission->permission_field = $field;
-								$permission->permission_read = $_REQUEST['permissions'][$domain][$category][$field]['read'];
-								$permission->permission_write = $_REQUEST['permissions'][$domain][$category][$field]['write'];
+								$permission->permission_read = $_POST['permissions'][$domain][$category][$field]['read'];
+								$permission->permission_write = $_POST['permissions'][$domain][$category][$field]['write'];
 								$permission->insert();
 							}
 			}
