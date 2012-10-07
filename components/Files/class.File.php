@@ -123,7 +123,7 @@
 		 */
 		public function delete() {
 			if ($this->type & self::TYPE_DIR) {
-				$delete = function($path) {
+				$delete = function($path) use (&$delete) {
 					foreach (glob($path.'/*') as $file)
 						if (is_dir($file))
 							$delete($file);
