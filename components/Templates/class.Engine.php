@@ -146,7 +146,7 @@
 		static private function getRequestField($name, $default) {
 			preg_match_all('/\w+/', $name, $matches);
 			
-			$ref = $_REQUEST;
+			$ref = array_merge($_GET, $_POST);
 			while ($matches[0])
 				$ref = &$ref[array_shift($matches[0])];
 			
