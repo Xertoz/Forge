@@ -40,6 +40,12 @@
 		static protected $controller = null;
 		
 		/**
+		 * The exception, if one was thrown
+		 * @var type \forge\HttpException
+		 */
+		static protected $exception = null;
+		
+		/**
 		 * Response message of the controller request
 		 */
 		static protected $message = null;
@@ -69,6 +75,7 @@
 				}
 				catch (\forge\HttpException $e) {
 					self::setResponse($e->getMessage(), self::RESULT_BAD);
+					self::$exception = $e;
 				}
 				
 				if (self::getCode() == self::RESULT_OK && isset($_POST['forge']['redirect']))
@@ -90,6 +97,14 @@
 		 */
 		static final public function getController() {
 			return self::$controller;
+		}
+		
+		/**
+		 * Get the exception, if one was thrown
+		 * @return \forge\HttpException
+		 */
+		static final public function getException() {
+			return self::$exception;
 		}
 		
 		/**

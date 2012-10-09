@@ -8,10 +8,23 @@
 	* to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
 	*/
 
-	namespace forge\components\XML\controllers;
+	namespace forge\components\XML;
 
 	/**
 	* Base class for controllers on /xml
 	*/
-	abstract class XML {
+	class XML {
+		static public function controller(\XMLWriter $xml) {
+			$xml->startElement('controller');
+			$xml->writeElement('name', \forge\Controller::getController());
+			$xml->writeElement('code', \forge\Controller::getCode());
+			$xml->writeElement('message', \forge\Controller::getMessage());
+			
+			if (($e = \forge\Controller::getException()) != null) {
+				$xml->writeElement('exception', $e->getMessage());
+				header($e->getHttpHeader(), $e->getCode());
+			}
+			
+			$xml->endElement();
+		}
 	}

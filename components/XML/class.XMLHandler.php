@@ -30,19 +30,19 @@
 
 				// Find the addon
 				if (\forge\Addon::existsComponent($addon))
-					$class = \forge\Addon::getComponent($addon);
+					$aClass = 'forge\components\\'.$addon;
 				elseif (\forge\Addon::existsModule($addon))
-					$class = \forge\Addon::getModule($addon);
+					$aClass = 'forge\modules\\'.$addon;
 				else
 					throw new \forge\HttpException('The requested feed does not exist',\forge\HttpException::HTTP_NOT_FOUND);
 
 				// Find its AJAX definition
-				if (!class_exists($ajax = call_user_func($class.'::getName',true).'\Ajax'))
-					throw new \forge\HttpException('AJAX definition not found',\forge\HttpException::HTTP_NOT_IMPLEMENTED);
+				if (!class_exists($xClass = $aClass.'\XML'))
+					throw new \forge\HttpException('XML definition not found',\forge\HttpException::HTTP_NOT_IMPLEMENTED);
 
 				// Does the method exist?
-				if (!method_exists($ajax,$method))
-					throw new \forge\HttpException('AJAX method not found',\forge\HttpException::HTTP_NOT_IMPLEMENTED);
+				if (!method_exists($xClass,$method))
+					throw new \forge\HttpException('XML method not found',\forge\HttpException::HTTP_NOT_IMPLEMENTED);
 			}
 			catch (\forge\HttpException $e) {
 				throw $e;
@@ -53,7 +53,7 @@
 
 			// We know where it is - time to try and execute it
 			try {
-				call_user_func($ajax.'::'.$method,$xml);
+				call_user_func($xClass.'::'.$method,$xml);
 			}
 			catch (\forge\HttpException $e) {
 				switch ($e->getCode()) {
