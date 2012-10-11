@@ -74,6 +74,6 @@
 		<?php else: ?>
 			<?php echo $instance->getEditForm($entry->getId()); ?>
 		<?php endif; ?>
-		<p><input type="submit" value="<?php echo _($entry->getId() ? 'Edit' : 'Create'); ?>"></p>
+		<p><input type="submit" value="<?php echo _($entry->getId() ? _('Save') : _('Create')); ?>"></p>
 	</form>
 </div>
