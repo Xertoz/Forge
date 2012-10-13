@@ -175,8 +175,14 @@
 		* @return array
 		*/
 		static public function getTemplates() {
-			foreach (glob('templates/*') as $template)
-				require_once $template.'/info/template.php';
+			foreach (glob('templates/*') as $target)
+				\forge\Helper::run(function() use ($target) {
+					$folder = substr($target, strlen('templates/'));
+					$template = new Templates\Template($folder);
+					self::$templates[$folder] = $template;
+				});
+			ksort(self::$templates);
+			
 			return self::$templates;
 		}
 

@@ -1,6 +1,6 @@
 <div class="admin templates template">
-	<h1><?php echo self::html($template['title']); ?></h1>
-	<p><?php printf(_('This template was written by %s, copyright &copy; %s.'),$template['author'],$template['copyright']); ?></p>
+	<h1><?php echo self::html($template->getName()); ?></h1>
+	<p><?php printf(_('This template was written by %s, copyright &copy; %s.'),$template->getAuthor(),$template->getCopyright()); ?></p>
 	<?php if ($defaultTemplate == $systemName): ?>
 		<p><?php echo _('The template is currently active.'); ?></p>
 	<?php else: ?>
@@ -10,7 +10,7 @@
 			<p><input type="submit" value="<?php echo _('Select'); ?>" />
 		</form>
 	<?php endif; ?>
-	<img src="/templates/<?php echo $systemName; ?>/info/snapshot.png" alt="<?php echo self::html($template['title']); ?>" title="<?php echo self::html($template['title']); ?>" align="left" style="margin-right:15px;" />
+	<img src="/templates/<?php echo $systemName; ?>/info/snapshot.png" alt="<?php echo self::html($template->getName()); ?>" title="<?php echo self::html($template->getName()); ?>" align="left" style="margin-right:15px;" />
 	<table style="width:auto;margin-top:0;">
 		<thead>
 			<tr>
@@ -18,11 +18,11 @@
 			</tr>
 		</thead>
 		<tbody>
-			<?php if (count($template['modules']) == 0): ?>
+			<?php if (count($template->getModules()) == 0): ?>
 				<tr>
 					<td><?php echo _('This template supports no special modules'); ?></td>
 				</tr>
-			<?php else: foreach($template['modules'] as $module): ?>
+			<?php else: foreach($template->getModules() as $module): ?>
 				<tr>
 					<td><?php echo self::html($module); ?></td>
 				</tr>
