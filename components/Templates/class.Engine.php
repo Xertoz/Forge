@@ -107,7 +107,7 @@
 				ob_start();
 
 				extract($variables);
-				require $file;
+				require FORGE_PATH.'/'.$file;
 				$parsed = ob_get_contents();
 
 				ob_end_clean();

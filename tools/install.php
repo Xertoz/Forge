@@ -11,8 +11,7 @@
 	namespace forge\installation;
 
 	// Start off by initializing Forge
-	chdir('..');
-	require_once 'forge.php';
+	require_once __DIR__.'/../forge.php';
 
 	/**
 	 * Get a parameter from the developer

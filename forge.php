@@ -13,6 +13,9 @@
 	// Set the version number of this software
 	define('FORGE_VERSION', '5.0.0-dev');
 	
+	// Set the root path for the Forge system
+	define('FORGE_PATH', __DIR__);
+	
 	// As a time zone must be set, use UTC for convenience
 	date_default_timezone_set('UTC');
 
@@ -68,7 +71,7 @@
 		}
 		
 		// Build a file path & name
-		$file = $path.'/'.$type.'.'.$class.'.php';
+		$file = FORGE_PATH.'/'.$path.'/'.$type.'.'.$class.'.php';
 		
 		// If it exists, include it
 		if (file_exists($file))

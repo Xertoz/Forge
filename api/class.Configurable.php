@@ -62,7 +62,7 @@
 			$path = 'config/'.self::getConfigPath();
 			
 			if (file_exists($path))
-				require_once $path;
+				require_once FORGE_PATH.'/'.$path;
 		}
 		
 		/**

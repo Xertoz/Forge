@@ -10,8 +10,8 @@
 
 	namespace forge\components\Mailer;
 
-	require_once 'components/Mailer/api/class.phpmailer.php';
-	require_once 'components/Mailer/api/class.smtp.php';
+	require_once FORGE_PATH.'/components/Mailer/api/class.phpmailer.php';
+	require_once FORGE_PATH.'/components/Mailer/api/class.smtp.php';
 
 	/**
 	* Mailman
