@@ -59,10 +59,10 @@
 		 */
 		static private function loadConfig() {
 			// Produce a path depending on the namespace
-			$path = 'config/'.self::getConfigPath();
+			$path = FORGE_PATH.'/config/'.self::getConfigPath();
 			
 			if (file_exists($path))
-				require_once FORGE_PATH.'/'.$path;
+				require_once $path;
 		}
 		
 		/**

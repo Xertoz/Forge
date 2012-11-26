@@ -119,7 +119,7 @@
 
 			// Return the template
 			if ($type == 'page') {
-				if (file_exists('templates/'.self::getTemplate().'/init.php'))
+				if (file_exists(FORGE_PATH.'/templates/'.self::getTemplate().'/init.php'))
 					include FORGE_PATH.'/templates/'.self::getTemplate().'/init.php';
 
 				return self::display(
