@@ -74,11 +74,11 @@
 		/**
 		* URL
 		* @var string
+		* @todo This should be UNIQUE coupled with forge_website
 		*/
 		public $page_url = [
 			'Char',
-			'length' => 255,
-			'unique' => true
+			'length' => 255
 		];
 
 		/**
