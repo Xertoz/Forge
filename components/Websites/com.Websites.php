@@ -87,7 +87,7 @@
 			return \forge\components\Templates::display(
 				'components/Websites/tpl/inc.infobox.php',
 				array(
-					'websites' => count(\forge\components\Websites::getDomains())
+					'websites' => \forge\components\Websites::getDomains(true)->length()
 				)
 			);
 		}
