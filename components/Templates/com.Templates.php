@@ -72,6 +72,9 @@
 		* @throws Exception
 		*/
 		static public function display($files,array $variables=array()) {
+			if (file_exists(FORGE_PATH.'/templates/'.self::getTemplate().'/init.php'))
+				require_once FORGE_PATH.'/templates/'.self::getTemplate().'/init.php';
+
 			// We utilize an array when checking if it exists
 			if (!is_array($files))
 				$files = array($files);
@@ -118,10 +121,7 @@
 				)));
 
 			// Return the template
-			if ($type == 'page') {
-				if (file_exists(FORGE_PATH.'/templates/'.self::getTemplate().'/init.php'))
-					include FORGE_PATH.'/templates/'.self::getTemplate().'/init.php';
-
+			if ($type == 'page')
 				return self::display(
 					'%T/sys.design.php',
 					array_merge(
@@ -129,7 +129,6 @@
 						array('content' => $output)
 					)
 				);
-			}
 			else
 				return $output;
 		}
