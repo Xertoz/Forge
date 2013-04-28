@@ -452,6 +452,8 @@
 				'username' => sha1($username),
 				'password' => sha1($password)
 			), true);
+
+			return true;
 		}
 	}
 	
