@@ -1,1 +1,1 @@
-<?php echo self::editor(array('name'=>'plugin')); ?>
+<?php echo self::editor(array('name'=>'plugin'));
