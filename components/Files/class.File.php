@@ -68,7 +68,7 @@
 		 */
 		public function __toString() {
 			if ($this->read)
-				return;
+				return $this->content;
 			$this->read = true;
 			
 			$this->content = file_get_contents($this->location);
