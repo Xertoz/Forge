@@ -26,6 +26,6 @@
 				if ($item == '..')
 					unset($parts[$key]);
 			
-			return 'config/'.implode('/', $parts);
+			return FORGE_PATH.'/config/'.implode('/', $parts);
 		}
 	}

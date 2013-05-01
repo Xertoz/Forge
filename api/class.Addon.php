@@ -64,8 +64,8 @@
 		static final public function getComponents($long=false) {
 			$components = array();
 			
-			foreach (glob('components/*') as $raw) {
-				$name = substr($raw, strlen('components/'));
+			foreach (glob(FORGE_PATH.'/components/*') as $raw) {
+				$name = substr($raw, strlen(FORGE_PATH.'/components/'));
 				$components[] = $long ? 'forge\\components\\'.$name : $name;
 			}
 			
@@ -121,8 +121,8 @@
 		*/
 		static public function getTables($long=true) {
 			$tables = array();
-			$files = glob(($path = (substr(str_replace('\\', '/', get_called_class()), strlen('forge/')).'/db/')).'*');
-			
+			$files = glob(FORGE_PATH.'/'.($path = (substr(str_replace('\\', '/', get_called_class()), strlen('forge/')).'/db/')).'*');
+
 			foreach ($files as $file) {
 				preg_match('$'.$path.'class.(\w+).php$', $file, $m);
 				

@@ -194,7 +194,7 @@
 				if ($item == '..')
 					unset($parts[$key]);
 			
-			return 'files/'.implode('/', $parts);
+			return FORGE_PATH.'/files/'.implode('/', $parts);
 		}
 		
 		/**

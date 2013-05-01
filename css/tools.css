@@ -1,0 +1,31 @@
+@import url(http://fonts.googleapis.com/css?family=Noto+Sans);
+
+body {
+	background:#f3ece2;
+	font:15px 'Noto Sans', sans-serif;
+	margin:25px;
+}
+
+h1 {
+	margin:0 0 15px 0;
+}
+
+p {
+	margin:10px 0;
+}
+
+ul.checklist > li.success {
+	list-style-image:url(/images/led/accept.png);
+}
+
+ul.checklist > li.failure {
+	list-style-image:url(/images/led/cross.png);
+}
+
+p.error {
+	color:red;
+}
+
+p.success {
+	color:green;
+}
