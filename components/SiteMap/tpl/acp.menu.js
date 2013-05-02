@@ -10,7 +10,7 @@ function organize() {
 	var parent = document.createElement('input');
 	parent.type = 'hidden';
 	parent.name = 'parent';
-	parent.value = '0';
+	parent.value = '<?php echo !empty($_GET['parent']) ? (int)$_GET['parent'] : 0; ?>';
 	form.appendChild(parent);
 	
 	var inputs = document.getElementsByClassName('forge-sitemap-menu-row');
