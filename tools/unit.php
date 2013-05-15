@@ -15,7 +15,7 @@
 		 * @return boolean
 		 */
 		function http($url) {
-			if (!extension_loaded('curl'))
+			if (!extension_loaded('curl') || ini_get('open_basedir'))
 				return false;
 			$curl = curl_init(HTTP_PREFIX.$url);
 			curl_setopt($curl, CURLOPT_NOBODY, true);
