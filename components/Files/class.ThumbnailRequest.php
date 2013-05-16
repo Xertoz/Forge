@@ -10,6 +10,8 @@
 
 	namespace forge\components\Files;
 
+	use forge\HttpException;
+
 	/**
 	* The thumbnail view
 	*/
@@ -47,6 +49,11 @@
 				$width,
 				$height,
 				isset($_GET['dimension']) ? (int)$_GET['dimension'] : Thumbnail::DIMENSION_STATIC)));
-			echo new File(substr($parsed, strlen('files/')));
+			try {
+				echo new File(substr($parsed, strlen('files/')));
+			}
+			catch (\Exception $e) {
+				throw new HttpException(_('Source image not found'), HttpException::HTTP_NOT_FOUND);
+			}
 		}
 	}
