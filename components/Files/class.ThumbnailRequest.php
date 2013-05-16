@@ -50,7 +50,7 @@
 				$height,
 				isset($_GET['dimension']) ? (int)$_GET['dimension'] : Thumbnail::DIMENSION_STATIC)));
 			try {
-				echo new File(substr($parsed, strlen('files/')));
+				echo new File(substr($parsed, strlen(FORGE_PATH.'/files/')));
 			}
 			catch (\Exception $e) {
 				throw new HttpException(_('Source image not found'), HttpException::HTTP_NOT_FOUND);
