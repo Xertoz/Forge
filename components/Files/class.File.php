@@ -87,9 +87,9 @@
 			$cls = get_called_class();
 			$target = static::jail($name);
 			
-			$folders = explode('/', $target);
+			$folders = explode('/', substr($target, strlen(FORGE_PATH)));
 			array_pop($folders);
-			$path = '';
+			$path = FORGE_PATH.'/';
 			foreach ($folders as $folder)
 				if (!file_exists($path.=$folder.'/'))
 					mkdir($path);
