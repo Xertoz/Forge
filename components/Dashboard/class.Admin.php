@@ -10,6 +10,9 @@
 
 	namespace forge\components\Dashboard;
 
+	use forge\Addon;
+	use forge\components\Templates;
+
 	/**
 	* Dashboard component of Forge 4
 	* Administration interface
@@ -18,13 +21,19 @@
 		static public function index() {
 			$infoboxes = array();
 
-			foreach (\forge\Addon::getComponents(true) as $com)
-				if (in_array('forge\components\Dashboard\InfoBox',class_implements($com)))
-					$infoboxes[] = call_user_func($com.'::getInfobox');
-
-			foreach (\forge\Addon::getModules(true) as $mod)
-				if (in_array('forge\components\Dashboard\InfoBox',class_implements($mod)))
-					$infoboxes[] = call_user_func($mod.'::getInfobox');
+			foreach (Addon::getAddons(true) as $addon)
+				if (in_array('forge\components\Dashboard\InfoBox', class_implements($addon)))
+					try {
+						$infoboxes[] = $addon::getInfoBox();
+					}
+					catch (\Exception $e) {
+						$parts = explode('\\', $addon);
+						$title = array_pop($parts);
+						$infoboxes[] = Templates::display(
+							['components/Dashboard/tpl/inc.errorbox.php'],
+							['title' => $title]
+						);
+					}
 
 			return \forge\components\Templates::display(
 				array(
