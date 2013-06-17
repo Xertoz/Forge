@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Admin.php
-	* Copyright 2010-2012 Mattias Lindholm
+	* Copyright 2010-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -15,7 +15,7 @@
 	*/
 	class Admin implements \forge\components\Admin\Administration {
 		static public function page() {
-			\forge\components\Accounts::restrict('SiteMap','admin','pages','r');
+			\forge\components\Identity::restrict('com.SiteMap.Admin');
 
 			$entry = !empty($_GET['id']) ? new db\Page($_GET['id']) : new db\Page();
 			$instance = $entry->page_type ? new $entry->page_type : null;
@@ -29,7 +29,7 @@
 		}
 
 		static public function index() {
-			\forge\components\Accounts::restrict('SiteMap','admin','pages','r');
+			\forge\components\Identity::restrict('com.SiteMap.Admin');
 			
 			$pages = new \forge\components\Databases\ListMatrix(new \forge\components\Databases\Params([
 				'type' => new \forge\components\SiteMap\db\Page,

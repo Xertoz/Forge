@@ -1,7 +1,8 @@
+<h2><?php echo _('Account'); ?></h2>
 <div class="accounts settings">
-	<h1><?php echo _('Settings'); ?></h1>
+	<h3><?php echo _('Personal'); ?></h3>
 	<?php echo self::response('Accounts\Account'); ?>
-	<form action="/user/settings" method="POST">
+	<form action="<?php echo self::html($_SERVER['REQUEST_URI']); ?>" method="POST">
 		<input type="hidden" name="forge[controller]" value="Accounts\Account" />
 		<input type="hidden" name="account[id]" value="<?php echo $account->getID(); ?>" />
 		<table>
@@ -18,9 +19,9 @@
 	</form>
 </div>
 <div class="accounts password">
-	<h1><?php echo _('Password'); ?></h1>
+	<h3><?php echo _('Password'); ?></h3>
 	<?php echo self::response('Accounts\Password'); ?>
-	<form action="/user/settings" method="POST">
+	<form action="<?php echo self::html($_SERVER['REQUEST_URI']); ?>" method="POST">
 		<input type="hidden" name="forge[controller]" value="Accounts\Password" />
 		<table>
 			<tr>
@@ -38,7 +39,4 @@
 		</table>
 		<input type="submit" value="<?php echo _('Save'); ?>" />
 	</form>
-</div>
-<div class="accounts logout">
-	<p><a href="/user/logout"><?php echo _('Log out'); ?></a></p>
 </div>

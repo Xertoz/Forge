@@ -1,7 +1,7 @@
 <?php
 	/**
-	* acp.Templates.php
-	* Copyright 2010-2012 Mattias Lindholm
+	* class.Admin.php
+	* Copyright 2010-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -15,7 +15,7 @@
 		* Show the connection list
 		*/
 		static public function index() {
-			\forge\components\Accounts::Restrict('Templates','admin','list','r');
+			\forge\components\Identity::restrict('com.Templates.Admin');
 
 			$defaultTemplate = \forge\components\Templates::getTemplate();
 
@@ -32,6 +32,8 @@
 		* @return string
 		*/
 		static public function view() {
+			\forge\components\Identity::restrict('com.Templates.Admin');
+
 			// Get the template info (or 404)
 			try {
 				$templates = \forge\components\Templates::getTemplates();

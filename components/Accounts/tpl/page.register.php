@@ -29,6 +29,6 @@
 				<td><?php echo self::input('password', 'password_confirm'); ?></td>
 			</tr>
 		</table>
-		<p><input type="submit" value="<?php echo _('Save'); ?>" /></p>
+		<p><input type="submit" value="<?php echo _('Register'); ?>" /></p>
 	</form>
 </div>

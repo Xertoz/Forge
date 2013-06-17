@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Admin.php
-	* Copyright 2010-2012 Mattias Lindholm
+	* Copyright 2010-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -19,7 +19,7 @@
 		* Show the connection list
 		*/
 		static public function index() {
-			\forge\components\Accounts::Restrict('Databases','admin','list','r');
+			\forge\components\Identity::restrict('com.Databases.Admin');
 
 			return \forge\components\Templates::display(
 				'components/Databases/tpl/acp.index.php',

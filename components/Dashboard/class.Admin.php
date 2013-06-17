@@ -1,7 +1,7 @@
 <?php
 	/**
-	* acp.Dashboard.php
-	* Copyright 2010-2012 Mattias Lindholm
+	* class.Admin.php
+	* Copyright 2010-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -9,9 +9,6 @@
 	*/
 
 	namespace forge\components\Dashboard;
-
-	use forge\Addon;
-	use forge\components\Templates;
 
 	/**
 	* Dashboard component of Forge 4
@@ -21,7 +18,7 @@
 		static public function index() {
 			$infoboxes = array();
 
-			foreach (Addon::getAddons(true) as $addon)
+			foreach (\forge\Addon::getAddons(true) as $addon)
 				if (in_array('forge\components\Dashboard\InfoBox', class_implements($addon)))
 					try {
 						$infoboxes[] = $addon::getInfoBox();
@@ -29,7 +26,7 @@
 					catch (\Exception $e) {
 						$parts = explode('\\', $addon);
 						$title = array_pop($parts);
-						$infoboxes[] = Templates::display(
+						$infoboxes[] = \forge\components\Templates::display(
 							['components/Dashboard/tpl/inc.errorbox.php'],
 							['title' => $title]
 						);

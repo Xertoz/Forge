@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Admin.php
-	* Copyright 2010-2012 Mattias Lindholm
+	* Copyright 2010-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -11,12 +11,12 @@
 	namespace forge\components\Files;
 
 	/**
-	* File component for Forge 4
+	* File component for Forge
 	* Administration interface
 	*/
 	class Admin implements \forge\components\Admin\Administration {
 		static public function index() {
-			\forge\components\Accounts::restrict('Files','admin','use','r');
+			\forge\components\Identity::restrict('com.Files.Admin');
 
 			$path = 'files/'.(empty($_REQUEST['path']) ? null : $_REQUEST['path'].'/').'*';
 			$path = preg_replace('/(\.){2,}/', '', $path);

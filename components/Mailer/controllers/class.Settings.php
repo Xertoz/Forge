@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Settings.php
-	* Copyright 2012 Mattias Lindholm
+	* Copyright 2012-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -19,7 +19,7 @@
 		 * @return void
 		 */
 		public function process() {
-			\forge\components\Accounts::restrict('Mailer','admin','settings','w');
+			\forge\components\Identity::restrict('com.Mailer.Admin');
 
 			// Update sender info
 			if (empty($_REQUEST['from']['name']))

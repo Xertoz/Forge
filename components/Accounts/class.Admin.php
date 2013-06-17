@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Admin.php
-	* Copyright 2010-2012 Mattias Lindholm
+	* Copyright 2010-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -11,12 +11,12 @@
 	namespace forge\components\Accounts;
 
 	/**
-	* Accounts component of Forge 4
+	* Accounts component of Forge
 	* Administration interface
 	*/
 	class Admin implements \forge\components\Admin\Administration {
 		static public function index() {
-			\forge\components\Accounts::Restrict('Accounts','admin','list','r');
+			\forge\components\Identity::restrict('com.Accounts.Admin');
 
 			// Get all accounts
 			$accounts = new \forge\components\Databases\ListMatrix(new \forge\components\Databases\Params([
@@ -29,7 +29,7 @@
 		}
 
 		static public function account() {
-			\forge\components\Accounts::Restrict('Accounts','admin','list','w');
+			\forge\components\Identity::restrict('com.Accounts.Admin');
 
 			$account = new \forge\components\Accounts\db\Account(empty($_GET['id']) ? null : $_GET['id']);
 
@@ -48,7 +48,7 @@
 		}
 
 		static public function lostpassword() {
-			\forge\components\Accounts::restrict('Accounts','admin','registration','r');
+			\forge\components\Identity::restrict('com.Accounts.Admin');
 
 			// Print the parsed template
 			return \forge\components\Templates::display('components/Accounts/tpl/acp.lostpassword.php',array(
@@ -57,7 +57,7 @@
 		}
 
 		static public function registration() {
-			\forge\components\Accounts::restrict('Accounts','admin','registration','r');
+			\forge\components\Identity::restrict('com.Accounts.Admin');
 
 			$tpl = array(
 				'activation' => \forge\components\Accounts::config('activation'),

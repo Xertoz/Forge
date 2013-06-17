@@ -1,7 +1,7 @@
 <?php
 	/**
-	* tbl.users.php
-	* Copyright 2009-2012 Mattias Lindholm
+	* class.Account.php
+	* Copyright 2009-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -26,12 +26,6 @@
 		* @var bool
 		*/
 		static protected $global = true;
-		
-		/**
-		 * Permissions associated with this user
-		 * @var \forge\components\Databases\TableList
-		 */
-		private $__permissions = null;
 
 		/**
 		* Account state
@@ -90,28 +84,6 @@
 			'Char',
 			'length' => 8,
 		);
-		
-		/**
-		 * Override the construct to add loading of permissions
-		 */
-		public function __construct() {
-			call_user_func_array('parent::__construct', func_get_args());
-			
-			if ($this->getID())
-				$this->__permissions = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
-					'type' => new \forge\components\Accounts\db\Permissions,
-					'where' => array('user_id'=>$this->getId()),
-					'limit' => 1000
-				]));
-		}
-		
-		/**
-		 * Get all permissions this user has been granted
-		 * @return \forge\components\Databases\TableList
-		 */
-		public function getPermissions() {
-			return $this->__permissions;
-		}
 
 		/**
 		* Hash a password for the given user

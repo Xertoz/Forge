@@ -1,0 +1,51 @@
+<?php
+	/**
+	 * class.ProviderInterface.php
+	 * Copyright 2013 Mattias Lindholm
+	 *
+	 * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+	 * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
+	 * to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
+	 */
+	namespace forge\components\Identity;
+
+	/**
+	 * Define a set of functions each provider must have
+	 */
+	interface ProviderInterface {
+		/**
+		 * Get the user's complete name
+		 * @return string
+		 */
+		public function getName();
+
+		/**
+		 * Get the user's email address
+		 * @return string
+		 */
+		public function getEmail();
+
+		/**
+		 * Get the title of this provider
+		 * @return string
+		 */
+		static public function getTitle();
+
+		/**
+		 * Produce some HTML providing a bind function
+		 * @return string
+		 */
+		static public function showBind();
+
+		/**
+		 * Produce some HTML providing a login function
+		 * @return string
+		 */
+		static public function showLogin();
+
+		/**
+		 * Produce some HTML providing a setting functionality
+		 * @return string
+		 */
+		public function showSettings();
+	}

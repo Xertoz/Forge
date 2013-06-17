@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Addon.php
-	* Copyright 2009-2012 Mattias Lindholm
+	* Copyright 2009-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -75,7 +75,7 @@
 		/**
 		 * Get all loaded addons
 		 * @param $long boolean Return the long (namespaced) class names?
-		 * @return array
+		 * @return Addon[]
 		 */
 		static final public function getAddons($long=false) {
 			$components = self::getComponents($long);
@@ -157,6 +157,13 @@
 		*/
 		static public function getPermissions() {
 			$class = get_called_class();
-			return $class::$permissions;
+			$permissions = [];
+			foreach ($class::$permissions as $permission)
+				$permissions[] = implode('.', [
+					self::isComponent() ? 'com' : 'mod',
+					self::getName(),
+					$permission
+				]);
+			return $permissions;
 		}
 	}

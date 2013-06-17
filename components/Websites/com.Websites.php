@@ -1,7 +1,7 @@
 <?php
 	/**
 	* com.Websites.php
-	* Copyright 2010-2012 Mattias Lindholm
+	* Copyright 2010-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -18,13 +18,7 @@
 		* Permissions
 		* @var array
 		*/
-		static protected $permissions = array(
-			'Websites' => array(
-				'admin' => array(
-					'entries'
-				)
-			)
-		);
+		static protected $permissions = ['Admin'];
 
 		/**
 		* The website we're currently on
@@ -81,7 +75,7 @@
 		 * @return string
 		 */
 		static public function getInfoBox() {
-			if (!\forge\components\Accounts::getPermission(\forge\components\Accounts::getUserId(),'websites','admin','entries','r'))
+			if (!\forge\components\Identity::getIdentity()->hasPermission('com.Websites.Admin'))
 				return null;
 
 			return \forge\components\Templates::display(

@@ -1,7 +1,7 @@
 <?php
 	/**
 	* com.Admin.php
-	* Copyright 2011-2012 Mattias Lindholm
+	* Copyright 2011-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -18,13 +18,7 @@
 		* Permissions
 		* @var array
 		*/
-		static protected $permissions = array(
-			'Admin' => array(
-				'administration' => array(
-					'access'
-				)
-			)
-		);
+		static protected $permissions = ['Admin'];
 
 		/**
 		* Display the administration panel
@@ -34,13 +28,11 @@
 		* @throws Exception
 		*/
 		static public function display($addon,$view) {
-			// First off, we must be admin
-			try {
-				\forge\components\Accounts::restrict('Admin','administration','access','r');
-			}
-			catch (\Exception $e) {
-				\forge\components\SiteMap::redirect('/user/login?from='.urlencode($_SERVER['REQUEST_URI']));
-			}
+			// Explicitly force authentication
+			\forge\components\Identity::auth();
+
+			// Then the admin permission is required to continue
+			\forge\components\Identity::restrict('com.Admin.Admin');
 
 			// Argument typing
 			$addon = (string)$addon;

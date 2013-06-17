@@ -34,7 +34,7 @@
 		<?php if (!$prerequisites->isChecked()): ?>
 		<p class="error"><?php echo _('You must take the proper steps to ensure that the prerequisites are met.'); ?></p>
 		<?php goto footer; endif; ?>
-		<form action="/tools/install" method="POST">
+		<form action="/tools/install.php" method="POST">
 			<h2><?php echo _('Step 2 - Settings'); ?></h2>
 			<h3><?php echo _('Database'); ?></h3>
 			<p><?php echo _('Forge requires a main database to store data within. It is possible to add additional database connections later.'); ?></p>
@@ -155,7 +155,7 @@
 
 				// Write the developer key
 				try {
-					\forge\components\Accounts::setDeveloperKey($_POST['development']['key1']);
+					\forge\components\Identity::setDeveloperKey($_POST['development']['key1']);
 					$install->add(true, _('Setting the development key.'));
 				}
 				catch (\Exception $e) {

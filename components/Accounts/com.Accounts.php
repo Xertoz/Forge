@@ -1,7 +1,7 @@
 <?php
 	/**
 	* com.Accounts.php
-	* Copyright 2009-2012 Mattias Lindholm
+	* Copyright 2009-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -13,7 +13,7 @@
 	/**
 	* Account component
 	*/
-	class Accounts extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Accounts extends \forge\Component {
 		use \forge\Configurable;
 		
 		/**
@@ -22,73 +22,10 @@
 		const MinimumPasswordLength = 4;
 
 		/**
-		* Cache the permissions fetched out of the database
-		* @var arrya
-		*/
-		static protected $permissionCache = array();
-
-		/**
 		* Permissions
 		* @var array
 		*/
-		static protected $permissions = array(
-			'Accounts' => array(
-				'admin' => array(
-					'list',
-					'fields',
-					'registration'
-				)
-			)
-		);
-
-		/**
-		* Attempt to login a user into the current session
-		* @param string Account / E-mail
-		* @param string Password (clear text)
-		* @param bool Remember this with a cookie?
-		* @return int
-		* @throws Exception
-		*/
-		static public function attemptLogin($username, $password, $cookie=false) {
-			// Step 1: Developer account?
-			$root = self::getConfig('root');
-			if ($root['username'] == sha1($username) && $root['password'] == sha1($password)) {
-				\forge\Memory::session('USER_DEVELOPER', true);
-				return 2;
-			}
-
-			// Attempt creating the account (throws exception if it doesn't exist)
-			try {
-				$account = new Accounts\db\Account();
-				$account->user_account = $username;
-				$account->select('user_account');
-			}
-			catch (\Exception $e) {
-				throw new \forge\HttpException('Account does not exist', \forge\HttpException::HTTP_FORBIDDEN);
-			}
-
-			if ($account->user_state != 'active')
-				throw new \forge\HttpException('The user is not activated, and cannot be logged into.', \forge\HttpException::HTTP_FORBIDDEN);
-
-			// Throw exception if it's the wrong password
-			if ($account->user_password != $account->hashPassword($password))
-				throw new \forge\HttpException('Wrong password given for user '.$username, \forge\HttpException::HTTP_FORBIDDEN);
-
-			// Save us as logged on!
-			self::login($account->getId());
-
-			// Do we want to be remembered?
-			if ((bool)$cookie === true) {
-				$entry = new \forge\components\Accounts\db\Cookie();
-				$entry->account = $account->getId();
-				$entry->insert();
-
-				\forge\Memory::cookie('account',$account->getId());
-				\forge\Memory::cookie('password',md5($account->user_password.$entry->salt));
-			}
-
-			return 1;
-		}
+		static protected $permissions = ['Admin'];
 
 		/**
 		* Set the current user ID
@@ -97,27 +34,6 @@
 		*/
 		static public function login($uid) {
 			\forge\Memory::session('USER_AUTHENTICATION',(int)$uid);
-		}
-
-		/**
-		* Get infobox
-		* @return string
-		*/
-		static public function getInfoBox() {
-			if (!self::getPermission(self::getUserId(),'accounts','admin','list','r'))
-				return null;
-
-			$accounts = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
-				'type' => new \forge\components\Accounts\db\Account,
-				'limit' => 1
-			]));
-
-			return \forge\components\Templates::display(
-				'components/Accounts/tpl/inc.infobox.php',
-				array(
-					'accounts' => $accounts->getPages()
-				)
-			);
 		}
 		
 		/**
@@ -135,44 +51,6 @@
 				'account' => $account,
 				'lost' => $lost
 			]);
-		}
-
-		/**
-		* Get the current user ID
-		* @return int
-		*/
-		static public function getUserId() {
-			return (int)\forge\Memory::session('USER_AUTHENTICATION');
-		}
-
-		/**
-		* Does the current user have the given permission?
-		* @param string Domain
-		* @param string Category
-		* @param string Field
-		* @param string Requirement
-		* @return bool
-		*/
-		static public function hasPermission($domain,$category,$permission,$requirement) {
-			try {
-				self::restrict($domain,$category,$permission,$requirement);
-				
-				return true;
-			}
-			catch (\Exception $e) {
-				return false;
-			}
-		}
-		
-		/**
-		* Logout the user from the session
-		* @return void
-		*/
-		static public function logout() {
-			\forge\Memory::session('USER_DEVELOPER',false);
-			\forge\Memory::session('USER_AUTHENTICATION',false);
-			\forge\Memory::cookie('account',null);
-			\forge\Memory::cookie('password',null);
 		}
 
 		/**
@@ -271,70 +149,6 @@
 			$mail->Body = str_replace(array_keys($tpl),array_values($tpl),self::getRegisteredMessage());
 			$mail->Send();
 		}
-
-		/**
-		* Restrict the current page to a certain requirement
-		* @param string Domain
-		* @param string Category
-		* @param string Field
-		* @param string Requirement
-		*/
-		static public function restrict($domain,$category,$permission,$requirement) {
-			// Is this a developer login?
-			if (\forge\Memory::session('USER_DEVELOPER'))
-				return;
-
-			// If logged in, find out our permissions
-			if (\forge\Memory::session('USER_AUTHENTICATION')) {
-				if (!self::getPermission(self::getUserId(), $domain, $category, $permission, $requirement))
-					throw new \forge\HttpException('FORBIDDEN', \forge\HttpException::HTTP_FORBIDDEN);
-
-				return;
-			}
-
-			// If not logged in, error it!
-			throw new \forge\HttpException('AUTHORIZATION_REQUIRED', \forge\HttpException::HTTP_UNAUTHORIZED);
-		}
-
-		/**
-		* Does the user have a certain permission?
-		* @param int Account the query is regards to
-		* @param string Domain of the permission
-		* @param string Category of the permission
-		* @param string Name of the permission
-		* @param string Require the following permissions
-		* @return bool
-		* @throws Exception
-		*/
-		static public function getPermission($id,$domain,$category,$field,$requirement) {
-			if (\forge\Memory::session('USER_DEVELOPER'))
-				return true;
-
-			if (!isset(self::$permissionCache[$id][$domain][$category][$field]))
-				try {
-					$permission = new \forge\components\Accounts\db\Permissions();
-					$permission->user_id = $id;
-					$permission->permission_domain = $domain;
-					$permission->permission_category = $category;
-					$permission->permission_field = $field;
-					$permission->select(array('user_id','permission_domain','permission_category','permission_field'));
-
-					self::$permissionCache[$id][$domain][$category][$field]['r'] = $permission->permission_read;
-					self::$permissionCache[$id][$domain][$category][$field]['w'] = $permission->permission_write;
-				}
-				catch (\Exception $e) {
-					self::$permissionCache[$id][$domain][$category][$field]['r'] = false;
-					self::$permissionCache[$id][$domain][$category][$field]['w'] = false;
-				}
-
-			$evaluate = true;
-			if (strstr($requirement,'r') !== false && self::$permissionCache[$id][$domain][$category][$field]['r']== 0)
-				$evaluate = false;
-			if (strstr($requirement,'w') !== false && self::$permissionCache[$id][$domain][$category][$field]['w'] == 0)
-				$evaluate = false;
-
-			return $evaluate;
-		}
 		
 		/**
 		 * Get the message to display when someone registers
@@ -348,97 +162,6 @@
 		}
 
 		/**
-		* Get the user
-		* @return \forge\components\Accounts\Account
-		* @throws Exception
-		*/
-		static public function getUser($id=null) {
-			if (!is_null($id))
-				return new \forge\components\Accounts\db\Account($id);
-
-			// Is this a developer login?
-			if (\forge\Memory::session('USER_DEVELOPER'))
-				return new \forge\components\Accounts\db\Account();
-
-			return new \forge\components\Accounts\db\Account(\forge\Memory::session('USER_AUTHENTICATION'));
-		}
-
-		/**
-		* Force the client to be logged in through either sessions or cookies
-		* @param string Redirect to another URL if not authenticated?
-		* @return \forge\components\Accounts\db\tables\AccountEntry
-		*/
-		static public function forceAuthentication($redir=false) {
-			if (!self::isAuthenticated())
-				\forge\components\SiteMap::redirect($redir ? $redir : '/user/login?from='.urlencode($_SERVER['REQUEST_URI']));
-
-			return new \forge\components\Accounts\db\Account(self::getUserId());
-		}
-
-		/**
-		* Have the client authenticated?
-		* @return bool
-		*/
-		static public function isAuthenticated() {
-			return self::getUserId() > 0 || \forge\Memory::session('USER_DEVELOPER');
-		}
-
-		/**
-		* Get list of set permissions
-		* @return array
-		*/
-		static public function getDomains() {
-			$domains = array();
-
-			foreach (\forge\Addon::getComponents(true) as $com)
-				foreach (call_user_func($com.'::getPermissions') as $domain => $list1)
-					foreach ($list1 as $category => $list2)
-						foreach ($list2 as $field)
-							$domains[$domain][$category][] = $field;
-
-			foreach (\forge\Addon::getModules(true) as $mod)
-				foreach (call_user_func($mod.'::getPermissions') as $domain => $list1)
-					foreach ($list1 as $category => $list2)
-						foreach ($list2 as $field)
-							$domains[$domain][$category][] = $field;
-
-			return $domains;
-		}
-
-		/**
-		* Is the logged in user an administrator?
-		* @return bool
-		*/
-		static public function isAdmin() {
-			try {
-				self::restrict('Admin','administration','access','r');
-
-				return true;
-			}
-			catch (\Exception $e) {
-				return false;
-			}
-		}
-		
-		/**
-		 * Check wether or not the requestee is a developer
-		 * @return bool
-		 */
-		static public function isDeveloper() {
-			return isset($_COOKIE['developer']) && sha1($_COOKIE['developer']) == self::getConfig('developer');
-		}
-		
-		/**
-		 * Set a new developer key
-		 * @param $key string Developer key
-		 * @return void
-		 */
-		static public function setDeveloperKey($key) {
-			self::setConfig('developer', sha1($key));
-			self::writeConfig();
-		}
-		
-		/**
 		 * Set root username & password
 		 * @param $username string Username
 		 * @param $password string Password
@@ -447,7 +170,7 @@
 		static public function setRoot($username, $password) {
 			if (self::getConfig('root', false) !== false)
 				return false;
-			
+
 			self::setConfig('root', array(
 				'username' => sha1($username),
 				'password' => sha1($password)
@@ -480,8 +203,8 @@
 				\forge\Memory::cookie('password',$password);
 				
 				// If this is the first access of this session, log us in!
-				if (!Accounts::isAuthenticated())
-					Accounts::login($account->getID());
+				if (!Identity::isAuthenticated())
+					Accounts\identities\Account::loginAccount($account->getID());
 				
 				break;
 			}

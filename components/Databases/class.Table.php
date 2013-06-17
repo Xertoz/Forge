@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class:Table.php
-	* Copyright 2011-2012 Mattias Lindholm
+	* Copyright 2011-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -375,7 +375,7 @@
 		* @return void
 		* @throws Exception
 		*/
-		final public function select($columns) {
+		public function select($columns) {
 			$columns = !is_array($columns) ? array($columns) : $columns;
 			if (!$this->isGlobal() && !in_array($this->__id, $columns))
 				$columns[] = 'forge_website';

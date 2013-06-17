@@ -1,7 +1,7 @@
 <?php
 	/**
 	* com.Dashboard.php
-	* Copyright 2010-2012 Mattias Lindholm
+	* Copyright 2010-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -14,16 +14,4 @@
 	/**
 	* Dashboard component
 	*/
-	class Dashboard extends Component {
-		/**
-		* Permissions
-		* @var array
-		*/
-		static protected $permissions = array(
-			'Databases' => array(
-				'admin' => array(
-					'gui'
-				)
-			)
-		);
-	}
+	class Dashboard extends Component {}

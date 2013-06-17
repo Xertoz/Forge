@@ -1,7 +1,7 @@
 <?php
 	/**
 	* com.Templates.php
-	* Copyright 2010-2012 Mattias Lindholm
+	* Copyright 2010-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -38,13 +38,7 @@
 		* Permissions
 		* @var array
 		*/
-		static protected $permissions = array(
-			'Templates' => array(
-				'admin' => array(
-					'list'
-				)
-			)
-		);
+		static protected $permissions = ['Admin'];
 
 		/**
 		* Add some JavaScript to the header element
@@ -138,7 +132,7 @@
 		 * @return string
 		 */
 		static public function getInfoBox() {
-			if (!\forge\components\Accounts::getPermission(\forge\components\Accounts::getUserId(),'templates','admin','list','r'))
+			if (!\forge\components\Identity::getIdentity()->hasPermission('com.Templates.Admin'))
 				return null;
 
 			return self::display(
@@ -156,7 +150,7 @@
 		* @throws Exception
 		*/
 		static public function getTemplate($hostname=false) {
-			if (\forge\components\Accounts::isAdmin() && ($template = \forge\Memory::cookie('template')) != null) {
+			if (\forge\components\Identity::isAdmin() && ($template = \forge\Memory::cookie('template')) != null) {
 				if (self::isTemplate($template))
 					return $template;
 				else

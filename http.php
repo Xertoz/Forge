@@ -1,7 +1,7 @@
 <?php
 	/**
 	* http.php
-	* Copyright 2009-2012 Mattias Lindholm
+	* Copyright 2009-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -12,7 +12,7 @@
 
 	// Load the Forge system
 	require_once 'forge.php';
-	
+
 	// Tell the client about us
 	header('Accept-Charset: utf-8', true);
 	header('X-Powered-By: PHP/'.phpversion().' Forge/'.FORGE_VERSION, true);
@@ -49,7 +49,7 @@
 		$event->exception = $e;
 		$event->fire();
 		
-		if (\forge\components\Accounts::isDeveloper())
+		if (\forge\components\Identity::isDeveloper())
 			require 'errors/dump.php';
 		else
 			require 'errors/500.html';

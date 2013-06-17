@@ -1,5 +1,6 @@
 @import 'controller.css';
 @import 'messages.css';
+@import 'std.css';
 
 .admin table {
 	margin:15px 0;

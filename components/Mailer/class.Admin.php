@@ -1,7 +1,7 @@
 <?php
 	/**
-	* acp.Mailer.php
-	* Copyright 2010-2012 Mattias Lindholm
+	* class.Admin.php
+	* Copyright 2010-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -9,9 +9,6 @@
 	*/
 
 	namespace forge\components\Mailer;
-	use \forge\components\Mailer;
-	use \forge\components\Accounts;
-	use \forge\HttpException;
 
 	/**
 	* Mailer component of Forge 4
@@ -19,17 +16,17 @@
 	*/
 	class Admin implements \forge\components\Admin\Administration {
 		static public function index() {
-			Accounts::restrict('Mailer','admin','settings','r');
+			\forge\components\Identity::restrict('com.Mailer.Admin');
 
 			$mailcfg = array(
 				'from' => array(
-					'address' => Mailer::getFromAddress(),
-					'name' => Mailer::getFromName()
+					'address' => \forge\components\Mailer::getFromAddress(),
+					'name' => \forge\components\Mailer::getFromName()
 				),
 				'smtp' => array(
-					'use' => (int)Mailer::getSMTPUsage(),
-					'hostname' => Mailer::getSMTPServer(),
-					'username' => Mailer::getSMTPUsername(),
+					'use' => (int)\forge\components\Mailer::getSMTPUsage(),
+					'hostname' => \forge\components\Mailer::getSMTPServer(),
+					'username' => \forge\components\Mailer::getSMTPUsername(),
 					'password' => null
 				)
 			);

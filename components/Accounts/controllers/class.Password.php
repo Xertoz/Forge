@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Password.php
-	* Copyright 2012 Mattias Lindholm
+	* Copyright 2012-2013 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -16,12 +16,22 @@
 	class Password extends \forge\Controller {
 		/**
 		 * Process POST data
+		 * @throws \forge\HttpException
 		 * @return void
 		 */
 		public function process() {
-			\forge\components\Accounts::forceAuthentication();
-			
-			$account = \forge\components\Accounts::getUser();
+			\forge\components\Identity::auth();
+
+			// Get the logged in identity and account provider, if any
+			$identity = \forge\components\Identity::getIdentity();
+			$provider = null;
+			foreach ($identity->getProviders() as $item)
+				if (get_class($item) == 'forge\\components\\Accounts\\identities\\Account')
+					$provider = $item;
+
+			if (is_null($provider))
+				throw new \forge\HttpException(_('You can\'t set a password on a non-account'), \forge\HttpException::HTTP_CONFLICT);
+			$account = new \forge\components\Accounts\db\Account($provider->getId());
 
 			if (empty($_POST['current']))
 				throw new \forge\HttpException(_('You must provide your current password'),
