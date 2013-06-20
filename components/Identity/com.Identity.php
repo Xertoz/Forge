@@ -180,6 +180,9 @@
 		 * @return void
 		 */
 		static public function logout() {
+			foreach (self::getProviders() as $provider)
+				$provider::logout();
+
 			\forge\Memory::session('identity', null);
 		}
 

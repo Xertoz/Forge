@@ -65,4 +65,9 @@ abstract class Provider implements ProviderInterface {
 
 		return new Identity($identity->getId());
 	}
+
+	/**
+	 * This is called when the Identity component decides to log out an identity with this provider
+	 */
+	static public function logout() {}
 }

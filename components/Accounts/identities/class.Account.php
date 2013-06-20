@@ -72,6 +72,11 @@
 			return 'Account';
 		}
 
+		static public function logout() {
+			\forge\Memory::cookie('account', '');
+			\forge\Memory::cookie('password', '');
+		}
+
 		static public function showBind() {
 			return \forge\components\Templates::display(['components/Accounts/tpl/inc.bind.php']);
 		}

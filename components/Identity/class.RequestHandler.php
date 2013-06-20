@@ -54,6 +54,11 @@
 
 				// Show the login page
 				case 'login':
+					$forms = [];
+					$fn = function() use (&$provider, &$forms) {$forms[] = $provider::showLogin(); };
+					foreach (\forge\components\Identity::getProviders() as $provider)
+						\forge\Helper::run($fn);
+
 					if (\forge\components\Identity::isAuthenticated())
 						\forge\components\SiteMap::redirect(!empty($_GET['from']) && $_GET['from'][0] == '/' ? $_GET['from'] : '/', 302);
 
@@ -63,7 +68,7 @@
 							'components/Identity/tpl/page.login.php'
 						],
 						[
-							'providers' => \forge\components\Identity::getProviders()
+							'forms' => $forms
 						]
 					);
 				break;

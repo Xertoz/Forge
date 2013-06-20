@@ -1,8 +1,8 @@
 <div class="identity login">
 	<h1><?php echo _('Log in'); ?></h1>
-	<?php foreach ($providers as $provider): try { $login = $provider::showLogin(); ?>
+	<?php foreach ($forms as $form): ?>
 	<div class="provider">
-		<?php echo $login; ?>
+		<?php echo $form; ?>
 	</div>
-	<?php } catch(\Exception $e) {} endforeach; ?>
+	<?php endforeach; ?>
 </div>
