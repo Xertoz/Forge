@@ -18,6 +18,8 @@
 		* Initialize the request
 		*/
 		public function handle() {
+			$this->setContentType('application/json;charset=UTF-8');
+
 			// Try to find the feed and throw proper HTTP errors if it fails
 			try {
 				// Find out what addon and method to run
@@ -40,25 +42,24 @@
 				// Does the method exist?
 				if (!method_exists($json, $method))
 					throw new \forge\HttpException(_('AJAX method not found'), \forge\HttpException::HTTP_NOT_IMPLEMENTED);
+
+				// Get the return and encode it for output
+				echo json_encode(call_user_func($json.'::'.$method));
 			}
 			catch (\forge\HttpException $e) {
-				throw $e;
+				$this->error($e->getMessage(), $e->getCode(), $e->getCode());
 			}
 			catch (\Exception $e) {
-				throw new \forge\HttpException('URL not found',\forge\HttpException::HTTP_NOT_FOUND);
+				if (\forge\components\Identity::isDeveloper())
+					$this->error($e->getMessage(), $e->getCode());
+				else
+					$this->error(_('Internal server error'));
 			}
+		}
 
-			// We know where it is - time to try and execute it
-			try {
-				$return = call_user_func($json.'::'.$method);
-				
-				$this->setContentType('application/json;charset=UTF-8');
-				echo json_encode($return);
-			}
-			catch (\forge\HttpException $e) {
-				header($e->getHttpHeader(), true, $e->getCode());
-				
-				echo json_encode(['error' => $e->getMessage()]);
-			}
+		private function error($message, $code=\forge\HttpException::HTTP_INTERNAL_SERVER_ERROR, $http=\forge\HttpException::HTTP_INTERNAL_SERVER_ERROR) {
+			$http = new \forge\HttpException($message, $http);
+			header($http->getHttpHeader(), $http->getCode());
+			echo json_encode(['error' => ['message' => $message, 'code' => $code]]);
 		}
 	}
