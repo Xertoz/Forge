@@ -133,7 +133,8 @@
 					'robots.txt' => 'forge\components\SiteMap\SiteMapHandler',
 					'sitemap' => 'forge\components\SiteMap\SiteMapHandler',
 					'xml' => 'forge\components\XML\XMLHandler',
-					'json' => 'forge\components\JSON\JSONHandler'
+					'json' => 'forge\components\JSON\JSONHandler',
+					'identity' => 'forge\components\Identity\RequestHandler'
 				];
 				foreach ($handlers as $base => $handler)
 					try {
@@ -143,15 +144,6 @@
 					catch (\Exception $e) {
 						$install->add(false, sprintf(_('Installing handler on %s'), '/'.$base));
 					}
-
-				// Set up the root account
-				try {
-					\forge\components\Accounts::setRoot($_POST['root']['name'], $_POST['root']['password1']);
-					$install->add(true, _('Setting up the root user.'));
-				}
-				catch (\Exception $e) {
-					$install->add(false, _('Setting up the root user.'));
-				}
 
 				// Write the developer key
 				try {
@@ -185,6 +177,35 @@
 				}
 				catch (\Exception $e) {
 					$install->add(false, _('Adding the database connection.'));
+				}
+
+				// Set up the root account
+				try {
+					$account = \forge\components\Accounts::createAccount(
+						$_POST['root']['name'],
+						'Super',
+						'User',
+						'noreply@'.$_SERVER['HTTP_HOST'],
+						$_POST['root']['password1'],
+						$_POST['root']['password2'],
+						false
+					);
+					$account->user_state = 'active';
+					$account->save();
+					$identity = new \forge\components\Accounts\identities\Account($account->getId());
+					$install->add(true, _('Setting up the root user.'));
+					foreach (\forge\Addon::getAddons(true) as $addon) {
+						$permissions = $addon::getPermissions();
+						foreach ($permissions as $permission) {
+							$entity = new \forge\components\Identity\db\Permission();
+							$entity->identity = $identity->getId();
+							$entity->permission = $permission;
+							$entity->insert();
+						}
+					}
+				}
+				catch (\Exception $e) {
+					$install->add(false, _('Setting up the root user.'));
 				}
 
 				// Set up the host

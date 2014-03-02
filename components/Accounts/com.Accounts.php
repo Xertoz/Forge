@@ -84,7 +84,7 @@
 		* @param string Password
 		* @param string Password (confirm)
 		*/
-		static public function createAccount($account,$nameFirst,$nameLast,$email,$password,$passwordConfirm) {
+		static public function createAccount($account,$nameFirst,$nameLast,$email,$password,$passwordConfirm,$sendMail=true) {
 			// Must have arguments.
 			if (empty($account) || empty($nameFirst) || empty($nameLast) || empty($email) || empty($password) || empty($passwordConfirm))
 				throw new \Exception('EMPTY_ARGUMENTS');
@@ -127,27 +127,31 @@
 			$accountInstance->insert();
 
 			// Mail the stuff to the new user
-			$domains = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
-				'type' => new \forge\components\Websites\db\Website,
-				'where' => array('alias'=>'')
-			]));
-			$sites = array();
-			foreach ($domains as $i => $site)
-				$sites[$i] = '<a href="http://'.$site->domain.'/">http://'.$site->domain.'/</a>';
-			$sites = implode('<br>',$sites);
-			$tpl = array(
-				'%account%' => $account,
-				'%name%' => $nameFirst.' '.$nameLast,
-				'%email%' => $email,
-				'%password%' => $password,
-				'%sites%' => $sites,
-				'%link%' => '<a href="'.($url='http://'.$_SERVER['SERVER_NAME'].'/user/confirm?id='.$accountInstance->getID().'&key='.md5($accountInstance->user_password.$accountInstance->getID())).'">'.$url.'</a>'
-			);
-			$mail = new \forge\components\Mailer\Mail();
-			$mail->AddAddress($email,$nameFirst.' '.$nameLast);
-			$mail->Subject = _('Account registered');
-			$mail->Body = str_replace(array_keys($tpl),array_values($tpl),self::getRegisteredMessage());
-			$mail->Send();
+			if ($sendMail) {
+				$domains = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
+					'type' => new \forge\components\Websites\db\Website,
+					'where' => array('alias'=>'')
+				]));
+				$sites = array();
+				foreach ($domains as $i => $site)
+					$sites[$i] = '<a href="http://'.$site->domain.'/">http://'.$site->domain.'/</a>';
+				$sites = implode('<br>',$sites);
+				$tpl = array(
+					'%account%' => $account,
+					'%name%' => $nameFirst.' '.$nameLast,
+					'%email%' => $email,
+					'%password%' => $password,
+					'%sites%' => $sites,
+					'%link%' => '<a href="'.($url='http://'.$_SERVER['SERVER_NAME'].'/user/confirm?id='.$accountInstance->getID().'&key='.md5($accountInstance->user_password.$accountInstance->getID())).'">'.$url.'</a>'
+				);
+				$mail = new \forge\components\Mailer\Mail();
+				$mail->AddAddress($email,$nameFirst.' '.$nameLast);
+				$mail->Subject = _('Account registered');
+				$mail->Body = str_replace(array_keys($tpl),array_values($tpl),self::getRegisteredMessage());
+				$mail->Send();
+			}
+
+			return $accountInstance;
 		}
 		
 		/**
@@ -159,24 +163,6 @@
 				'%T/mail.registered.php',
 				'components/Accounts/tpl/mail.registered.php'
 			]);
-		}
-
-		/**
-		 * Set root username & password
-		 * @param $username string Username
-		 * @param $password string Password
-		 * @return bool Returns FALSE if root was already set
-		 */
-		static public function setRoot($username, $password) {
-			if (self::getConfig('root', false) !== false)
-				return false;
-
-			self::setConfig('root', array(
-				'username' => sha1($username),
-				'password' => sha1($password)
-			), true);
-
-			return true;
 		}
 	}
 	
