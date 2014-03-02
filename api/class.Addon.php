@@ -95,8 +95,8 @@
 		static final public function getModules($long=false) {
 			$modules = array();
 			
-			foreach (glob('modules/*') as $raw) {
-				$name = substr($raw, strlen('modules/'));
+			foreach (glob(FORGE_PATH.'/modules/*') as $raw) {
+				$name = substr($raw, strlen(FORGE_PATH.'/modules/'));
 				$modules[] = $long ? 'forge\\modules\\'.$name : $name;
 			}
 			

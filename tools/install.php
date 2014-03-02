@@ -174,6 +174,14 @@
 						catch (\Exception $e) {
 							$install->add(false, sprintf(_('Installing component %s into the database'), $component));
 						}
+					foreach (\forge\Addon::getModules() as $module)
+						try {
+							\forge\components\Databases::fixDatabase($module,'MOD');
+							$install->add(true, sprintf(_('Installing module %s into the database'), $module));
+						}
+						catch (\Exception $e) {
+							$install->add(false, sprintf(_('Installing module %s into the database'), $module));
+						}
 				}
 				catch (\Exception $e) {
 					$install->add(false, _('Adding the database connection.'));
