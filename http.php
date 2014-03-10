@@ -19,6 +19,12 @@
 	
 	// Get the relative URL that was requested
 	$url = substr(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), 1);
+
+	// Make sure the developers see all debug info available
+	if (\forge\components\Identity::isDeveloper()) {
+		error_reporting(E_ALL | E_STRICT);
+		ini_set('display_errors', 'on');
+	}
 	
 	// Respond to the HTTP request
 	try {
