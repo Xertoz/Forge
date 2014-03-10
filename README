@@ -13,9 +13,10 @@ ABOUT:
 
 ============================
 
-INSTALLATION:
+INSTALLATION (WEB):
 
-	1   Run tools/install.php from the command line of the host environment and follow
+	1   Put Forge in your configured web root path.
+	2   Open up a browser and go to /tools/install.php on your web server and follow
 		the onscreen instructions.
 
 ============================
