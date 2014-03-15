@@ -28,6 +28,15 @@
 			));
 		}
 
+		static public function robots() {
+			\forge\components\Identity::restrict('com.SiteMap.Robots');
+
+			return \forge\components\Templates::display(
+				'components/SiteMap/tpl/acp.robots.php',
+				['robots' => \forge\components\SiteMap::getRobots()]
+			);
+		}
+
 		static public function index() {
 			\forge\components\Identity::restrict('com.SiteMap.Admin');
 			

@@ -54,9 +54,13 @@
 			$this->setContentType('text/plain;charset=UTF-8');
 
 			$output = "User-agent: *\n";
-			$output .= "Disallow: /admin/\n";
-			$output .= "Disallow: /xml/\n";
-			$output .= 'Sitemap: http://'.$_SERVER['SERVER_NAME'].'/sitemap/xml';
+			if (\forge\components\SiteMap::getRobots()) {
+				$output .= "Disallow: /admin/\n";
+				$output .= "Disallow: /xml/\n";
+				$output .= 'Sitemap: http://'.$_SERVER['SERVER_NAME'].'/sitemap/xml';
+			}
+			else
+				$output .= 'Disallow: /';
 
 			echo $output;
 		}

@@ -15,18 +15,21 @@
 	* Supply a site map sort of function to Forge. This component WILL handle URL translations etc.
 	*/
 	class SiteMap extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+		use \forge\Configurable;
+
 		/**
 		* Permissions
 		* @var array
 		*/
-		static protected $permissions = ['Admin'];
+		static protected $permissions = ['Admin', 'Robots'];
 
 		/**
 		 * Get the infobox for the dashboard as HTML source code
 		 * @return string
 		 */
 		static public function getInfoBox() {
-			if (!\forge\components\Identity::getIdentity()->hasPermission('com.SiteMap.Admin'))
+			if (!\forge\components\Identity::getIdentity()->hasPermission('com.SiteMap.Admin')
+			|| !\forge\components\Identity::getIdentity()->hasPermission('com.SiteMap.Robots'))
 				return null;
 
 			$accounts = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
@@ -37,7 +40,8 @@
 			return \forge\components\Templates::display(
 				'components/SiteMap/tpl/inc.infobox.php',
 				array(
-					'pages' => $accounts->getPages()
+					'pages' => $accounts->getPages(),
+					'robots' => self::getRobots()
 				)
 			);
 		}
@@ -55,6 +59,23 @@
 				'order' => array('page_order'=>'DESC')
 			]));
 			return $pages;
+		}
+
+		/**
+		 * Get the current robot status
+		 * @return bool
+		 */
+		static public function getRobots() {
+			return self::getConfig('robots', false);
+		}
+
+		/**
+		 * Set a new robot status
+		 * @param bool $enabled
+		 */
+		static public function setRobots($enabled) {
+			self::setConfig('robots', (bool)$enabled);
+			self::writeConfig();
 		}
 
 		/**
