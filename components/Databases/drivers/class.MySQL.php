@@ -68,7 +68,6 @@
 						$indexes[$key][] = $index;
 			}
 			sort($indexes['primary']);
-			sort($indexes['unique']);
 			sort($indexes['key']);
 			$indexes = array_merge($indexes['primary'], $indexes['unique'], $indexes['key']);
 			$create .= "\n  ".implode(",\n  ",array_merge($lines,$indexes))."\n) ENGINE=InnoDB DEFAULT CHARSET=utf8";
