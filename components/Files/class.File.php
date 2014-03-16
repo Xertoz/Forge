@@ -75,7 +75,7 @@
 			
 			return $this->content;
 		}
-		
+
 		/**
 		 * Create a new file
 		 * @param string $name File path and name
@@ -233,5 +233,27 @@
 		 */
 		public function save() {
 			file_put_contents($this->location, $this->content);
+		}
+
+		/**
+		 * Upload a file to a folder
+		 * @param array $file $_FILE entry of the file
+		 * @param string $target Directory to upload into
+		 * @return File
+		 * @throws \Exception
+		 */
+		static public function upload($file, $target) {
+			// The uploaded file should exist
+			if (!is_uploaded_file($file['tmp_name']))
+				throw new \Exception('The requested file was not uploaded.');
+
+			// Make sure the target directory exists
+			$dir = File::create($target, File::TYPE_DIR);
+
+			// Move the uploaded file into the target
+			move_uploaded_file($file['tmp_name'], $dir->getRealPath().'/'.$file['name']);
+
+			// Return a File object for the result
+			return new File($target.'/'.$file['name']);
 		}
 	}
