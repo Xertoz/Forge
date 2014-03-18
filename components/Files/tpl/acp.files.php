@@ -1,5 +1,14 @@
 <div class="admin files">
 	<h1><?php echo _('Files'); ?></h1>
+	<p><?php echo _('Browsing'); ?> /<a href="?path=">files</a>/<?php if (!empty($_GET['path'])) {
+			$folders = explode('/', $_GET['path']);
+			$link = '?path=';
+			foreach ($folders as $folder) {
+				$link .= urlencode($folder.'/');
+				echo '<a href="'.substr($link, 0, strlen($link)-3).'">'.self::html($folder).'</a>/';
+			}
+		}
+	?></p>
 	<?php echo self::response('Files\Delete'); ?>
 	<?php echo self::response('Files\Rename'); ?>
 	<?php
@@ -20,8 +29,10 @@
 					return is_null($r['size']) ? null : \forge\String::bytesize($r['size']);
 				},
 				'actions' => function($r) {
-					$view = $r['type'] == 'dir' ? '?path='.self::html($r['name']) : '/files/'.self::html($r['name']);
-					$out = '<a href="'.$view.'"><img src="/images/led/magnifier.png" alt="'._('View').'" title="'._('View').'" /></a> ';
+					$path = !empty($_GET['path']) ? $_GET['path'].'/' : '';
+					$view = $r['type'] == 'dir' ? '?path='.urlencode($path.$r['name']) : '/files/'.self::html($path.$r['name']);
+					$target = $r['type'] == 'dir' ? '_self' : '_blank';
+					$out = '<a href="'.$view.'" target="'.$target.'"><img src="/images/led/magnifier.png" alt="'._('View').'" title="'._('View').'" /></a> ';
 					$out .= '<a href="javascript:rename(\''.self::html($r['name']).'\');"><img src="/images/led/pencil.png" alt="'._('Rename').'" title="'._('Rename').'" /></a> ';
 					$out .= '<a href="javascript:trash(\''.self::html($r['name']).'\');"><img src="/images/led/cross.png" alt="'._('Delete').'" title="'._('Delete').'" /></a>';
 					
