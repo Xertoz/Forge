@@ -11,6 +11,7 @@
 	?></p>
 	<?php echo self::response('Files\Delete'); ?>
 	<?php echo self::response('Files\Rename'); ?>
+	<?php echo self::response('Files\Upload'); ?>
 	<?php
 		echo $matrix->drawTable(
 			array(
@@ -41,6 +42,12 @@
 			)
 		);
 	?>
+	<form action="<?php echo self::html($_SERVER['REQUEST_URI']); ?>" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="forge[controller]" value="Files\Upload" />
+		<?php echo self::input('hidden', 'path', !empty($_GET['path']) ? $_GET['path'] : ''); ?>
+		<p><?php echo _('Upload:'); ?> <input type="file" name="file" /></p>
+		<p><input type="submit" value="<?php echo _('Upload'); ?>" /></p>
+	</form>
 </div>
 <form name="rename" action="<?php echo isset($_GET['path']) ? '?path='.self::html($_GET['path']) : '/admin/Files'; ?>" method="POST">
 	<input type="hidden" name="forge[controller]" value="Files\Rename" />
