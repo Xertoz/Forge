@@ -18,7 +18,7 @@
 		$prerequisites->add(count(glob(FORGE_PATH.'/config/*')) === 0, _('Forge isn\'t already installed.'));
 		$prerequisites->add(is_writable(FORGE_PATH.'/config'), _('The config folder is writable.'));
 		$prerequisites->add(is_writable(FORGE_PATH.'/files'), _('The files folder is writable.'));
-		$prerequisites->add(substr(phpversion(), 0, strlen('5.4')) == '5.4', _('PHP version is in the 5.4 family.'));
+		$prerequisites->add(substr(phpversion(), 0, strlen('5.4')) >= 5.4, _('PHP version is at least 5.4.'));
 		$prerequisites->add(extension_loaded('curl'), _('PHP extension curl is loaded.'));
 		$prerequisites->add(extension_loaded('fileinfo'), _('PHP extension fileinfo is loaded.'));
 		$prerequisites->add(extension_loaded('gettext'), _('PHP extension gettext is loaded.'));
