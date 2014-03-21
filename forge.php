@@ -80,3 +80,6 @@
 	
 	// Set up the autoloader for Forge
 	spl_autoload_register('forge\autoload', true, false);
+
+	// Load the configured locale
+	\forge\components\Locale::loadLocale(); // Todo: Adhere to accepted languages

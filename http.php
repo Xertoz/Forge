@@ -28,9 +28,6 @@
 	
 	// Respond to the HTTP request
 	try {
-		// Load the configured locale
-		\forge\components\Locale::loadLocale(); // Todo: Adhere to accepted languages
-
 		// Handle any POST data
 		Controller::handle();
 		
