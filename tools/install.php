@@ -12,23 +12,25 @@
 		<h2><?php echo _('Step 1 - Prerequisites'); ?></h2>
 		<p><?php echo _('This set of minimum requirements must be met or Forge won\'t be able to function properly.'); ?></p>
 		<?php
-		// TODO: Add checks for all required PHP modules
+		function check_extension(\forge\Checklist $chk, $ext) {
+			$chk->add(extension_loaded($ext), sprintf(_('PHP extension %s is loaded.'), $ext));
+		}
 		$prerequisites = new forge\Checklist();
 		$prerequisites->add(true, _('Forge is loadable.'));
 		$prerequisites->add(count(glob(FORGE_PATH.'/config/*')) === 0, _('Forge isn\'t already installed.'));
 		$prerequisites->add(is_writable(FORGE_PATH.'/config'), _('The config folder is writable.'));
 		$prerequisites->add(is_writable(FORGE_PATH.'/files'), _('The files folder is writable.'));
 		$prerequisites->add(substr(phpversion(), 0, strlen('5.4')) >= 5.4, _('PHP version is at least 5.4.'));
-		$prerequisites->add(extension_loaded('curl'), _('PHP extension curl is loaded.'));
-		$prerequisites->add(extension_loaded('fileinfo'), _('PHP extension fileinfo is loaded.'));
-		$prerequisites->add(extension_loaded('gettext'), _('PHP extension gettext is loaded.'));
-		$prerequisites->add(extension_loaded('gd'), _('PHP extension gd is loaded.'));
-		$prerequisites->add(extension_loaded('hash'), _('PHP extension hash is loaded.'));
-		$prerequisites->add(extension_loaded('pcre'), _('PHP extension pcre is loaded.'));
-		$prerequisites->add(extension_loaded('PDO'), _('PHP extension PDO is loaded.'));
-		$prerequisites->add(extension_loaded('pdo_mysql'), _('PHP extension pdo_mysql is loaded.'));
-		$prerequisites->add(extension_loaded('session'), _('PHP extension session is loaded.'));
-		$prerequisites->add(extension_loaded('xmlwriter'), _('PHP extension xmlwriter is loaded.'));
+		check_extension($prerequisites, 'curl');
+		check_extension($prerequisites, 'fileinfo');
+		check_extension($prerequisites, 'gettext');
+		check_extension($prerequisites, 'gd');
+		check_extension($prerequisites, 'hash');
+		check_extension($prerequisites, 'pcre');
+		check_extension($prerequisites, 'PDO');
+		check_extension($prerequisites, 'PDO_mysql');
+		check_extension($prerequisites, 'session');
+		check_extension($prerequisites, 'xmlwriter');
 		echo $prerequisites;
 		?>
 		<?php if (!$prerequisites->isChecked()): ?>
