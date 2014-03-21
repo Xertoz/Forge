@@ -32,7 +32,18 @@
 			
 			return isset(static::$__config[get_called_class()][$key]) ? static::$__config[get_called_class()][$key] : $default;
 		}
-		
+
+		/**
+		 * Get all set config keys
+		 * @return array
+		 */
+		static protected function getConfigKeys() {
+			if (!isset(static::$__config[get_called_class()]))
+				self::loadConfig();
+
+			return isset(static::$__config[get_called_class()]) ? array_keys(static::$__config[get_called_class()]) : [];
+		}
+
 		/**
 		 * Get the path to the configuration file
 		 * @return string
