@@ -289,11 +289,18 @@
 		
 		/**
 		 * Handle any response from a specific controller
-		 * @param string $controller
+		 * @param string|array $controller
 		 * @return string
 		 */
 		static public function response($controller) {
 			$html = null;
+
+			if (is_array($controller)) {
+				foreach ($controller as $item)
+					$html .= self::response($item);
+
+				return $html;
+			}
 			
 			if (\forge\Controller::getController() == $controller && \forge\Controller::getCode() != \forge\Controller::RESULT_PENDING) {
 				$class = \forge\Controller::getCode() == \forge\Controller::RESULT_OK ? 'success' : 'error';
