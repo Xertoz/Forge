@@ -114,5 +114,9 @@
 			
 			// Finally, put it in place
 			components\Files\ConfigFile::create($path)->set($config, true);
+
+			// Clear any APC cache if available
+			if (function_exists('apc_clear_cache'))
+				apc_clear_cache();
 		}
 	}
