@@ -59,6 +59,9 @@
 		* @throws Exception
 		*/
 		public function set($value) {
+			if (is_object($value) && $value instanceof \forge\components\Databases\Table)
+				$value = $value->getId();
+
 			$this->value = (int)$value;
 		}
 	}
