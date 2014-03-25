@@ -46,13 +46,18 @@
 
 		/**
 		* Load a list of data table
-		* @param \forge\components\Databases\Params $params Parameters
+		* @param \forge\components\Databases\Params|array $params Parameters
 		* @return void
 		* @throws Exception
 		*/
-		public function __construct(Params $params) {
+		public function __construct($params) {
 			// Save the arguments
-			$this->params = $params;
+			if (is_array($params))
+				$this->params = new Params($params);
+			elseif (get_class($params) == 'forge\\components\\Databases\\Params')
+				$this->params = $params;
+			else
+				throw new \Exception(_('Invalid parameters'));
 
 			// Perform the query
 			$this->query();
