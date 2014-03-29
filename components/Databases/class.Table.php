@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class:Table.php
-	* Copyright 2011-2013 Mattias Lindholm
+	* Copyright 2011-2014 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -304,13 +304,13 @@
 				if ($column != $this->__id || !$this->__columns[$column]->getIncrement())
 					$params->columns[] = $column;
 
-			$query = $this->__engine->buildInsert($params);
+			list($query, $columns) = $this->__engine->buildInsert($this, $params);
 
-			for ($i=0;$i<count($params->columns);$i++)
+			for ($i=0;$i<count($columns);$i++)
 				$query->bindValue(
 					$i+1,
-					$this->__columns[$params->columns[$i]]->get(),
-					$this->__columns[$params->columns[$i]]->getDataType()
+					$this->__columns[$columns[$i]]->get(),
+					$this->__columns[$columns[$i]]->getDataType()
 				);
 
 			$query->execute();

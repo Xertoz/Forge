@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Engine.php
-	* Copyright 2011-2012 Mattias Lindholm
+	* Copyright 2011-2014 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -105,10 +105,11 @@
 
 		/**
 		* Prepare a query for insertion
+		* @param Table Table
 		* @param SqlParams Parameters
-		* @return \PDOStatement
+		* @return array
 		*/
-		abstract public function buildInsert(Params $params);
+		abstract public function buildInsert(Table $table, Params $params);
 		
 		final public function buildOrder(Params $params) {
 			$order = 'ORDER BY';

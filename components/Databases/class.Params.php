@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Params.php
-	* Copyright 2011-2012 Mattias Lindholm
+	* Copyright 2011-2014 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -73,6 +73,11 @@
 			// Set a specific engine?
 			if (is_null($this->engine))
 				$this->engine = \forge\components\Databases::getEngine();
+
+			// Fetch items not yet trashed per default, if the Trashable trait is used
+			if (!is_null($this->type) && in_array('forge\\components\\Databases\\Trashable', class_uses($this->type))
+				&& !isset($this->where['trashed']))
+				$this->where['trashed'] = false;
 		}
 
 		/**
