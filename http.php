@@ -25,6 +25,10 @@
 		error_reporting(E_ALL | E_STRICT);
 		ini_set('display_errors', 'on');
 	}
+
+	// Load the requested or configured locale
+	if (!\forge\components\Locale::loadLocale(\Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE'])))
+		\forge\components\Locale::loadLocale();
 	
 	// Respond to the HTTP request
 	try {
