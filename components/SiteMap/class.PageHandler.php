@@ -98,7 +98,7 @@
 			\forge\components\Templates::setMeta(array(
 				'description' => $this->page->meta_description,
 				'keywords' => $this->page->meta_keywords,
-				'language' => 'sv', /** @todo Fix so this is fetched from admin or something **/
+				'language' => \forge\components\Locale::getLocale()
 			));
 			\forge\components\Templates::setVar('page',$this->page);
 			\forge\components\Templates::setVar('type',$type);

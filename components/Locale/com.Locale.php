@@ -17,6 +17,12 @@
 		use \forge\Configurable;
 
 		/**
+		 * Currently selected locale
+		 * @var string
+		 */
+		static private $locale = null;
+
+		/**
 		 * Permissions
 		 * @var array
 		 */
@@ -59,7 +65,7 @@
 		 * @return string
 		 */
 		static public function getLocale() {
-			return self::getConfig('locale', 'en_US');
+			return is_null(self::$locale) ? self::getConfig('locale', 'en_US') : self::$locale;
 		}
 
 		/**
@@ -86,6 +92,7 @@
 			// Set the language
 			putenv('LC_ALL='.$locale);
 			setlocale(LC_ALL, $locale);
+			self::$locale = $locale;
 
 			// Set the locale location and load it
 			bindtextdomain('Forge', FORGE_PATH.'/files/.locales');
