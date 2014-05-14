@@ -10,7 +10,7 @@
 			<p><input type="submit" value="<?php echo _('Select'); ?>" />
 		</form>
 	<?php endif; ?>
-	<img src="/templates/<?php echo $systemName; ?>/info/snapshot.png" alt="<?php echo self::html($template->getName()); ?>" title="<?php echo self::html($template->getName()); ?>" align="left" style="margin-right:15px;" />
+	<img src="/templates/<?php echo $systemName; ?>/template.png" alt="<?php echo self::html($template->getName()); ?>" title="<?php echo self::html($template->getName()); ?>" align="left" style="margin-right:15px;" />
 	<table style="width:auto;margin-top:0;">
 		<thead>
 			<tr>
