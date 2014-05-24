@@ -40,7 +40,8 @@
 		 * @return string
 		 */
 		static public function getFromAddress() {
-			return self::getConfig('from.address', 'noreply@'.$_SERVER['HTTP_HOST']);
+			$host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
+			return self::getConfig('from.address', 'noreply@'.$host);
 		}
 		
 		/**
