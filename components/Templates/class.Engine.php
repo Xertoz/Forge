@@ -231,6 +231,42 @@
 		}
 		
 		/**
+		 * Write an image here which is selected by the client depending on its
+		 * pixel density.
+		 * @param array $images Array with density => file
+		 * @param array $attributes Additional HTML attributes
+		 * @return string
+		 */
+		static public function image($images, $attributes=[]) {
+			$script = '<script type="text/javascript">';
+			$script .= 'document.write("<img ");';
+			$ifs = [];
+			ksort($images);
+			$images = array_reverse($images, true);
+			foreach ($images as $dpr => $image) {
+				$size = getimagesize(FORGE_PATH.'/'.$image);
+				$out = [
+					'src' => '/'.$image,
+					'width' => floor(($dpr == 0 ? 1 : 1/$dpr)*$size[0]),
+					'height' => floor(($dpr == 0 ? 1 : 1/$dpr)*$size[1])
+				];
+				$if = 'if (window.devicePixelRatio >= '.$dpr.') document.write("';
+				foreach ($out as $attribute => $value)
+					$if .= $attribute.'=\\"'.htmlentities($value).'\\" ';
+				$if .= '");';
+				$ifs[] = $if;
+			}
+			$script .= implode(' else ', $ifs);
+			$script .= 'document.write("';
+			if (count($attributes))
+				foreach ($attributes as $attribute => $value)
+					$script .= $attribute.'=\\"'.htmlentities($value).'\\" ';
+			$script .= '/>");</script>';
+
+			return $script;
+		}
+		
+		/**
 		 * Create an INPUT element based on default values and POST/GET data
 		 * @param $type string Type attribute
 		 * @param $name string Name attribute
