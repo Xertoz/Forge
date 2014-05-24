@@ -114,8 +114,10 @@
 		final public function buildOrder(Params $params) {
 			$order = 'ORDER BY';
 			
+			$args = [];
 			foreach ($params->order as $column => $type)
-				$order .= ' `'.$column.'` '.$type;
+				$args[] = '`'.$column.'` '.$type;
+			$order .= ' '.implode(', ', $args);
 			
 			return count($params->order) ? $order : null;
 		}
