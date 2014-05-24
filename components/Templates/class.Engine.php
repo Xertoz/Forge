@@ -208,6 +208,7 @@
 			self::addScript(
 				'<script src="http://cdn.aloha-editor.org/latest/lib/aloha.js"
 					data-aloha-plugins="common/ui,
+					common/image,
 					common/format,
 					common/list,
 					common/link,
