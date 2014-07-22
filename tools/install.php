@@ -26,6 +26,7 @@
 		check_extension($prerequisites, 'gettext');
 		check_extension($prerequisites, 'gd');
 		check_extension($prerequisites, 'hash');
+		check_extension($prerequisites, 'intl');
 		check_extension($prerequisites, 'pcre');
 		check_extension($prerequisites, 'PDO');
 		check_extension($prerequisites, 'PDO_mysql');

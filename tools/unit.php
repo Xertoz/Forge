@@ -46,6 +46,7 @@
 		check_extension($unit, 'gettext');
 		check_extension($unit, 'gd');
 		check_extension($unit, 'hash');
+		check_extension($unit, 'intl');
 		check_extension($unit, 'pcre');
 		check_extension($unit, 'PDO');
 		check_extension($unit, 'PDO_mysql');
