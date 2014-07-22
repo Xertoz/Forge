@@ -40,7 +40,7 @@
 		$unit->add(count(glob(FORGE_PATH.'/config/*')) > 0, _('Forge is installed.'));
 		$unit->add(is_writable(FORGE_PATH.'/config'), _('The config folder is writable.'));
 		$unit->add(is_writable(FORGE_PATH.'/files'), _('The files folder is writable.'));
-		$unit->add(substr(phpversion(), 0, strlen('5.4')) == '5.4', _('PHP version is in the 5.4 family.'));
+		$unit->add(substr(phpversion(), 0, strlen('5.4')) >= 5.4, _('PHP version is at least 5.4.'));
 		check_extension($unit, 'curl');
 		check_extension($unit, 'fileinfo');
 		check_extension($unit, 'gettext');
