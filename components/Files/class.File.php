@@ -75,6 +75,16 @@
 			
 			return $this->content;
 		}
+		
+		/**
+		 * Copy the file
+		 * @param string $to
+		 */
+		public function copy($to) {
+			$new = static::jail($to);
+			self::create($to);
+			copy($this->location, $new);
+		}
 
 		/**
 		 * Create a new file
