@@ -73,7 +73,7 @@
 			}
 			// If it fails, say so.
 			catch (\Exception $e) {
-				throw new \Exception('The driver failed with the given parameters');
+				throw new \Exception('The driver failed with the given parameters', 0, $e);
 			}
 
 			// Create a new configuration post for this connection

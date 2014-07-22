@@ -35,7 +35,7 @@
 				$this->prefix = $params->prefix;
 			}
 			catch (\Exception $e) {
-				throw new \forge\HttpException('Failed to establish a database connection',\forge\HttpException::HTTP_SERVICE_UNAVAILABLE);
+				throw new \forge\HttpException('Failed to establish a database connection',\forge\HttpException::HTTP_SERVICE_UNAVAILABLE,$e);
 			}
 		}
 
@@ -204,6 +204,11 @@
 			catch (\Exception $e) {
 				$tmp = false;
 			}
+			
+			// Drop any existing temporary table
+			try {
+				$this->pdo->query('DROP TABLE `'.$name.'_tmp`');
+			} catch (\Exception $e) {}
 
 			// Rename any existing table
 			if ($tmp !== false)
