@@ -19,18 +19,30 @@
 		 * @var int
 		 */
 		private $count = false;
+                
+                /**
+                 * Current row from the result set
+                 * @var Table
+                 */
+                private $current;
 
 		/**
 		* Paramters passed to the constructor
 		* @var Params
 		*/
 		private $params;
-
+		
 		/**
-		* List of results as objects
-		* @var array
-		*/
-		private $result;
+		 * Current position of the iterator
+		 * @var int
+		 */
+		private $position;
+                
+		/**
+		 * The query for looping results
+		 * @var \PDOStatement
+		 */
+		private $query;
 
 		/**
 		* The total amount of rows available (not all might be fetched)
@@ -142,7 +154,7 @@
 		* @return void
 		*/
 		public function rewind() {
-			reset($this->result);
+			$this->query();
 		}
 
 		/**
@@ -150,23 +162,40 @@
 		* @return DataObject
 		*/
 		public function current() {
-			return current($this->result);
+			return $this->current;
+		}
+		
+		/**
+		 * Fetch a new row from the result set
+		 * @return void
+		 */
+		private function fetch() {
+			++$this->position;
+			$row = $this->query->fetch(\PDO::FETCH_ASSOC);
+			if ($row !== false) {
+				$class = get_class($this->params->type);
+				$this->current = new $class;
+				
+				foreach ($row as $column => $value)
+					$this->current->$column = $value;
+			}
+			else
+				$this->current = false;
 		}
 
 		/**
-		* ?
-		* @return ?
+		* Return the current key
+		* @return int
 		*/
 		public function key() {
-			return key($this->result);
+			return $this->position;
 		}
 
 		/**
-		* Move one element further and return it
-		* @return DataObject
+		* Move one element further down the result set
 		*/
 		public function next() {
-			return next($this->result);
+			$this->fetch();
 		}
 
 		/**
@@ -182,7 +211,7 @@
 		* @return int
 		*/
 		public function length() {
-			return count($this->result);
+			return $this->query->rowCount();
 		}
 
 		/**
@@ -199,13 +228,14 @@
 				$this->params->where['forge_website'] = \forge\components\Websites::getId();
 
 			// Build the query
-			$query = $this->params->engine->buildSelect($this->params);
+			$this->query = $this->params->engine->buildSelect($this->params);
 
 			// Set the parameters
-			$this->params->engine->bindWhere($query, $this->params);
+			$this->params->engine->bindWhere($this->query, $this->params);
 			
 			// Run the query & fetch the results
-			$query->execute();
-			$this->result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, get_class($this->params->type));
+			$this->query->execute();
+			$this->position = -1;
+			$this->fetch();
 		}
 	}
