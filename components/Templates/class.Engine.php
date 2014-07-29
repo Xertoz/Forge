@@ -245,12 +245,12 @@
 			ksort($images);
 			$images = array_reverse($images, true);
 			foreach ($images as $dpr => $image) {
-				$size = getimagesize(FORGE_PATH.'/'.$image);
-				$out = [
-					'src' => '/'.$image,
-					'width' => floor(($dpr == 0 ? 1 : 1/$dpr)*$size[0]),
-					'height' => floor(($dpr == 0 ? 1 : 1/$dpr)*$size[1])
-				];
+				$out = ['src' => '/'.$image];
+				if (empty($attributes['width']) && empty($attributes['height'])) {
+					$size = getimagesize(FORGE_PATH.'/'.$image);
+					$out['width'] = floor(($dpr == 0 ? 1 : 1/$dpr)*$size[0]);
+					$out['height'] = floor(($dpr == 0 ? 1 : 1/$dpr)*$size[1]);
+				}
 				$if = 'if (window.devicePixelRatio >= '.$dpr.') document.write("';
 				foreach ($out as $attribute => $value)
 					$if .= $attribute.'=\\"'.htmlentities($value).'\\" ';
