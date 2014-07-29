@@ -338,8 +338,7 @@
 
 		/**
 		* Save row changes to the database
-		* @return void
-		* @throws Exception
+		* @return bool
 		*/
 		final public function save() {
 			if (!$this->__changed)
@@ -365,8 +364,7 @@
 
 			$query->execute();
 			
-			if ($query->rowCount() != 1)
-				throw new \Exception(_('An error occured while updating a row in the database'));
+			return $query->rowCount() == 1;
 		}
 
 		/**
