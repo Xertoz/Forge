@@ -19,7 +19,7 @@
 			</div>
 			<div id="footer">
 				<span>
-					<?php if (\forge\components\Accounts::isAdmin()): ?>
+					<?php if (\forge\components\Identity::isAdmin()): ?>
 						<a href="/admin">&raquo; <?php echo _('Dashboard'); ?></a>
 					<?php endif; ?>
 					<?php echo isset($page) ? $page->page_updated : date('Y-m-d H:i:s'); ?>
