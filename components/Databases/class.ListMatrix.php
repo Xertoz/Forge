@@ -41,10 +41,7 @@
 		 * @return array
 		 */
 		public function getItems() {
-			$items = [];
-			foreach ($this->rows as $row)
-				$items[] = $row;
-			return $items;
+			return $this->rows;
 		}
 
 		/**

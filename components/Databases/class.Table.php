@@ -13,7 +13,7 @@
 	/**
 	* Database abstraction layer for tables
 	*/
-	abstract class Table {
+	abstract class Table implements \ArrayAccess {
 		/**
 		 * Has the instance been altered with? (and differs from the source data?)
 		 */
@@ -334,6 +334,34 @@
 		 */
 		final static public function isHandled() {
 			return static::$handleIntegrity;
+		}
+
+		/**
+		 * Does this offset exist?
+		 */
+		public function offsetExists($offset) {
+			return array_key_exists($offset, $this->__columns);
+		}
+		
+		/**
+		 * Get an offset
+		 */
+		public function offsetGet($offset) {
+			return $this->__get($offset);
+		}
+		
+		/**
+		 * Set an offset
+		 */
+		public function offsetSet($offset, $value) {
+			$this->__set($offset, $value);
+		}
+		
+		/**
+		 * Unset an offset
+		 */
+		public function offsetUnset($offset) {
+			/* void */
 		}
 
 		/**

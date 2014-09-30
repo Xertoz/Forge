@@ -13,7 +13,7 @@
 	/**
 	* This class is a PHP representation of table data over multiple rows, using this would allow the programmer to not work with the SQL interface directly
 	*/
-	class TableList implements \Iterator {
+	class TableList implements \Iterator, \ArrayAccess {
 		/**
 		 * The total amount of rows available
 		 * @var int
@@ -198,6 +198,40 @@
 			$this->fetch();
 		}
 
+		/**
+		 * Does this offset exist?
+		 */
+		public function offsetExists($offset) {
+			return (is_int($offset) && $offset >= 0 && $offset < $this->rows);
+		}
+		
+		/**
+		 * Get an offset
+		 */
+		public function offsetGet($offset) {
+			if ($offset < $this->position)
+				$this->query();
+			
+			while ($this->position < $offset)
+				$this->next();
+			
+			return $this->current;
+		}
+		
+		/**
+		 * Set an offset
+		 */
+		public function offsetSet($offset, $value) {
+			/* void */
+		}
+		
+		/**
+		 * Unset an offset
+		 */
+		public function offsetUnset($offset) {
+			/* void */
+		}
+		
 		/**
 		* ?
 		* @return ?
