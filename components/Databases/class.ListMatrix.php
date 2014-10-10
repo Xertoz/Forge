@@ -16,10 +16,16 @@
 	class ListMatrix extends \forge\components\XML\Matrix {
 		/**
 		* Take the construct parameters into the TableList object
-		* @param Params Parameters
+		* @param Params|array Parameters
 		* @return void
 		*/
-		public function __construct(Params $params) {
+		public function __construct($params) {
+			// Make sure we've got parameters
+			if (is_array($params))
+				$params = new Params($params);
+			elseif (get_class($params) != 'forge\\components\\Databases\\Params')
+				throw new \Exception(_('Invalid parameters'));
+
 			$reflection = new \ReflectionClass('forge\components\Databases\TableList');
 			if (isset($_GET['page']))
 				$params->page = (int)$_GET['page'];
