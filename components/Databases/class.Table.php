@@ -202,7 +202,7 @@
 		* @return void
 		* @throws Exception
 		*/
-		final public function delete() {
+		public function delete() {
 			$params = new Params();
 
 			$params->table = static::$table;
