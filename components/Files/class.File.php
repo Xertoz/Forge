@@ -266,4 +266,27 @@
 			// Return a File object for the result
 			return new File($target.'/'.$file['name']);
 		}
+
+		/**
+		 * Upload one of multiple files to a folder
+		 * @param array $file $_FILE entry of the file
+		 * @param int $i Index of the asked file
+		 * @param string $target Directory to upload into
+		 * @return File
+		 * @throws \Exception
+		 */
+		static public function uploadi($file, $i, $target) {
+			// The uploaded file should exist
+			if (!is_uploaded_file($file['tmp_name'][$i]))
+				throw new \Exception('The requested file was not uploaded.');
+
+			// Make sure the target directory exists
+			$dir = File::create($target, File::TYPE_DIR);
+
+			// Move the uploaded file into the target
+			move_uploaded_file($file['tmp_name'][$i], $dir->getRealPath().'/'.$file['name'][$i]);
+
+			// Return a File object for the result
+			return new File($target.'/'.$file['name'][$i]);
+		}
 	}
