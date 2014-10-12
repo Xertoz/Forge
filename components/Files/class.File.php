@@ -79,11 +79,13 @@
 		/**
 		 * Copy the file
 		 * @param string $to
+		 * @return \forge\components\Files\File
 		 */
 		public function copy($to) {
 			$new = static::jail($to);
-			self::create($to);
+			$file = self::create($to);
 			copy($this->location, $new);
+			return $file;
 		}
 
 		/**
@@ -126,6 +128,8 @@
 			catch (\Exception $e) {
 				throw new \Exception(_('File could not be created'));
 			}
+			
+			return new File($name);
 		}
 		
 		/**
