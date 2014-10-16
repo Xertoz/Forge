@@ -29,7 +29,7 @@
 		 */
 		static public function getInfoBox() {
 			if (!\forge\components\Identity::getIdentity()->hasPermission('com.SiteMap.Admin')
-			|| !\forge\components\Identity::getIdentity()->hasPermission('com.SiteMap.Robots'))
+			&& !\forge\components\Identity::getIdentity()->hasPermission('com.SiteMap.Robots'))
 				return null;
 
 			$accounts = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
