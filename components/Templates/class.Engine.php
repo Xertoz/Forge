@@ -203,33 +203,8 @@
 			if (empty($vars['value']))
 				$vars['value'] = null;
 			
-			self::addScriptFile('http://cdn.aloha-editor.org/latest/lib/vendor/jquery-1.7.2.js');
-			self::addScriptFile('http://cdn.aloha-editor.org/latest/lib/require.js');
-			self::addScript(
-				'<script src="http://cdn.aloha-editor.org/latest/lib/aloha.js"
-					data-aloha-plugins="common/ui,
-					common/abbr,
-					common/align,
-					common/autoparagraph,
-					common/characterpicker,
-					common/image,
-					common/format,
-					common/list,
-					common/link,
-					common/paste,
-					common/undo,
-					common/highlighteditables,
-					common/table"></script>'
-			);
-			self::addScript(
-				'<script type="text/javascript">
-					Aloha.ready(function() {
-						var $ = Aloha.jQuery;
-						$(".editable").aloha();
-					});
-				</script>'
-			);
-			self::addStyleFile('http://cdn.aloha-editor.org/latest/css/aloha.css');
+			self::addScriptFile('/script/tinymce/tinymce.min.js');
+			self::addScriptFile('/components/Templates/script/editor.js');
 			
 			$id = uniqid();
 			$textarea = '<textarea name="'.htmlspecialchars($vars['name']).'" class="editable" id="'.$id.'">'.htmlentities($vars['value']).'</textarea>';

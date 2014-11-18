@@ -35,7 +35,6 @@
 			$this->addon = !empty($parts[0]) ? $parts[0] : 'Dashboard';
 			$this->view = !empty($parts[1]) ? $parts[1] : 'index';
 
-			\forge\components\Templates::addScript('<script type="text/javascript" src="/script/ckeditor/ckeditor.js"></script>');
 			\forge\components\Templates::addScript('<script type="text/javascript" src="/script/forge/forge.js"></script>');
 			\forge\components\Templates::addScript('<script type="text/javascript" src="/script/forge/forge.admin.js"></script>');
 
