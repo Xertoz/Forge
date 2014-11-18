@@ -13,7 +13,7 @@
 	/**
 	* Manage mails from (and to?) Forge
 	*/
-	class Mailer extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Mailer extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
 		use \forge\Configurable;
 		
 		/**
@@ -21,6 +21,25 @@
 		* @var array
 		*/
 		static protected $permissions = ['Admin'];
+		
+		/**
+		 * Get the menu items
+		 * @return array[AdminMenu]|MenuItem
+		 */
+		static public function getAdminMenu() {
+			if (!\forge\components\Identity::hasPermission('com.Mailer.Admin'))
+				return null;
+			
+			$menu = new \forge\components\Admin\MenuItem('developer', _('Developer'));
+			
+			$menu->appendChild(new \forge\components\Admin\MenuItem(
+				'mailer',
+				_('E-mail'),
+				'/admin/Mailer'
+			));
+			
+			return $menu;
+		}
 
 		/**
 		 * Get the infobox for the dashboard as HTML source code

@@ -1,9 +1,5 @@
-div.admin#dashboard {
-	margin-right:-15px;
-}
-
-div.admin#dashboard > div.infobox {
-	float:left;
+#dashboard > div.infobox {
+	display:inline-block;
 	width:225px;
 	height:75px;
 	overflow:hidden;
@@ -15,17 +11,18 @@ div.admin#dashboard > div.infobox {
 	margin-right:15px;
 }
 
-div.admin#dashboard > div.infobox > img.icon {
+#dashboard > div.infobox > img.icon {
 	float:left;
 	margin-right:10px;
 }
 
-div.admin#dashboard > div.infobox > h2 {
-	font:13px verdana,arial,helvetica,sans-serif;
+#dashboard > div.infobox > h2 {
+	font-size:14px;
+	font-weight:normal;
 	margin:10px 0 0 0;
 }
 
-div.admin#dashboard > div.infobox > p {
+#dashboard > div.infobox > p {
 	font-size:32px;
 	margin:0;
 }

@@ -13,7 +13,7 @@
 	/**
 	* Locale component
 	*/
-	class Locale extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Locale extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
 		use \forge\Configurable;
 
 		/**
@@ -42,6 +42,25 @@
 			$path = FORGE_PATH.'/files/.locales/'.$locale.'/LC_MESSAGES/';
 
 			return phpmo_convert($path.'Forge.po', $path.'Forge.mo');
+		}
+		
+		/**
+		 * Get the menu items
+		 * @return array[AdminMenu]|MenuItem
+		 */
+		static public function getAdminMenu() {
+			if (!\forge\components\Identity::hasPermission('com.Locale.Admin'))
+				return null;
+			
+			$menu = new \forge\components\Admin\MenuItem('developer', _('Developer'));
+			
+			$menu->appendChild(new \forge\components\Admin\MenuItem(
+				'locale',
+				_('Locale'),
+				'/admin/Locale'
+			));
+			
+			return $menu;
 		}
 
 		/**

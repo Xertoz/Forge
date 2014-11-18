@@ -2,14 +2,14 @@
 @import 'messages.css';
 @import 'std.css';
 
-.admin table {
+table.list {
 	margin:15px 0;
 	border:1px solid #ccc;
 	border-collapse:collapse;
 	width:100%;
 }
 
-.admin table > thead {
+table.list > thead {
 	background:#006699;
 	font:11px verdana,arial,helvetica,sans-serif;
 	line-height:22px;
@@ -17,60 +17,60 @@
 	color:#fff;
 }
 
-.admin table > tbody > tr {
+table.list > tbody > tr {
 	background:#fff;
 	border:1px dashed #ccc;
 }
 
-.admin table > tbody > tr:hover {
+table.list > tbody > tr:hover {
 	background:#ffffcc;
 }
 
-.admin table > tbody > tr > td {
+table.list > tbody > tr > td {
 	font:14px arial,helvetica,sans-serif;
 	line-height:30px;
 }
 
-.admin table > tbody > tr > td.actions {
+table.list > tbody > tr > td.actions {
 	width:0;
 	white-space:nowrap;	
 }
 
-.admin table > tbody > tr > td.actions > form {
+table.list > tbody > tr > td.actions > form {
 	display:inline;
 	vertical-align:middle;
 }
 
-.admin table > tfoot {
+table.list > tfoot {
 	background:#d7d7d7;
 	font:11px verdana,arial,helvetica,sans-serif;
 	line-height:22px;
 	border-top:1px solid #ccc;
 }
 
-.admin table td,
-.admin table th {
+table.list td,
+table.list th {
 	padding:2px 5px;
 }
 
-.admin table th {
+table.list th {
 	text-align:left;
 }
 
-.admin table img {
+table.list img {
 	vertical-align:middle;
 }
 
-.admin table td.action {
+table.list td.action {
 	width:16px;
 	margin:0 5px;
 }
 
-.admin table td.actions {
+table.list td.actions {
 	text-align:right;
 }
 
-.admin table td.actions form {
+table.list td.actions form {
 	display:inline;
 }
 

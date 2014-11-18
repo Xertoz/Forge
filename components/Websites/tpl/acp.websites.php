@@ -1,8 +1,8 @@
-<div class="admin websites">
+<div class="panel">
 	<h1><?php echo _('Websites'); ?></h1>
 	<p><?php echo _('The system handles all requests available to it, and as it may be requests made on multiple domains, it uses this table to determine what site to use.'); ?></p>
 	<p><?php echo _('You may set up what web sites the system is supposed to handle and also its alias domains.'); ?></p>
-	<table>
+	<table class="list">
 		<thead>
 			<tr>
 				<th><?php echo _('Domain'); ?></th>

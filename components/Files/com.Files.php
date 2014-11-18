@@ -13,12 +13,31 @@
 	/**
 	* File manager
 	*/
-	class Files extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Files extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
 		/**
 		* Permissions
 		* @var array
 		*/
 		static protected $permissions = ['Admin'];
+		
+		/**
+		 * Get the menu items
+		 * @return array[AdminMenu]|MenuItem
+		 */
+		static public function getAdminMenu() {
+			if (!\forge\components\Identity::hasPermission('com.Files.Admin'))
+				return null;
+			
+			$menu = new \forge\components\Admin\MenuItem('content', _('Content'));
+			
+			$menu->appendChild(new \forge\components\Admin\MenuItem(
+				'files',
+				_('Files'),
+				'/admin/Files'
+			));
+			
+			return $menu;
+		}
 
 		/**
 		 * Get the infobox for the dashboard as HTML source code

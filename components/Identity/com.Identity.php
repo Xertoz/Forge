@@ -13,7 +13,7 @@
 	/**
 	* Manage different user account types with a unified identification
 	*/
-	class Identity extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Identity extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
 		use \forge\Configurable;
 
 		/**
@@ -134,6 +134,25 @@
 			foreach (\forge\Addon::getAddons(true) as $addon)
 				$permissions = array_merge($permissions, $addon::getPermissions());
 			return $permissions;
+		}
+		
+		/**
+		 * Get the menu items
+		 * @return array[AdminMenu]|MenuItem
+		 */
+		static public function getAdminMenu() {
+			if (!\forge\components\Identity::hasPermission('com.Identity.Admin'))
+				return null;
+			
+			$menu = new \forge\components\Admin\MenuItem('identity', _('People'));
+			
+			$menu->appendChild(new \forge\components\Admin\MenuItem(
+				'manage',
+				_('Users'),
+				'/admin/Identity'
+			));
+			
+			return $menu;
 		}
 
 		/**

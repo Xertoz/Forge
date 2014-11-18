@@ -13,7 +13,7 @@
 	/**
 	* Enable Forge to provide multiple website support on one installation
 	*/
-	class Websites extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Websites extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
 		/**
 		* Permissions
 		* @var array
@@ -25,6 +25,25 @@
 		* @var \forge\components\Websites\db\tables\Website
 		*/
 		static private $website = null;
+		
+		/**
+		 * Get the menu items
+		 * @return array[AdminMenu]|MenuItem
+		 */
+		static public function getAdminMenu() {
+			if (!\forge\components\Identity::hasPermission('com.Websites.Admin'))
+				return null;
+			
+			$menu = new \forge\components\Admin\MenuItem('developer', _('Developer'));
+			
+			$menu->appendChild(new \forge\components\Admin\MenuItem(
+				'websites',
+				_('Websites'),
+				'/admin/Websites'
+			));
+			
+			return $menu;
+		}
 
 		/**
 		* Get the domain of the current website

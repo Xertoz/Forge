@@ -14,7 +14,7 @@
 	/**
 	* Database component
 	*/
-	class Databases extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Databases extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
 		use \forge\Configurable;
 		
 		/**
@@ -239,6 +239,25 @@
 			foreach ($class::getTables() as $model)
 				if ($model::isHandled())
 					(new $model)->fixIntegrity();
+		}
+		
+		/**
+		 * Get the menu items
+		 * @return array[AdminMenu]|MenuItem
+		 */
+		static public function getAdminMenu() {
+			if (!\forge\components\Identity::hasPermission('com.Databases.Admin'))
+				return null;
+			
+			$menu = new \forge\components\Admin\MenuItem('developer', _('Developer'));
+			
+			$menu->appendChild(new \forge\components\Admin\MenuItem(
+				'databases',
+				_('Databases'),
+				'/admin/Databases'
+			));
+			
+			return $menu;
 		}
 
 		/**

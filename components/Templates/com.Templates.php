@@ -13,7 +13,7 @@
 	/**
 	* Manage templates
 	*/
-	class Templates extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Templates extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
 		use \forge\Configurable;
 		
 		/**
@@ -99,12 +99,8 @@
 			$output = \forge\components\Templates\Engine::display($file,$tv=array_merge(self::$vars,$variables));
 
 			// Add CSS
-			if (file_exists($path.$type.'.'.$name.'.css'))
-				self::addStyle(implode(array(
-					'<style type="text/css" media="screen">',
-					\forge\components\Templates\Engine::display($path.$type.'.'.$name.'.css',$tv),
-					'</style>'
-				)));
+			if (file_exists($css = $path.$type.'.'.$name.'.css'))
+				self::addStyle('<link href="/'.$css.'" rel="stylesheet" media="screen">');
 
 			// Add JS
 			if (file_exists($path.$type.'.'.$name.'.js'))
@@ -125,6 +121,25 @@
 				);
 			else
 				return $output;
+		}
+		
+		/**
+		 * Get the menu items
+		 * @return array[AdminMenu]|MenuItem
+		 */
+		static public function getAdminMenu() {
+			if (!\forge\components\Identity::hasPermission('com.Templates.Admin'))
+				return null;
+			
+			$menu = new \forge\components\Admin\MenuItem('developer', _('Developer'));
+			
+			$menu->appendChild(new \forge\components\Admin\MenuItem(
+				'templates',
+				_('Templates'),
+				'/admin/Templates'
+			));
+			
+			return $menu;
 		}
 		
 		/**
@@ -172,7 +187,8 @@
 				\forge\Helper::run(function() use ($target) {
 					$folder = substr($target, strlen('templates/'));
 					$template = new Templates\Template($folder);
-					self::$templates[$folder] = $template;
+					if ($template->isSelectable())
+						self::$templates[$folder] = $template;
 				});
 			ksort(self::$templates);
 			

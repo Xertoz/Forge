@@ -1,4 +1,4 @@
-<div class="admin software fix">
+<div class="panel">
 	<h1><?php echo _('Update database'); ?></h1>
 	<p><?php echo _('Carefully inspect the differences found between the Forge models and the current database.'); ?></p>
 	<p><?php echo _('Be sure to make a backup of your data, since the automated fix is irreversible!'); ?></p>
@@ -15,8 +15,8 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td><pre><?php echo $result['control']; ?></pre></td>
-						<td><pre><?php echo $result['live']; ?></pre></td>
+						<td><pre class="sql"><?php echo $result['control']; ?></pre></td>
+						<td><pre class="sql"><?php echo $result['live']; ?></pre></td>
 					</tr>
 				</tbody>
 			</table>

@@ -1,4 +1,4 @@
-<div class="admin accounts account">
+<div class="panel">
 	<h1><?php echo _('Identity'); ?></h1>
 	<h2><?php echo _('Personal'); ?></h2>
 	<table>
@@ -16,7 +16,7 @@
 		<input type="hidden" name="forge[controller]" value="Identity\Permissions" />
 		<input type="hidden" name="identity[id]" value="<?php echo (int)$_GET['id']; ?>" />
 		<?php echo self::response('Identity\Permissions'); ?>
-		<table class="matrix">
+		<table class="list">
 			<thead>
 				<tr>
 					<th><?php echo _('Name'); ?></th>

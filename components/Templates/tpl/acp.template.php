@@ -1,4 +1,4 @@
-<div class="admin templates template">
+<div class="panel">
 	<h1><?php echo self::html($template->getName()); ?></h1>
 	<p><?php printf(_('This template was written by %s, copyright &copy; %s.'),$template->getAuthor(),$template->getCopyright()); ?></p>
 	<?php if ($defaultTemplate == $systemName): ?>

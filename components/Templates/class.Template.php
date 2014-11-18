@@ -39,6 +39,11 @@
 		 */
 		private $path;
 		
+		/**
+		 * @var bool Wether or not the admin can select this template
+		 */
+		private $selectable;
+		
 		public function __construct($template) {
 			$this->path = FORGE_PATH.'/templates/'.$template;
 			
@@ -49,7 +54,8 @@
 			$this->author = (string)$xml->author;
 			$this->copyright = (string)$xml->copyright;
 			$this->name = (string)$xml->name;
-			
+			$this->selectable = isset($xml->selectable) && (string)$xml->selectable == "false" ? false : true;
+
 			foreach ($xml->modules as $element) 
 				$this->modules[] = (string)$element->module;
 		}
@@ -68,5 +74,9 @@
 		
 		public function getName() {
 			return $this->name;
+		}
+		
+		public function isSelectable() {
+			return $this->selectable;
 		}
 	}

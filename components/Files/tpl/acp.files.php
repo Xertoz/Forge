@@ -1,4 +1,4 @@
-<div class="admin files">
+<div class="panel">
 	<h1><?php echo _('Files'); ?></h1>
 	<p><?php echo _('Browsing'); ?> /<a href="?path=">files</a>/<?php if (!empty($_GET['path'])) {
 			$folders = explode('/', $_GET['path']);

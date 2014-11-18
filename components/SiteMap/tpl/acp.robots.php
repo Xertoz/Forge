@@ -1,4 +1,4 @@
-<div class="admin sitemap robots">
+<div class="panel">
 	<h1><?php echo _('Robots'); ?></h1>
 	<?php echo self::response('SiteMap\Robots'); ?>
 	<form action="/admin/SiteMap/robots" method="post">

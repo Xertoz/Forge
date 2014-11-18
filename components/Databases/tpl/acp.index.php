@@ -1,7 +1,7 @@
-<div class="admin databases list">
+<div class="panel">
 	<h1><?php echo _('Databases'); ?></h1>
 	<?php echo self::response('Databases\Select'); ?>
-	<table>
+	<table class="list">
 		<thead>
 			<tr>
 				<th><?php echo _('Driver'); ?></th>

@@ -14,7 +14,7 @@
 	/**
 	* Patch component
 	*/
-	class Software extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Software extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
 		/**
 		* Default table engine
 		*/
@@ -112,6 +112,25 @@
 				'config' => in_array('forge\\Configurable', class_uses($controller)) ? $controller::isConfigured() : -1,
 				'database' => count($models) ? $database : -1
 			);
+		}
+		
+		/**
+		 * Get the menu items
+		 * @return array[AdminMenu]|MenuItem
+		 */
+		static public function getAdminMenu() {
+			if (!\forge\components\Identity::hasPermission('com.Software.Admin'))
+				return null;
+			
+			$menu = new \forge\components\Admin\MenuItem('developer', _('Developer'));
+			
+			$menu->appendChild(new \forge\components\Admin\MenuItem(
+				'software',
+				_('Modules'),
+				'/admin/Software'
+			));
+			
+			return $menu;
 		}
 
 		/**

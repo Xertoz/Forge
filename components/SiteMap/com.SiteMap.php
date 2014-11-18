@@ -14,7 +14,7 @@
 	/**
 	* Supply a site map sort of function to Forge. This component WILL handle URL translations etc.
 	*/
-	class SiteMap extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class SiteMap extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
 		use \forge\Configurable;
 
 		/**
@@ -192,6 +192,36 @@
 				foreach (call_user_func('\forge\modules\\'.$module.'::getNamespace','pages') as $class)
 					$types[] = new $class;
 			return $types;
+		}
+		
+		/**
+		 * Get the menu items
+		 * @return array[AdminMenu]|MenuItem
+		 */
+		static public function getAdminMenu() {
+			$menus = [];
+			
+			if (\forge\components\Identity::hasPermission('com.SiteMap.Admin')) {
+				$menus[] = new \forge\components\Admin\MenuItem('content', _('Content'));
+
+				$menus[0]->appendChild(new \forge\components\Admin\MenuItem(
+					'sitemap',
+					_('Pages'),
+					'/admin/SiteMap'
+				));
+			}
+			
+			if (\forge\components\Identity::hasPermission('com.SiteMap.Robots')) {
+				$menus[] = new \forge\components\Admin\MenuItem('developer', _('Developer'));
+
+				$menus[1]->appendChild(new \forge\components\Admin\MenuItem(
+					'robots',
+					_('Robots'),
+					'/admin/SiteMap/robots'
+				));
+			}
+			
+			return $menus;
 		}
 
 		/**

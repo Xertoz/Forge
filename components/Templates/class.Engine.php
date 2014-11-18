@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Engine.php
-	* Copyright 2011-2012 Mattias Lindholm
+	* Copyright 2011-2014 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -31,6 +31,12 @@
 		* @var array
 		*/
 		static private $styles = array();
+		
+		/**
+		 * The page title
+		 * @var string
+		 */
+		static private $title = null;
 
 		/**
 		* Add some JavaScript to the header element
@@ -155,30 +161,46 @@
 
 		/**
 		* Get all JavaScript elements as string
+		* @param string Glue
 		* @return string
 		*/
-		static public function getScripts() {
-			return implode('',self::$scripts);
+		static public function getScripts($glue) {
+			return implode($glue, self::$scripts);
 		}
 
 		/**
 		* Get all CSS elements as string
+		* @param string Glue
 		* @return string
 		*/
-		static public function getStyles() {
-			return implode('',self::$styles);
+		static public function getStyles($glue) {
+			return implode($glue, self::$styles);
+		}
+		
+		/**
+		 * Get the page title
+		 * @return string
+		 */
+		static public function getTitle() {
+			return self::$title;
 		}
 
 		/**
 		* Get the complete header elements as string
+		* @param int Number of tab indentations
 		* @return string
 		*/
-		static public function header() {
-			return implode('',array(
-				self::meta(),
-				self::getStyles(),
-				self::getScripts()
-			));
+		static public function header($tabs=0) {
+			$glue = "\n";
+			for ($i=0;$i<$tabs;++$i)
+				$glue .= "\t";
+
+			return implode($glue, array_filter(array(
+				self::title(),
+				self::meta($glue),
+				self::getStyles($glue),
+				self::getScripts($glue)
+			)));
 		}
 
 		/**
@@ -292,17 +314,18 @@
 
 		/**
 		* Get META elements
+		* @param string Glue
 		* @return string
 		*/
-		static public function meta() {
+		static public function meta($glue) {
 			if (!is_array($meta = self::getMeta()))
 				return null;
 
-			$output = null;
+			$output = [];
 			foreach ($meta as $key => $value)
-				$output .= '<meta name="'.self::html($key).'" content="'.self::html($value).'" />';
+				$output[] = '<meta name="'.self::html($key).'" content="'.self::html($value).'" />';
 
-			return $output;
+			return implode($glue, $output);
 		}
 		
 		/**
@@ -336,6 +359,14 @@
 		static public function setMeta($meta) {
 			self::$meta = array_merge(self::$meta,$meta);
 		}
+		
+		/**
+		 * Set the page title
+		 * @param string $title
+		 */
+		static public function setTitle($title) {
+			self::$title = $title;
+		}
 
 		/**
 		* Get thumbnail href
@@ -346,5 +377,13 @@
 		*/
 		static public function thumb($file,$width,$height) {
 			return '/thumbnail/'.$width.'/'.$height.'/'.$file;
+		}
+		
+		/**
+		 * Get the title element
+		 * @return string
+		 */
+		static public function title() {
+			return '<title>'.self::html(self::getTitle()).'</title>';
 		}
 	}

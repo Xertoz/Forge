@@ -1,4 +1,4 @@
-<div class="admin mailer">
+<div class="panel">
 	<h1><?php echo _('Email system'); ?></h1>
 	<p><?php echo _('Every e-mail sent from this website will use the following settings. The system\'s email address and name that will appear in the \'From\' field must be set up. It is also possible to set up an external SMTP connection if neccessary.'); ?></p>
 	<form action="/admin/Mailer" method="post">

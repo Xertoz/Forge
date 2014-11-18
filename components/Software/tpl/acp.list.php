@@ -1,10 +1,10 @@
-<div class="admin software">
+<div class="panel">
 	<h1><?php echo _('Software'); ?></h1>
 	<div class="components">
 		<?php if (\forge\Controller::getController() == 'Software\\FixDatabase' && \forge\Controller::getCode() == \forge\Controller::RESULT_BAD): ?>
 			<p class="error"><?php echo \forge\Controller::getMessage(); ?></p>
 		<?php endif; ?>
-		<table class="software tablesorter">
+		<table class="list">
 			<thead>
 				<tr>
 					<th><?php echo _('Component'); ?></th>
@@ -50,7 +50,7 @@
 		</table>
 	</div>
 	<div class="modules">
-		<table class="software tablesorter">
+		<table class="list">
 			<thead>
 				<tr>
 					<th><?php echo _('Module'); ?></th>

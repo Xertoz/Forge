@@ -1,4 +1,4 @@
-<div class="admin locale build">
+<div class="panel">
 	<h1><?php echo _('Build locale'); ?></h1>
 	<?php echo self::response('Locale\Build'); ?>
 	<p><?php echo sprintf(_('You will build %s by clicking the button below.'), $locale); ?></p>

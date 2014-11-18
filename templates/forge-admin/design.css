@@ -1,0 +1,86 @@
+@import url(http://fonts.googleapis.com/css?family=Oswald:700);
+@import url(http://fonts.googleapis.com/css?family=PT+Sans);
+
+html, body {
+	width:100%;
+	height:100%;
+	margin:0;
+	padding:0;
+	background:#333;
+}
+
+body > header {
+	position:absolute;
+	z-index:1;
+	top:0;
+	left:0;
+	height:32px;
+	min-width:100%;
+}
+
+body > header > h1 {
+	font:bold 18px/32px 'Oswald', sans-serif;
+	margin:0 0 0 8px;
+}
+
+body > header > h1 > a {
+	color:#e0e0e0;
+	text-decoration:none;
+}
+
+body > nav {
+	position:absolute;
+	top:0;
+	left:0;
+	width:180px;
+	padding-top:32px;
+	box-sizing:border-box;
+}
+
+body > nav > ul {
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	font:12px/18px 'Oswald', sans-serif;
+	color:#767676;
+}
+
+body > nav > ul > li > span {
+	margin-left:8px
+}
+
+body > nav > ul > li > ul {
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+
+body > nav > ul > li > ul > li > a {
+	font:13px/26px 'PT Sans', sans-serif;
+	color:#e0e0e0;
+	text-decoration:none;
+	margin:0 0 0 16px;
+	padding:0;
+}
+
+body > nav > ul > li > ul > li > a:hover {
+	color:orange;
+}
+
+#admin-content {
+	width:100%;
+	padding:48px 16px 16px 196px;
+	box-sizing:border-box;
+	font-family:'PT Sans', sans-serif;
+}
+
+#admin-content > div.panel {
+	background:#fff;
+	padding:10px;
+	border-radius:5px;
+}
+
+#admin-content h1 {
+	font:bold 28px 'PT Sans', sans-serif;
+	margin:0 0 16px 0;
+}

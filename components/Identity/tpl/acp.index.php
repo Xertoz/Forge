@@ -1,6 +1,6 @@
-<div class="admin identity list">
+<div class="panel">
 	<h1><?php echo _('People'); ?></h1>
-	<table>
+	<table class="list">
 		<thead>
 			<tr>
 				<th width="50%"><?php echo _('Name'); ?></th>

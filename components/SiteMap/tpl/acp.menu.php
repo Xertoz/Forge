@@ -1,4 +1,4 @@
-<div class="admin sitemap menu">
+<div class="panel">
 	<h1><?php echo _('Pages'); ?></h1>
 	<?php echo self::response('SiteMap\Delete'); ?>
 	<?php echo self::response('SiteMap\Organize'); ?>

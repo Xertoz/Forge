@@ -1,4 +1,4 @@
-<div class="admin locale">
+<div class="panel">
 	<h1><?php echo _('Locales'); ?></h1>
 	<?php echo self::response('Locale\Create'); ?>
 	<?php echo self::response('Locale\Scan'); ?>

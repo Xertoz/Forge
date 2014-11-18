@@ -1,4 +1,4 @@
-<table class="matrix"<?php foreach ($attributes as $attr => $value): ?>
+<table class="list"<?php foreach ($attributes as $attr => $value): ?>
 	<?php echo $attr; ?>="<?php echo self::html($value); ?>"<?php endforeach; ?>>
 	<thead>
 		<tr>

@@ -1,4 +1,4 @@
-<div class="admin sitemap page">
+<div class="panel">
 	<h1><?php echo _($entry->getId() ? 'Edit' : 'Create'); ?></h1>
 	<?php if (\forge\Controller::getCode() == \forge\Controller::RESULT_BAD): ?>
 		<p class="error"><?php echo self::html(\forge\Controller::getMessage()); ?></p>
