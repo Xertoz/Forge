@@ -44,8 +44,11 @@
 		* @return void
 		*/
 		static public function addScript($script) {
+			if (is_string($script))
+				$script = new JavaScript($script);
+			
 			foreach (self::$scripts as $subject)
-				if ($subject == $script)
+				if ($subject->getHash() == $script->getHash())
 					return;
 
 			self::$scripts[] = $script;
@@ -54,12 +57,11 @@
 		/**
 		 * Add an external JavaScript file to the header element
 		 * @param string $file File name
+		 * @param bool $preserve Do not minify the source
 		 * @return void
 		 */
-		static public function addScriptFile($file) {
-			$script = '<script src="'.self::html($file).'" type="text/javascript"></script>';
-			
-			self::addScript($script);
+		static public function addScriptFile($file, $preserve=false) {
+			self::addScript(new JavaScript($file, JavaScript::TYPE_FILE, !$preserve));
 		}
 
 		/**
@@ -132,6 +134,7 @@
 		 * @return void
 		 */
 		static public function forgeJS($api) {
+			self::addScriptFile('/script/forge.js');
 			self::addScriptFile('/script/'.$api.'.js');
 		}
 
@@ -165,7 +168,31 @@
 		* @return string
 		*/
 		static public function getScripts($glue) {
-			return implode($glue, self::$scripts);
+			$local = '';
+			$elements = [];
+			
+			foreach (self::$scripts as $script)
+				if ($script->isRemote())
+					$elements[] = '<script type="text/javascript" src="'.$script->getFile().'"></script>';
+				elseif (!\forge\components\Identity::isDeveloper() && $script->isMinifiable())
+					$local .= $script->getSource();
+				elseif ($script->isLocal())
+					$elements[] = '<script type="text/javascript" src="'.$script->getFile().'"></script>';
+				else
+					$elements[] = '<script type="text/javascript">'.$script->getSource().'</script>';
+			
+			if (strlen($local)) {
+				$js = new JavaScript($local);
+				$hash = $js->getHash();
+				$cache = \forge\components\Files\File::create('cache/script/'.$hash.'.js');
+				if (!$cache->length()) {
+					$cache->set(\forge\JSMin::minify($local));
+					$cache->save();
+				}
+				$elements[] = '<script type="text/javascript" src="/files/cache/script/'.$hash.'.js"></script>';
+			}
+			
+			return implode($glue, $elements);
 		}
 
 		/**
@@ -225,7 +252,7 @@
 			if (empty($vars['value']))
 				$vars['value'] = null;
 			
-			self::addScriptFile('/script/tinymce/tinymce.min.js');
+			self::addScriptFile('/script/tinymce/tinymce.min.js', true);
 			self::addScriptFile('/components/Templates/script/editor.js');
 			
 			$id = uniqid();

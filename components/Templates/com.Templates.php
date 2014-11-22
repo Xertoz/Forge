@@ -104,11 +104,7 @@
 
 			// Add JS
 			if (file_exists($path.$type.'.'.$name.'.js'))
-				self::addScript(implode(array(
-					'<script type="text/javascript">',
-					\forge\components\Templates\Engine::display($path.$type.'.'.$name.'.js',$tv),
-					'</script>'
-				)));
+				self::addScript(\forge\components\Templates\Engine::display($path.$type.'.'.$name.'.js',$tv));
 
 			// Return the template
 			if ($type == 'page')
