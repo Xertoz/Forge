@@ -56,7 +56,9 @@
 			$text = new \forge\modules\Text\db\Text();
 			$text->page_id = $pageId;
 			$text->select('page_id');
-			$text->text_content = $pageData;
+			$text->mobile_enabled = !empty($pageData['mobile_enabled']);
+			$text->mobile_content = $pageData['mobile_content'];
+			$text->text_content = $pageData['text_content'];
 			$text->save();
 		}
 
@@ -70,7 +72,9 @@
 		public function create($id,$page) {
 			$text = new \forge\modules\Text\db\Text();
 			$text->page_id = $id;
-			$text->text_content = $page;
+			$text->mobile_enabled = !empty($page['mobile_enabled']);
+			$text->mobile_content = $page['mobile_content'];
+			$text->text_content = $page['text_content'];
 			$text->insert();
 		}
 
