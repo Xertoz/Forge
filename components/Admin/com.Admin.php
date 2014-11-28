@@ -60,8 +60,12 @@
 			foreach (\forge\components\Software::getAddons(true) as $addon)
 				if (in_array('forge\\components\\Admin\\Menu', class_implements($addon))) {
 					$items = $addon::getAdminMenu();
-					if (!is_array($items))
-						$items = [$items];
+					if (!is_array($items)) {
+						if ($items instanceof \forge\components\Admin\MenuItem)
+							$items = [$items];
+						else
+							continue;
+					}
 					
 					foreach ($items as $item)
 						if (!isset($menu[$item->getName()]))
@@ -73,6 +77,7 @@
 			// If the view exists, then we should return the administration output
 			if (method_exists($class,$view)) {
 				\forge\components\Templates::setTemplate('forge-admin');
+				\forge\components\Templates\Engine::forgeJS('f');
 				
 				return \forge\components\Templates::display(
 					'components/Admin/tpl/page.view.php',
