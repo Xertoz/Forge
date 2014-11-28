@@ -23,7 +23,7 @@
 			\forge\components\Identity::restrict('com.Identity.Admin');
 
 			if (empty($_POST['identity']['id']))
-				throw new \forge\HttpException(_('No identity was selected for update'), \forge\HttpException::HTTP_BAD_REQUEST);
+				throw new \forge\HttpException('No identity was selected for update', \forge\HttpException::HTTP_BAD_REQUEST);
 
 			$identity = new \forge\components\Identity\Identity($_POST['identity']['id']);
 
@@ -40,6 +40,6 @@
 					$permission->insert();
 				}
 
-			self::setResponse(_('Identity permissions settings were saved!'), self::RESULT_OK);
+			self::setResponse(self::l('Identity permissions settings were saved!'), self::RESULT_OK);
 		}
 	}

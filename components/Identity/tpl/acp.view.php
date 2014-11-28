@@ -1,17 +1,17 @@
 <div class="panel">
-	<h1><?php echo _('Identity'); ?></h1>
-	<h2><?php echo _('Personal'); ?></h2>
+	<h1><?php echo self::l('Identity'); ?></h1>
+	<h2><?php echo self::l('Personal'); ?></h2>
 	<table>
 		<tr>
-			<td><?php echo _('Name'); ?>:</td>
+			<td><?php echo self::l('Name'); ?>:</td>
 			<td><?php echo self::html($identity->getName()); ?></td>
 		</tr>
 		<tr>
-			<td><?php echo _('Email'); ?>:</td>
+			<td><?php echo self::l('Email'); ?>:</td>
 			<td><?php echo self::html($identity->getEmail()); ?></td>
 		</tr>
 	</table>
-	<h2><?php echo _('Permissions'); ?></h2>
+	<h2><?php echo self::l('Permissions'); ?></h2>
 	<form action="/admin/Identity/view?id=<?php echo (int)$_GET['id']; ?>" method="POST">
 		<input type="hidden" name="forge[controller]" value="Identity\Permissions" />
 		<input type="hidden" name="identity[id]" value="<?php echo (int)$_GET['id']; ?>" />
@@ -19,7 +19,7 @@
 		<table id="identity-permissions" class="list">
 			<thead>
 				<tr>
-					<th><?php echo _('Name'); ?></th>
+					<th><?php echo self::l('Name'); ?></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -29,13 +29,13 @@
 					<td><?php echo self::html($permission); ?></td>
 					<td class="actions permissive">
 						<input type="hidden" name="permissions[<?php echo self::html($permission); ?>]" value="<?php echo $has = (int)$identity->hasPermission($permission); ?>" />
-						<img src="/images/led/accept.png" alt="<?php echo _('Yes'); ?>" class="accept"<?php if (!$has): ?> style="display:none;"<?php endif; ?> />
-						<img src="/images/led/cross.png" alt="<?php echo _('No'); ?>" class="deny"<?php if ($has): ?> style="display:none;"<?php endif; ?> />
+						<img src="/images/led/accept.png" alt="<?php echo self::l('Yes'); ?>" class="accept"<?php if (!$has): ?> style="display:none;"<?php endif; ?> />
+						<img src="/images/led/cross.png" alt="<?php echo self::l('No'); ?>" class="deny"<?php if ($has): ?> style="display:none;"<?php endif; ?> />
 					</td>
 				</tr>
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-		<p><input type="submit" value="<?php echo _('Save'); ?>" /></p>
+		<p><input type="submit" value="<?php echo self::l('Save'); ?>" /></p>
 	</form>
 </div>

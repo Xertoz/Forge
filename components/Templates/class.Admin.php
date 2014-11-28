@@ -42,7 +42,7 @@
 				$defaultTemplate = \forge\components\Templates::getTemplate();
 			}
 			catch (\Exception $e) {
-				throw new \forge\HttpException(_('The template does not exist'),\forge\HttpException::HTTP_NOT_FOUND);
+				throw new \forge\HttpException('The template does not exist',\forge\HttpException::HTTP_NOT_FOUND);
 			}
 
 			return \forge\components\Templates::display(

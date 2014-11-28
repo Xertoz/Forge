@@ -30,11 +30,11 @@
 			if (!\forge\components\Identity::hasPermission('com.Mailer.Admin'))
 				return null;
 			
-			$menu = new \forge\components\Admin\MenuItem('developer', _('Developer'));
+			$menu = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
 			
 			$menu->appendChild(new \forge\components\Admin\MenuItem(
 				'mailer',
-				_('E-mail'),
+				self::l('E-mail'),
 				'/admin/Mailer'
 			));
 			

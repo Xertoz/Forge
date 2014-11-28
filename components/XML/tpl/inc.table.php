@@ -24,11 +24,11 @@
 		<tr>
 			<th colspan="100%">
 				<?php if ($matrix->getPage() > 1): ?>
-					<a href="?<?php foreach ($_GET as $key => $value) if ($key != 'page') echo urlencode($key).'='.urlencode($value).'&'; ?>page=<?php echo $matrix->getPage()-1; ?>"><?php echo _('Previous'); ?></a>
+					<a href="?<?php foreach ($_GET as $key => $value) if ($key != 'page') echo urlencode($key).'='.urlencode($value).'&'; ?>page=<?php echo $matrix->getPage()-1; ?>"><?php echo self::l('Previous'); ?></a>
 				<?php endif; ?>
 				<span><?php echo $matrix->getPage(); ?>/<?php echo $matrix->getPages(); ?></span>
 				<?php if ($matrix->getPage() < $matrix->getPages()): ?>
-					<a href="?<?php foreach ($_GET as $key => $value) if ($key != 'page') echo urlencode($key).'='.urlencode($value).'&'; ?>page=<?php echo $matrix->getPage()+1; ?>"><?php echo _('Next'); ?></a>
+					<a href="?<?php foreach ($_GET as $key => $value) if ($key != 'page') echo urlencode($key).'='.urlencode($value).'&'; ?>page=<?php echo $matrix->getPage()+1; ?>"><?php echo self::l('Next'); ?></a>
 				<?php endif; ?>
 			</th>
 		</tr>

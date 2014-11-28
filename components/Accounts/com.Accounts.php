@@ -108,14 +108,14 @@
 			}
 			catch (\Exception $e) {}
 			if ($accountInstance->getId())
-				throw new \forge\HttpException(_('There is already an account known by that name. Select something else!'),
+				throw new \forge\HttpException('There is already an account known by that name. Select something else!',
 						\forge\HttpException::HTTP_CONFLICT);
 			try {
 				$accountInstance->select('user_email');
 			}
 			catch (\Exception $e) {}
 			if ($accountInstance->getId())
-				throw new \forge\HttpException(_('There is already an account using that email address. Use another one!'),
+				throw new \forge\HttpException('There is already an account using that email address. Use another one!',
 						\forge\HttpException::HTTP_CONFLICT);
 			
 			// Create the account
@@ -146,7 +146,7 @@
 				);
 				$mail = new \forge\components\Mailer\Mail();
 				$mail->AddAddress($email,$nameFirst.' '.$nameLast);
-				$mail->Subject = _('Account registered');
+				$mail->Subject = self::l('Account registered');
 				$mail->Body = str_replace(array_keys($tpl),array_values($tpl),self::getRegisteredMessage());
 				$mail->Send();
 			}

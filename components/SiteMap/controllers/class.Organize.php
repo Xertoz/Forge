@@ -44,6 +44,6 @@
 
 			\forge\components\Databases::DB()->commit();
 			
-			self::setResponse(_('The menu order was updated!'), self::RESULT_OK);
+			self::setResponse(self::l('The menu order was updated!'), self::RESULT_OK);
 		}
 	}

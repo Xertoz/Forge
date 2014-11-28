@@ -22,17 +22,17 @@
 			\forge\components\Identity::restrict('com.Files.Admin');
 			
 			if (empty($_POST['file']))
-				throw new \forge\HttpException(_('A file must be chosen'),
+				throw new \forge\HttpException('A file must be chosen',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			
 			try {
 				(new \forge\components\Files\File($_POST['file']))->delete();
 			}
 			catch (\Exception $e) {
-				throw new \forge\HttpException(_('The file could not be deleted'),
+				throw new \forge\HttpException('The file could not be deleted',
 						\forge\HttpException::HTTP_CONFLICT);
 			}
 			
-			self::setResponse(_('The file was successfully deleted!'), self::RESULT_OK);
+			self::setResponse(self::l('The file was successfully deleted!'), self::RESULT_OK);
 		}
 	}

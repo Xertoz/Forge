@@ -23,11 +23,11 @@
 
 			// We must set something
 			if (empty($_POST['id']))
-				throw new \forge\HttpException(_('Bad request'),
+				throw new \forge\HttpException('Bad request',
 					\forge\HttpException::HTTP_BAD_REQUEST);
 
 			\forge\components\Databases::deleteConnection($_POST['id']);
 			
-			self::setResponse(_('The connection was deleted!'), self::RESULT_OK);
+			self::setResponse(self::l('The connection was deleted!'), self::RESULT_OK);
 		}
 	}

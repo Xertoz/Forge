@@ -25,7 +25,7 @@
 			$parts = explode('/', $this->getPathDecoded());
 			
 			if (count($parts) < 3)
-				throw new \forge\HttpException(_('Invalid URL'),
+				throw new \forge\HttpException('Invalid URL',
 					\forge\HttpException::HTTP_BAD_REQUEST);
 			
 			$width = array_shift($parts);
@@ -36,10 +36,10 @@
 				$file = new \forge\components\Files\File($name);
 				
 				if (!$file->isFile())
-					throw new \Exception(_('Not requesting a file'));
+					throw new \Exception('Not requesting a file');
 			}
 			catch (\Exception $e) {
-				throw new \forge\HttpException(_('File does not exist'),
+				throw new \forge\HttpException('File does not exist',
 					\forge\HttpException::HTTP_NOT_FOUND);
 			}
 			
@@ -53,7 +53,7 @@
 				echo new File(substr($parsed, strlen(FORGE_PATH.'/files/')));
 			}
 			catch (\Exception $e) {
-				throw new HttpException(_('Source image not found'), HttpException::HTTP_NOT_FOUND);
+				throw new HttpException('Source image not found', HttpException::HTTP_NOT_FOUND);
 			}
 		}
 	}

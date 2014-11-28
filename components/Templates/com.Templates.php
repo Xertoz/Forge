@@ -137,11 +137,11 @@
 			if (!\forge\components\Identity::hasPermission('com.Templates.Admin'))
 				return null;
 			
-			$menu = new \forge\components\Admin\MenuItem('developer', _('Developer'));
+			$menu = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
 			
 			$menu->appendChild(new \forge\components\Admin\MenuItem(
 				'templates',
-				_('Templates'),
+				self::l('Templates'),
 				'/admin/Templates'
 			));
 			

@@ -23,32 +23,32 @@
 
 			// Require a type.
 			if (empty($_POST['system']))
-				throw new \forge\HttpException(_('You must choose a driver'),
+				throw new \forge\HttpException('You must choose a driver',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 
 			// Require a hostname.
 			if (empty($_POST['hostname']))
-				throw new \forge\HttpException(_('You must supply a hostname'),
+				throw new \forge\HttpException('You must supply a hostname',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 
 			// Require a database.
 			if (empty($_POST['database']))
-				throw new \forge\HttpException(_('You must supply a database name'),
+				throw new \forge\HttpException('You must supply a database name',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 
 			// Require a table prefix.
 			if (empty($_POST['prefix']))
-				throw new \forge\HttpException(_('You must supply a prefix'),
+				throw new \forge\HttpException('You must supply a prefix',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 
 			// Require a type.
 			if (empty($_POST['username']))
-				throw new \forge\HttpException(_('You must supply a username'),
+				throw new \forge\HttpException('You must supply a username',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 
 			// Require a type.
 			if (empty($_POST['password']))
-				throw new \forge\HttpException(_('You must supply a password'),
+				throw new \forge\HttpException('You must supply a password',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 
 			// Add it
@@ -67,6 +67,6 @@
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			}
 			
-			self::setResponse(_('The connection was set up!'), self::RESULT_OK);
+			self::setResponse(self::l('The connection was set up!'), self::RESULT_OK);
 		}
 	}

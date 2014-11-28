@@ -1,14 +1,14 @@
 <div class="panel">
-	<h1><?php echo _('Databases'); ?></h1>
+	<h1><?php echo self::l('Databases'); ?></h1>
 	<?php echo self::response('Databases\Select'); ?>
 	<table class="list">
 		<thead>
 			<tr>
-				<th><?php echo _('Driver'); ?></th>
-				<th><?php echo _('Hostname'); ?></th>
-				<th><?php echo _('Database'); ?></th>
-				<th><?php echo _('Prefix'); ?></th>
-				<th><?php echo _('Username'); ?></th>
+				<th><?php echo self::l('Driver'); ?></th>
+				<th><?php echo self::l('Hostname'); ?></th>
+				<th><?php echo self::l('Database'); ?></th>
+				<th><?php echo self::l('Prefix'); ?></th>
+				<th><?php echo self::l('Username'); ?></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -25,12 +25,12 @@
 						<form action="/admin/Databases" method="POST">
 							<input type="hidden" name="forge[controller]" value="Databases\Select" />
 							<input type="hidden" name="id" value="<?php echo $id; ?>" />
-							<input type="image" src="/images/led/connect.png" title="<?php echo _('Connect'); ?>" />
+							<input type="image" src="/images/led/connect.png" title="<?php echo self::l('Connect'); ?>" />
 						</form>
 						<form action="/admin/Databases" method="POST">
 							<input type="hidden" name="forge[controller]" value="Databases\Delete" />
 							<input type="hidden" name="id" value="<?php echo $id; ?>" />
-							<input type="image" src="/images/led/cross.png" title="<?php echo _('Delete'); ?>" />
+							<input type="image" src="/images/led/cross.png" title="<?php echo self::l('Delete'); ?>" />
 						</form>
 					<?php endif; ?>
 				</td>
@@ -40,11 +40,11 @@
 	</table>
 	<form action="/admin/Databases" method="POST">
 		<input type="hidden" name="forge[controller]" value="Databases\Add" />
-		<h2><?php echo _('New connection'); ?></h2>
+		<h2><?php echo self::l('New connection'); ?></h2>
 		<?php echo self::response('Databases\Add'); ?>
 		<table>
 			<tr>
-				<td width="100"><?php echo _('Driver'); ?>:</td>
+				<td width="100"><?php echo self::l('Driver'); ?>:</td>
 				<td>
 					<?php foreach ($drivers as $driver): ?>
 						<?php echo self::input('radio', 'system', $driver, true, ['id' => $driver]); ?>
@@ -53,27 +53,27 @@
 				</td>
 			</tr>
 			<tr>
-				<td><?php echo _('Hostname'); ?>:</td>
+				<td><?php echo self::l('Hostname'); ?>:</td>
 				<td><?php echo self::input('text', 'hostname'); ?></td>
 			</tr>
 			<tr>
-				<td><?php echo _('Database'); ?>:</td>
+				<td><?php echo self::l('Database'); ?>:</td>
 				<td><?php echo self::input('text', 'database'); ?></td>
 			</tr>
 			<tr>
-				<td><?php echo _('Prefix'); ?>:</td>
+				<td><?php echo self::l('Prefix'); ?>:</td>
 				<td><?php echo self::input('text', 'prefix'); ?></td>
 			</tr>
 			<tr>
-				<td><?php echo _('Username'); ?>:</td>
+				<td><?php echo self::l('Username'); ?>:</td>
 				<td><?php echo self::input('text', 'username'); ?></td>
 			</tr>
 			<tr>
-				<td><?php echo _('Password'); ?>:</td>
+				<td><?php echo self::l('Password'); ?>:</td>
 				<td><?php echo self::input('password', 'password'); ?></td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="submit" value="<?php echo _('Create'); ?>"></td>
+				<td colspan="2"><input type="submit" value="<?php echo self::l('Create'); ?>"></td>
 			</tr>
 		</table>
 	</form>

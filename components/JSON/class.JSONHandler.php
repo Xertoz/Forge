@@ -33,15 +33,15 @@
 				elseif (\forge\Addon::existsModule($addon))
 					$class = 'forge\\modules\\'.$addon;
 				else
-					throw new \forge\HttpException(_('The requested feed does not exist'), \forge\HttpException::HTTP_NOT_FOUND);
+					throw new \forge\HttpException('The requested feed does not exist', \forge\HttpException::HTTP_NOT_FOUND);
 
 				// Find its AJAX definition
 				if (!class_exists($json = $class.'\JSON'))
-					throw new \forge\HttpException(_('JSON definition not found'), \forge\HttpException::HTTP_NOT_IMPLEMENTED);
+					throw new \forge\HttpException('JSON definition not found', \forge\HttpException::HTTP_NOT_IMPLEMENTED);
 
 				// Does the method exist?
 				if (!method_exists($json, $method))
-					throw new \forge\HttpException(_('AJAX method not found'), \forge\HttpException::HTTP_NOT_IMPLEMENTED);
+					throw new \forge\HttpException('AJAX method not found', \forge\HttpException::HTTP_NOT_IMPLEMENTED);
 
 				// Get the return and encode it for output
 				echo json_encode(call_user_func($json.'::'.$method));
@@ -53,7 +53,7 @@
 				if (\forge\components\Identity::isDeveloper())
 					$this->error($e->getMessage(), $e->getCode());
 				else
-					$this->error(_('Internal server error'));
+					$this->error(self::l('Internal server error'));
 			}
 		}
 

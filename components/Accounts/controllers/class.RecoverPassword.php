@@ -20,20 +20,20 @@
 		 */
 		public function process() {
 			if (empty($_POST['key']))
-				throw new \forge\HttpException(_('No key provided'),
+				throw new \forge\HttpException('No key provided',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			
 			if (empty($_POST['password1']))
-				throw new \forge\HttpException(_('No password provided'),
+				throw new \forge\HttpException('No password provided',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			if (strlen($_POST['password1']) < \forge\components\Accounts::MinimumPasswordLength)
-				throw new \forge\HttpException(_('The password is too short'),
+				throw new \forge\HttpException('The password is too short',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			if (empty($_POST['password2']))
-				throw new \forge\HttpException(_('You must confirm the password'),
+				throw new \forge\HttpException('You must confirm the password',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			if ($_POST['password1'] != $_POST['password2'])
-				throw new \forge\HttpException(_('The passwords differ'),
+				throw new \forge\HttpException('The passwords differ',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 
 			try {

@@ -53,7 +53,7 @@
 			if (!class_exists($class = $addon.'\\Admin'))
 				throw new \forge\HttpException('The addon does not implement an administration interface',\forge\HttpException::HTTP_NOT_FOUND);
 			if (!in_array('forge\components\Admin\Administration', class_implements($class)))
-				throw new \forge\HttpException(_('The addon did not invoke a proper admin interface'),\forge\HttpException::HTTP_NOT_IMPLEMENTED);
+				throw new \forge\HttpException('The addon did not invoke a proper admin interface',\forge\HttpException::HTTP_NOT_IMPLEMENTED);
 
 			// Populate the menu with items
 			$menu = [];

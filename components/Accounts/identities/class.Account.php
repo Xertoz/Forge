@@ -104,15 +104,15 @@
 				$account->select('user_account');
 			}
 			catch (\Exception $e) {
-				throw new \forge\HttpException(_('Account does not exist'), \forge\HttpException::HTTP_FORBIDDEN);
+				throw new \forge\HttpException('Account does not exist', \forge\HttpException::HTTP_FORBIDDEN);
 			}
 
 			if ($account->user_state != 'active')
-				throw new \forge\HttpException(_('The user is not activated, and cannot be logged into.'), \forge\HttpException::HTTP_FORBIDDEN);
+				throw new \forge\HttpException('The user is not activated, and cannot be logged into.', \forge\HttpException::HTTP_FORBIDDEN);
 
 			// Throw exception if it's the wrong password
 			if ($account->user_password != $account->hashPassword($password))
-				throw new \forge\HttpException(sprintf(_('Wrong password given for user %s'), $username), \forge\HttpException::HTTP_FORBIDDEN);
+				throw new \forge\HttpException(sprintf(self::l('Wrong password given for user %s'), $username), \forge\HttpException::HTTP_FORBIDDEN);
 
 			return $account;
 		}

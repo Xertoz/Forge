@@ -14,6 +14,8 @@
 	* Controller class for handling HTTP POST data
 	*/
 	abstract class Controller {
+		use \forge\components\Locale\Translator;
+		
 		/**
 		 * Something went wrong while running the controller
 		 */

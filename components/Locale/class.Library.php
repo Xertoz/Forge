@@ -24,10 +24,10 @@
 		 */
 		static public function addLocale($locale) {
 			if (!\forge\components\Locale::isLocale($locale))
-				throw new \Exception(_('Trying to add an invalid locale'));
+				throw new \Exception('Trying to add an invalid locale');
 
 			if (in_array($locale, self::getLocales()))
-				throw new \Exception(_('Trying to add an existing locale!'));
+				throw new \Exception('Trying to add an existing locale!');
 
 			// Write the locale
 			self::setConfig($locale, [], true);
@@ -41,7 +41,7 @@
 		 */
 		static public function build($locale) {
 			if (!\forge\components\Locale::isLocale($locale))
-				throw new \Exception(_('Trying to build an invalid locale'));
+				throw new Exception('Trying to build an invalid locale');
 
 			$file = FORGE_PATH.'/files/.locales/'.$locale.'/LC_MESSAGES/Forge.po';
 			$build = '';
@@ -69,7 +69,7 @@
 		 */
 		static public function getEntries($locale) {
 			if (!\forge\components\Locale::isLocale($locale))
-				throw new \Exception(_('Trying to read an invalid locale'));
+				throw new Exception('Trying to read an invalid locale');
 
 			return count(self::getConfig($locale, []));
 		}
@@ -82,7 +82,7 @@
 		 */
 		static public function getLocale($locale) {
 			if (!\forge\components\Locale::isLocale($locale))
-				throw new \Exception(_('Trying to get an invalid locale'));
+				throw new Exception('Trying to get an invalid locale');
 
 			// Write the locale
 			return self::getConfig($locale, []);
@@ -117,7 +117,7 @@
 		 */
 		static public function getMissing($locale) {
 			if (!\forge\components\Locale::isLocale($locale))
-				throw new \Exception(_('Trying to read an invalid locale'));
+				throw new Exception('Trying to read an invalid locale');
 
 			$missing = [];
 			$en_US = self::getMessages();
@@ -136,7 +136,7 @@
 		 */
 		static public function getMissingEntries($locale) {
 			if (!\forge\components\Locale::isLocale($locale))
-				throw new \Exception(_('Trying to read an invalid locale'));
+				throw new Exception('Trying to read an invalid locale');
 
 			$missing = 0;
 			$en_US = self::getMessages();
@@ -156,7 +156,7 @@
 		 */
 		static public function isBuilt($locale) {
 			if (!\forge\components\Locale::isLocale($locale))
-				throw new \Exception(_('Trying to read an invalid locale'));
+				throw new Exception('Trying to read an invalid locale');
 
 			return self::getConfig($locale.'.built', false);
 		}
@@ -181,7 +181,7 @@
 		 */
 		static public function setLocale($locale, $library) {
 			if (!\forge\components\Locale::isLocale($locale))
-				throw new \Exception(_('Trying to set to an invalid locale'));
+				throw new Exception('Trying to set to an invalid locale');
 
 			// Write the locale
 			self::setConfig($locale, $library, true);
@@ -196,10 +196,10 @@
 		 */
 		static public function setMessage($locale, $message, $translation) {
 			if (!\forge\components\Locale::isLocale($locale))
-				throw new \Exception(_('Trying to set to an invalid locale'));
+				throw new Exception('Trying to set to an invalid locale');
 
 			if (!self::isMessage($message))
-				throw new \Exception(_('Trying to translate a non-existing message!'));
+				throw new Exception('Trying to translate a non-existing message!');
 
 			$library = self::getLocale($locale);
 			$library[$message] = $translation;
@@ -220,7 +220,7 @@
 					if (is_dir($subject))
 						$scanner($subject);
 					elseif (substr($subject, strlen($subject)-4) == '.php')
-						if (preg_match_all('/_\\(((?<![\\\\])[\'"])((?:.(?!(?<![\\\\])\\1))*.?)\\1\\)/', file_get_contents($subject), $matches))
+						if (preg_match_all('/self::l\\(((?<![\\\\])[\'"])((?:.(?!(?<![\\\\])\\1))*.?)\\1\\)/', file_get_contents($subject), $matches))
 							foreach ($matches[2] as $match)
 								$library[$match] = $match;
 				}

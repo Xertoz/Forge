@@ -14,6 +14,8 @@ namespace forge\components\Identity;
  * A provider adds support to specific login systems for identities.
  */
 abstract class Provider implements ProviderInterface {
+	use \forge\components\Locale\Translator;
+
 	/**
 	 * The provider id
 	 * @var int

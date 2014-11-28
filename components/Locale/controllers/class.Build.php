@@ -23,16 +23,16 @@
 			\forge\components\Identity::restrict('com.Locale.Build');
 
 			if (empty($_POST['locale']) || !\forge\components\Locale::isLocale($_POST['locale']))
-				throw new \forge\HttpException(_('No valid locale was entered.'), \forge\HttpException::HTTP_BAD_REQUEST);
+				throw new \forge\HttpException('No valid locale was entered.', \forge\HttpException::HTTP_BAD_REQUEST);
 
 			try {
 				\forge\components\Locale\Library::build($_POST['locale']);
 			}
 			catch (\Exception $e) {
-				throw new \forge\HttpException(_('An error occured during the build!'.$e->getMessage()),
+				throw new \forge\HttpException('An error occured during the build!'.$e->getMessage(),
 					\forge\HttpException::HTTP_INTERNAL_SERVER_ERROR);
 			}
 
-			self::setResponse(_('The build was successfully performed!'), self::RESULT_OK);
+			self::setResponse(self::l('The build was successfully performed!'), self::RESULT_OK);
 		}
 	}

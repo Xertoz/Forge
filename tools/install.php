@@ -2,28 +2,27 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><?php echo _('Forge Installer'); ?></title>
+		<title>Forge Installer</title>
 		<link href="/css/tools.css" rel="stylesheet" media="screen" />
 	</head>
 	<body>
-		<h1><?php echo _('Installation'); ?></h1>
-		<p><?php echo _('Welcome to this installation guide which will guide you through a few required steps in order to install Forge on your system.'); ?></p>
-		<p><?php echo _('Please make sure that you have recieved the web, database and mail server information from your host before proceeding!'); ?></p>
-		<h2><?php echo _('Step 1 - Prerequisites'); ?></h2>
-		<p><?php echo _('This set of minimum requirements must be met or Forge won\'t be able to function properly.'); ?></p>
+		<h1>Installation</h1>
+		<p>Welcome to this installation guide which will guide you through a few required steps in order to install Forge on your system.</p>
+		<p>Please make sure that you have recieved the web, database and mail server information from your host before proceeding!</p>
+		<h2>Step 1 - Prerequisites</h2>
+		<p>This set of minimum requirements must be met or Forge won\'t be able to function properly.</p>
 		<?php
 		function check_extension(\forge\Checklist $chk, $ext) {
-			$chk->add(extension_loaded($ext), sprintf(_('PHP extension %s is loaded.'), $ext));
+			$chk->add(extension_loaded($ext), sprintf('PHP extension %s is loaded.', $ext));
 		}
 		$prerequisites = new forge\Checklist();
-		$prerequisites->add(true, _('Forge is loadable.'));
-		$prerequisites->add(count(glob(FORGE_PATH.'/config/*')) === 0, _('Forge isn\'t already installed.'));
-		$prerequisites->add(is_writable(FORGE_PATH.'/config'), _('The config folder is writable.'));
-		$prerequisites->add(is_writable(FORGE_PATH.'/files'), _('The files folder is writable.'));
-		$prerequisites->add(substr(phpversion(), 0, strlen('5.4')) >= 5.4, _('PHP version is at least 5.4.'));
+		$prerequisites->add(true, 'Forge is loadable.');
+		$prerequisites->add(count(glob(FORGE_PATH.'/config/*')) === 0, 'Forge isn\'t already installed.');
+		$prerequisites->add(is_writable(FORGE_PATH.'/config'), 'The config folder is writable.');
+		$prerequisites->add(is_writable(FORGE_PATH.'/files'), 'The files folder is writable.');
+		$prerequisites->add(substr(phpversion(), 0, strlen('5.4')) >= 5.4, 'PHP version is at least 5.4.');
 		check_extension($prerequisites, 'curl');
 		check_extension($prerequisites, 'fileinfo');
-		check_extension($prerequisites, 'gettext');
 		check_extension($prerequisites, 'gd');
 		check_extension($prerequisites, 'hash');
 		check_extension($prerequisites, 'intl');
@@ -35,93 +34,93 @@
 		echo $prerequisites;
 		?>
 		<?php if (!$prerequisites->isChecked()): ?>
-		<p class="error"><?php echo _('You must take the proper steps to ensure that the prerequisites are met.'); ?></p>
+		<p class="error">You must take the proper steps to ensure that the prerequisites are met.</p>
 		<?php goto footer; endif; ?>
 		<form action="/tools/install.php" method="POST">
-			<h2><?php echo _('Step 2 - Settings'); ?></h2>
-			<h3><?php echo _('Database'); ?></h3>
-			<p><?php echo _('Forge requires a main database to store data within. It is possible to add additional database connections later.'); ?></p>
-			<p><?php echo _('The prefix field is freely selectable - just choose a table prefix that is unique to all software using the database!'); ?></p>
+			<h2>Step 2 - Settings</h2>
+			<h3>Database</h3>
+			<p>Forge requires a main database to store data within. It is possible to add additional database connections later.</p>
+			<p>The prefix field is freely selectable - just choose a table prefix that is unique to all software using the database!</p>
 			<table>
 				<tbody>
 					<tr>
-						<td><?php echo _('System:'); ?></td>
+						<td>System:</td>
 						<td>
 							<select name="database[system]">
-								<option value="MySQL"><?php echo _('MySQL'); ?></option>
+								<option value="MySQL">MySQL</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<td><?php echo _('Hostname:'); ?></td>
+						<td>Hostname:</td>
 						<td><?php echo \forge\components\Templates\Engine::input('text', 'database[hostname]'); ?></td>
 					</tr>
 					<tr>
-						<td><?php echo _('Username:'); ?></td>
+						<td>Username:</td>
 						<td><?php echo \forge\components\Templates\Engine::input('text', 'database[username]'); ?></td>
 					</tr>
 					<tr>
-						<td><?php echo _('Password:'); ?></td>
+						<td>Password:</td>
 						<td><?php echo \forge\components\Templates\Engine::input('password', 'database[password]'); ?></td>
 					</tr>
 					<tr>
-						<td><?php echo _('Database:'); ?></td>
+						<td>Database:</td>
 						<td><?php echo \forge\components\Templates\Engine::input('text', 'database[database]'); ?></td>
 					</tr>
 					<tr>
-						<td><?php echo _('Prefix:'); ?></td>
+						<td>Prefix:</td>
 						<td><?php echo \forge\components\Templates\Engine::input('text', 'database[prefix]'); ?></td>
 					</tr>
 				</tbody>
 			</table>
-			<h3><?php echo _('Root'); ?></h3>
-			<p><?php echo _('Every Forge system has a root user, which is granted all permissions without having an account.'); ?></p>
-			<p><?php echo _('The root user shouldn\'t be given to any non-developers.'); ?></p>
+			<h3>Root</h3>
+			<p>Every Forge system has a root user, which is granted all permissions without having an account.</p>
+			<p>The root user shouldn\'t be given to any non-developers.</p>
 			<table>
 				<tbody>
 					<tr>
-						<td><?php echo _('Name:'); ?></td>
+						<td>Name:</td>
 						<td><?php echo \forge\components\Templates\Engine::input('text', 'root[name]'); ?></td>
 					</tr>
 					<tr>
-						<td><?php echo _('Password:'); ?></td>
+						<td>Password:</td>
 						<td><?php echo \forge\components\Templates\Engine::input('password', 'root[password1]'); ?></td>
 					</tr>
 					<tr>
-						<td><?php echo _('Confirm:'); ?></td>
+						<td>Confirm:</td>
 						<td><?php echo \forge\components\Templates\Engine::input('password', 'root[password2]'); ?></td>
 					</tr>
 				</tbody>
 			</table>
 			<h3>Development</h3>
-			<p><?php echo _('Any client which wishes to read debug data upon fatal errors must provide the secret development key.'); ?></p>
+			<p>Any client which wishes to read debug data upon fatal errors must provide the secret development key.</p>
 			<table>
 				<tbody>
 					<tr>
-						<td><?php echo _('Development key:'); ?></td>
+						<td>Development key:</td>
 						<td><?php echo \forge\components\Templates\Engine::input('password', 'development[key1]'); ?></td>
 					</tr>
 					<tr>
-						<td><?php echo _('Confirm:'); ?></td>
+						<td>Confirm:</td>
 						<td><?php echo \forge\components\Templates\Engine::input('password', 'development[key2]'); ?></td>
 					</tr>
 				</tbody>
 			</table>
-			<h2><?php echo _('Step 3 - Install'); ?></h2>
+			<h2>Step 3 - Install</h2>
 			<?php if (count($_POST) > 0): ?>
 				<?php
 				$install = new \forge\Checklist();
-				$install->add(!empty($_POST['database']['system']), _('Database system must be selected.'));
-				$install->add(!empty($_POST['database']['hostname']), _('Database hostname must be given.'));
-				$install->add(!empty($_POST['database']['username']), _('Database username must be given.'));
-				$install->add(!empty($_POST['database']['password']), _('Database password must be given.'));
-				$install->add(!empty($_POST['database']['database']), _('Database name must be given.'));
-				$install->add(!empty($_POST['database']['prefix']), _('Database table prefix must be given.'));
-				$install->add(!empty($_POST['root']['name']), _('Root name must be given.'));
-				$install->add(!empty($_POST['root']['password1']), _('Root password must be given.'));
-				$install->add(!empty($_POST['root']['password2']) && strcmp($_POST['root']['password1'], $_POST['root']['password2']) == 0, _('Root password must be confirmed.'));
-				$install->add(!empty($_POST['development']['key1']), _('Development key must be given.'));
-				$install->add(!empty($_POST['development']['key1']) && strcmp($_POST['development']['key1'], $_POST['development']['key2']) == 0, _('Development key must be confirmed.'));
+				$install->add(!empty($_POST['database']['system']), 'Database system must be selected.');
+				$install->add(!empty($_POST['database']['hostname']), 'Database hostname must be given.');
+				$install->add(!empty($_POST['database']['username']), 'Database username must be given.');
+				$install->add(!empty($_POST['database']['password']), 'Database password must be given.');
+				$install->add(!empty($_POST['database']['database']), 'Database name must be given.');
+				$install->add(!empty($_POST['database']['prefix']), 'Database table prefix must be given.');
+				$install->add(!empty($_POST['root']['name']), 'Root name must be given.');
+				$install->add(!empty($_POST['root']['password1']), 'Root password must be given.');
+				$install->add(!empty($_POST['root']['password2']) && strcmp($_POST['root']['password1'], $_POST['root']['password2']) == 0, 'Root password must be confirmed.');
+				$install->add(!empty($_POST['development']['key1']), 'Development key must be given.');
+				$install->add(!empty($_POST['development']['key1']) && strcmp($_POST['development']['key1'], $_POST['development']['key2']) == 0, 'Development key must be confirmed.');
 
 				if (!$install->isChecked())
 					goto results;
@@ -142,19 +141,19 @@
 				foreach ($handlers as $base => $handler)
 					try {
 						\forge\RequestHandler::register($base, $handler);
-						$install->add(true, sprintf(_('Installing handler on %s'), '/'.$base));
+						$install->add(true, sprintf('Installing handler on %s', '/'.$base));
 					}
 					catch (\Exception $e) {
-						$install->add(false, sprintf(_('Installing handler on %s'), '/'.$base));
+						$install->add(false, sprintf('Installing handler on %s', '/'.$base));
 					}
 
 				// Write the developer key
 				try {
 					\forge\components\Identity::setDeveloperKey($_POST['development']['key1']);
-					$install->add(true, _('Setting the development key.'));
+					$install->add(true, 'Setting the development key.');
 				}
 				catch (\Exception $e) {
-					$install->add(false, _('Setting the development key.'));
+					$install->add(false, 'Setting the development key.');
 				}
 
 				// Set up the database connection
@@ -168,26 +167,26 @@
 						$_POST['database']['password']
 					);
 					\forge\components\Databases::SetDefaultConnection($databaseId);
-					$install->add(true, _('Adding the database connection.'));
+					$install->add(true, 'Adding the database connection.');
 					foreach (\forge\Addon::getComponents() as $component)
 						try {
 							\forge\components\Databases::fixDatabase($component,'COM');
-							$install->add(true, sprintf(_('Installing component %s into the database'), $component));
+							$install->add(true, sprintf('Installing component %s into the database', $component));
 						}
 						catch (\Exception $e) {
-							$install->add(false, sprintf(_('Installing component %s into the database'), $component));
+							$install->add(false, sprintf('Installing component %s into the database', $component));
 						}
 					foreach (\forge\Addon::getModules() as $module)
 						try {
 							\forge\components\Databases::fixDatabase($module,'MOD');
-							$install->add(true, sprintf(_('Installing module %s into the database'), $module));
+							$install->add(true, sprintf('Installing module %s into the database', $module));
 						}
 						catch (\Exception $e) {
-							$install->add(false, sprintf(_('Installing module %s into the database'), $module));
+							$install->add(false, sprintf('Installing module %s into the database', $module));
 						}
 				}
 				catch (\Exception $e) {
-					$install->add(false, _('Adding the database connection.'));
+					$install->add(false, 'Adding the database connection.');
 				}
 
 				// Set up the root account
@@ -204,7 +203,7 @@
 					$account->user_state = 'active';
 					$account->save();
 					$identity = new \forge\components\Accounts\identities\Account($account->getId());
-					$install->add(true, _('Setting up the root user.'));
+					$install->add(true, 'Setting up the root user.');
 					foreach (\forge\Addon::getAddons(true) as $addon) {
 						$permissions = $addon::getPermissions();
 						foreach ($permissions as $permission) {
@@ -216,7 +215,7 @@
 					}
 				}
 				catch (\Exception $e) {
-					$install->add(false, _('Setting up the root user.'));
+					$install->add(false, 'Setting up the root user.');
 				}
 
 				// Set up the host
@@ -224,19 +223,19 @@
 					$website = new \forge\components\Websites\db\Website();
 					$website->domain = $_SERVER['HTTP_HOST'];
 					$website->insert();
-					$install->add(true, sprintf(_('Installing website %s'), $_SERVER['HTTP_HOST']));
+					$install->add(true, sprintf('Installing website %s', $_SERVER['HTTP_HOST']));
 				}
 				catch (\Exception $e) {
-					$install->add(false, sprintf(_('Installing website %s').$e->getMessage(), $_SERVER['HTTP_HOST']));
+					$install->add(false, sprintf('Installing website %s'.$e->getMessage(), $_SERVER['HTTP_HOST']));
 				}
 
 				// Set the default template
 				try {
 					\forge\components\Templates::setTemplate('anvil', true, $_SERVER['HTTP_HOST']);
-					$install->add(true, _('Installing default template'));
+					$install->add(true, 'Installing default template');
 				}
 				catch (\Exception $e) {
-					$install->add(false, _('Installing default template'));
+					$install->add(false, 'Installing default template');
 				}
 
 				// Remove any configured files on failure
@@ -248,15 +247,15 @@
 				results:
 				echo $install;
 				if (!$install->isChecked())
-					echo '<p class="error">'._('Installation failed!').'</p>';
+					echo '<p class="error">'.'Installation failed!'.'</p>';
 				else {
-					echo '<p class="success">'._('Forge was installed!').'</p>';
+					echo '<p class="success">'.'Forge was installed!'.'</p>';
 					goto clean;
 				}
 				?>
 			<?php endif; ?>
-			<p><?php echo _('You may proceed with the installation once you have set up the fields in step 2 accordingly to your server environment.'); ?></p>
-			<p><input type="submit" value="<?php echo _('Install'); ?>" /></p>
+			<p>You may proceed with the installation once you have set up the fields in step 2 accordingly to your server environment.</p>
+			<p><input type="submit" value="Install" /></p>
 			<?php clean: ?>
 		</form>
 		<?php footer: ?>

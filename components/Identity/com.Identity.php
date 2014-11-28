@@ -144,11 +144,11 @@
 			if (!\forge\components\Identity::hasPermission('com.Identity.Admin'))
 				return null;
 			
-			$menu = new \forge\components\Admin\MenuItem('identity', _('People'));
+			$menu = new \forge\components\Admin\MenuItem('identity', self::l('People'));
 			
 			$menu->appendChild(new \forge\components\Admin\MenuItem(
 				'manage',
-				_('Users'),
+				self::l('Users'),
 				'/admin/Identity'
 			));
 			
@@ -213,7 +213,7 @@
 		 */
 		static public function restrict($permission) {
 			if (!self::hasPermission($permission))
-				throw new \forge\HttpException(_('Forbidden'), \forge\HttpException::HTTP_FORBIDDEN);
+				throw new \forge\HttpException('Forbidden', \forge\HttpException::HTTP_FORBIDDEN);
 		}
 
 		/**

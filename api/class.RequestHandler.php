@@ -15,6 +15,7 @@
 	 */
 	abstract class RequestHandler {
 		use Configurable;
+		use \forge\components\Locale\Translator;
 
 		/**
 		 * The requested path this handler should work with

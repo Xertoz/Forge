@@ -41,7 +41,7 @@
 			// TODO: Implement delete functionality
 			/*if (isset($_POST['delete'])) {
 				$account->delete();
-				self::setResponse(_('The account has been deleted!'), self::RESULT_OK);
+				self::setResponse(self::l('The account has been deleted!'), self::RESULT_OK);
 				
 				return;
 			}*/
@@ -49,14 +49,14 @@
 			// All required fields must be set
 			if ($admin) {
 				if (empty($_POST['account']['account']))
-					throw new \forge\HttpException(_('You must specify an account name'),\forge\HttpException::HTTP_BAD_REQUEST);
+					throw new \forge\HttpException('You must specify an account name',\forge\HttpException::HTTP_BAD_REQUEST);
 				if (empty($_POST['account']['email']))
-					throw new \forge\HttpException(_('You must specify an e-mail address'),\forge\HttpException::HTTP_BAD_REQUEST);
+					throw new \forge\HttpException('You must specify an e-mail address',\forge\HttpException::HTTP_BAD_REQUEST);
 			}
 			if (empty($_POST['account']['name_first']))
-				throw new \forge\HttpException(_('You must specify a first name'),\forge\HttpException::HTTP_BAD_REQUEST);
+				throw new \forge\HttpException('You must specify a first name',\forge\HttpException::HTTP_BAD_REQUEST);
 			if (empty($_POST['account']['name_last']))
-				throw new \forge\HttpException(_('You must specify a last name'),\forge\HttpException::HTTP_BAD_REQUEST);
+				throw new \forge\HttpException('You must specify a last name',\forge\HttpException::HTTP_BAD_REQUEST);
 
 			// Set the account settings
 			if ($admin) {
@@ -68,6 +68,6 @@
 
 			// Save it
 			$account->save();
-			self::setResponse(_('Account settings were saved!'), self::RESULT_OK);
+			self::setResponse(self::l('Account settings were saved!'), self::RESULT_OK);
 		}
 	}

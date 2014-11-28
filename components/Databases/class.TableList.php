@@ -69,7 +69,7 @@
 			elseif (get_class($params) == 'forge\\components\\Databases\\Params')
 				$this->params = $params;
 			else
-				throw new \Exception(_('Invalid parameters'));
+				throw new Exception('Invalid parameters');
 
 			// Perform the query
 			$this->query();

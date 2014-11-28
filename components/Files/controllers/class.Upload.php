@@ -22,17 +22,17 @@
 			\forge\components\Identity::restrict('com.Files.Admin');
 			
 			if (!isset($_POST['path']))
-				throw new \forge\HttpException(_('A path must be chosen'),
+				throw new \forge\HttpException('A path must be chosen',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			
 			try {
 				\forge\components\Files\File::upload($_FILES['file'], $_POST['path']);
 			}
 			catch (\Exception $e) {
-				throw new \forge\HttpException(_('The file could not be uploaded!'),
+				throw new \forge\HttpException('The file could not be uploaded!',
 						\forge\HttpException::HTTP_CONFLICT);
 			}
 			
-			self::setResponse(_('The file was successfully uploaded!'), self::RESULT_OK);
+			self::setResponse(self::l('The file was successfully uploaded!'), self::RESULT_OK);
 		}
 	}

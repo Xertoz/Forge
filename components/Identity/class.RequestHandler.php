@@ -28,18 +28,18 @@
 					\forge\components\Identity::auth();
 
 					if (empty($_GET['type']))
-						throw new \forge\HttpException(_('No type given'), \forge\HttpException::HTTP_BAD_REQUEST);
+						throw new \forge\HttpException('No type given', \forge\HttpException::HTTP_BAD_REQUEST);
 
 					$target = null;
 					foreach (\forge\components\Identity::getProviders() as $provider)
 						if ($provider::getTitle() == $_GET['type'])
 							$target = $provider;
 					if (!$target)
-						throw new \forge\HttpException(_('Type not found'), \forge\HttpException::HTTP_NOT_FOUND);
+						throw new \forge\HttpException('Type not found', \forge\HttpException::HTTP_NOT_FOUND);
 
 					foreach (\forge\components\Identity::getIdentity()->getProviders() as $provider)
 						if (get_class($provider) == $target)
-							throw new \forge\HttpException(_('Duplicate account types'), \forge\HttpException::HTTP_CONFLICT);
+							throw new \forge\HttpException('Duplicate account types', \forge\HttpException::HTTP_CONFLICT);
 
 					echo \forge\components\Templates::display(
 						[

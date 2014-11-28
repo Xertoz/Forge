@@ -1,5 +1,5 @@
 <div class="panel">
-	<h1><?php echo _('Software'); ?></h1>
+	<h1><?php echo self::l('Software'); ?></h1>
 	<div class="components">
 		<?php if (\forge\Controller::getController() == 'Software\\FixDatabase' && \forge\Controller::getCode() == \forge\Controller::RESULT_BAD): ?>
 			<p class="error"><?php echo \forge\Controller::getMessage(); ?></p>
@@ -7,10 +7,10 @@
 		<table class="list">
 			<thead>
 				<tr>
-					<th><?php echo _('Component'); ?></th>
-					<th width="75"><?php echo _('Configured'); ?></th>
-					<th width="75"><?php echo _('Database'); ?></th>
-					<th width="75"><?php echo _('Version'); ?></th>
+					<th><?php echo self::l('Component'); ?></th>
+					<th width="75"><?php echo self::l('Configured'); ?></th>
+					<th width="75"><?php echo self::l('Database'); ?></th>
+					<th width="75"><?php echo self::l('Version'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -21,9 +21,9 @@
 						</td>
 						<td>
 							<?php if ($component['config'] === true): ?>
-								<img src="/images/led/accept.png" alt="<?php printf(_('%s was successfully configured'), self::html($component['name'])); ?>" title="<?php printf(_('%s was successfully configured'), self::html($component['name'])); ?>" />
+								<img src="/images/led/accept.png" alt="<?php printf(self::l('%s was successfully configured'), self::html($component['name'])); ?>" title="<?php printf(self::l('%s was successfully configured'), self::html($component['name'])); ?>" />
 							<?php elseif ($component['config'] === false): ?>
-								<a href="/admin/<?php echo self::html($component['name']); ?>"><img src="/images/led/cross.png" alt="<?php printf(_('%s hasn\'t been configured'), self::html($component['name'])); ?>" title="<?php printf(_('%s hasn\'t been configured'), self::html($component['name'])); ?>" /></a>
+								<a href="/admin/<?php echo self::html($component['name']); ?>"><img src="/images/led/cross.png" alt="<?php printf(self::l('%s hasn\'t been configured'), self::html($component['name'])); ?>" title="<?php printf(self::l('%s hasn\'t been configured'), self::html($component['name'])); ?>" /></a>
 							<?php else: ?>
 								<!-- NULL -->
 							<?php endif; ?>
@@ -32,9 +32,9 @@
 							<?php if ($component['database'] == -2 || $component['database'] == -1): ?>
 								<!--  NULL -->
 							<?php elseif ($component['database'] == 0): ?>
-								<a href="/admin/Software/fix?com=<?php echo self::html($component['name']); ?>"><img src="/images/led/cross.png" alt="<?php printf(_('The models in %s are invalid'), self::html($component['name'])); ?>" title="<?php printf(_('The models in %s are invalid'), self::html($component['name'])); ?>" /></a>
+								<a href="/admin/Software/fix?com=<?php echo self::html($component['name']); ?>"><img src="/images/led/cross.png" alt="<?php printf(self::l('The models in %s are invalid'), self::html($component['name'])); ?>" title="<?php printf(self::l('The models in %s are invalid'), self::html($component['name'])); ?>" /></a>
 							<?php elseif ($component['database'] == 1): ?>
-								<img src="/images/led/accept.png" alt="<?php printf(_('The models in %s are valid'), self::html($component['name'])); ?>" title="<?php printf(_('The models in %s are valid'), self::html($component['name'])); ?>" />
+								<img src="/images/led/accept.png" alt="<?php printf(self::l('The models in %s are valid'), self::html($component['name'])); ?>" title="<?php printf(self::l('The models in %s are valid'), self::html($component['name'])); ?>" />
 							<?php endif; ?>
 						</td>
 						<td>
@@ -53,10 +53,10 @@
 		<table class="list">
 			<thead>
 				<tr>
-					<th><?php echo _('Module'); ?></th>
-					<th width="75"><?php echo _('Configured'); ?></th>
-					<th width="75"><?php echo _('Database'); ?></th>
-					<th width="75"><?php echo _('Version'); ?></th>
+					<th><?php echo self::l('Module'); ?></th>
+					<th width="75"><?php echo self::l('Configured'); ?></th>
+					<th width="75"><?php echo self::l('Database'); ?></th>
+					<th width="75"><?php echo self::l('Version'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -67,9 +67,9 @@
 						</td>
 						<td>
 							<?php if ($module['config'] === true): ?>
-								<img src="/images/led/accept.png" alt="<?php printf(_('%s was successfully configured'), self::html($module['name'])); ?>" title="<?php printf(_('%s was successfully configured'), self::html($module['name'])); ?>" />
+								<img src="/images/led/accept.png" alt="<?php printf(self::l('%s was successfully configured'), self::html($module['name'])); ?>" title="<?php printf(self::l('%s was successfully configured'), self::html($module['name'])); ?>" />
 							<?php elseif ($module['config'] === false): ?>
-								<a href="/admin/<?php echo self::html($module['name']); ?>"><img src="/images/led/cross.png" alt="<?php printf(_('%s hasn\'t been configured'), self::html($module['name'])); ?>" title="<?php printf(_('%s hasn\'t been configured'), self::html($module['name'])); ?>" /></a>
+								<a href="/admin/<?php echo self::html($module['name']); ?>"><img src="/images/led/cross.png" alt="<?php printf(self::l('%s hasn\'t been configured'), self::html($module['name'])); ?>" title="<?php printf(self::l('%s hasn\'t been configured'), self::html($module['name'])); ?>" /></a>
 							<?php else: ?>
 								<!-- NULL -->
 							<?php endif; ?>
@@ -78,9 +78,9 @@
 							<?php if ($module['database'] == -2 || $module['database'] == -1): ?>
 								<!-- NULL -->
 							<?php elseif ($module['database'] == 0): ?>
-								<a href="/admin/Software/fix?mod=<?php echo self::html($module['name']); ?>"><img src="/images/led/cross.png" alt="<?php printf(_('The models in %s are invalid'), self::html($module['name'])); ?>" title="<?php printf(_('The models in %s are invalid'), self::html($module['name'])); ?>" /></a>
+								<a href="/admin/Software/fix?mod=<?php echo self::html($module['name']); ?>"><img src="/images/led/cross.png" alt="<?php printf(self::l('The models in %s are invalid'), self::html($module['name'])); ?>" title="<?php printf(self::l('The models in %s are invalid'), self::html($module['name'])); ?>" /></a>
 							<?php elseif ($module['database'] == 1): ?>
-								<img src="/images/led/accept.png" alt="<?php printf(_('The models in %s are valid'), self::html($module['name'])); ?>" title="<?php printf(_('The models in %s are valid'), self::html($module['name'])); ?>" />
+								<img src="/images/led/accept.png" alt="<?php printf(self::l('The models in %s are valid'), self::html($module['name'])); ?>" title="<?php printf(self::l('The models in %s are valid'), self::html($module['name'])); ?>" />
 							<?php endif; ?>
 						</td>
 						<td>

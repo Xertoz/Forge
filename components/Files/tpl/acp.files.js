@@ -1,5 +1,5 @@
 function rename(original) {
-	var target = prompt("<?php echo _('Rename file to:'); ?>", original);
+	var target = prompt('Rename file to:', original);
 	if (!target)
 		return;
 	
@@ -9,7 +9,7 @@ function rename(original) {
 }
 
 function trash(file) {
-	if (!confirm("<?php echo _('Are you sure you want to delete the file?'); ?>"))
+	if (!confirm('Are you sure you want to delete the file?'))
 		return;
 	
 	document.getElementById('trashFile').value = '<?php if (isset($_GET['path'])) echo $_GET['path'].'/'; ?>'+file;

@@ -48,7 +48,7 @@
 			$this->path = FORGE_PATH.'/templates/'.$template;
 			
 			if (!file_exists($file = $this->path.'/template.xml'))
-				throw new \Exception(_('File template.xml not found'));
+				throw new Exception('File template.xml not found');
 			$xml = simplexml_load_file($file);
 			
 			$this->author = (string)$xml->author;

@@ -24,7 +24,7 @@
 			if (is_array($params))
 				$params = new Params($params);
 			elseif (get_class($params) != 'forge\\components\\Databases\\Params')
-				throw new \Exception(_('Invalid parameters'));
+				throw new Exception('Invalid parameters');
 
 			$reflection = new \ReflectionClass('forge\components\Databases\TableList');
 			if (isset($_GET['page']))

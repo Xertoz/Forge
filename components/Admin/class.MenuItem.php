@@ -72,7 +72,7 @@
 		
 		public function merge(MenuItem $item) {
 			if ($item->getName() != $this->getName())
-				throw new \Exception(_('Not allowed to merge incompatible menu items.'));
+				throw new Exception('Not allowed to merge incompatible menu items.');
 			
 			if ($item->getTitle() !== null)
 				$this->title = $item->getTitle();

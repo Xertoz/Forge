@@ -2,12 +2,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><?php echo _('Forge Unit Tester'); ?></title>
+		<title>Forge Unit Tester</title>
 		<link href="/css/tools.css" rel="stylesheet" media="screen" />
 	</head>
 	<body>
-		<h1><?php echo _('Unit Test'); ?></h1>
-		<p><?php echo _('This tool will run a series of tests on the installed Forge system and produce results for inspection.'); ?></p>
+		<h1>Unit Test</h1>
+		<p>This tool will run a series of tests on the installed Forge system and produce results for inspection.</p>
 		<?php
 		/**
 		 * Check an URL for any errors
@@ -28,22 +28,21 @@
 		define('HTTP_PREFIX', 'http://'.$_SERVER['HTTP_HOST'].'/');
 
 		function check_extension(\forge\Checklist $chk, $ext) {
-			$chk->add(extension_loaded($ext), sprintf(_('PHP extension %s is loaded.'), $ext));
+			$chk->add(extension_loaded($ext), sprintf('PHP extension %s is loaded.', $ext));
 		}
 
 		function check_url(\forge\Checklist $chk, $url) {
-			$chk->add(http($url), sprintf(_('The address /%s is reachable.'), $url));
+			$chk->add(http($url), sprintf('The address /%s is reachable.', $url));
 		}
 
 		$unit = new \forge\Checklist();
-		$unit->add(true, _('Forge is loadable.'));
-		$unit->add(count(glob(FORGE_PATH.'/config/*')) > 0, _('Forge is installed.'));
-		$unit->add(is_writable(FORGE_PATH.'/config'), _('The config folder is writable.'));
-		$unit->add(is_writable(FORGE_PATH.'/files'), _('The files folder is writable.'));
-		$unit->add(substr(phpversion(), 0, strlen('5.4')) >= 5.4, _('PHP version is at least 5.4.'));
+		$unit->add(true, 'Forge is loadable.');
+		$unit->add(count(glob(FORGE_PATH.'/config/*')) > 0, 'Forge is installed.');
+		$unit->add(is_writable(FORGE_PATH.'/config'), 'The config folder is writable.');
+		$unit->add(is_writable(FORGE_PATH.'/files'), 'The files folder is writable.');
+		$unit->add(substr(phpversion(), 0, strlen('5.4')) >= 5.4, 'PHP version is at least 5.4.');
 		check_extension($unit, 'curl');
 		check_extension($unit, 'fileinfo');
-		check_extension($unit, 'gettext');
 		check_extension($unit, 'gd');
 		check_extension($unit, 'hash');
 		check_extension($unit, 'intl');

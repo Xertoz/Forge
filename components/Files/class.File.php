@@ -57,7 +57,7 @@
 			$this->location = static::jail($location);
 			
 			if (!file_exists($this->location))
-				throw new \Exception(_('File not found'));
+				throw new \Exception('File not found');
 			
 			$this->type = is_file($this->location) ? self::TYPE_FILE : self::TYPE_DIR;
 		}
@@ -119,14 +119,14 @@
 					break;
 				
 				default:
-					throw new \Exception(_('Unknown file type'));
+					throw new \Exception('Unknown file type');
 			}
 			
 			try {
 				return new $cls($name);
 			}
 			catch (\Exception $e) {
-				throw new \Exception(_('File could not be created'));
+				throw new \Exception('File could not be created');
 			}
 			
 			return new File($name);

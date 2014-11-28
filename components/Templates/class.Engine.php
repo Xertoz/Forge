@@ -14,6 +14,8 @@
 	* The actual template engine
 	*/
 	class Engine {
+		use \forge\components\Locale\Translator;
+		
 		/**
 		* META data
 		* @var array
@@ -369,7 +371,7 @@
 			
 			return self::display('components/Templates/tpl/inc.input.php', ['attributes' => $attr]);
 		}
-
+		
 		/**
 		* Get META elements
 		* @param string Glue

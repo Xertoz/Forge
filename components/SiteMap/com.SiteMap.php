@@ -202,21 +202,21 @@
 			$menus = [];
 			
 			if (\forge\components\Identity::hasPermission('com.SiteMap.Admin')) {
-				$menus[] = new \forge\components\Admin\MenuItem('content', _('Content'));
+				$menus[] = new \forge\components\Admin\MenuItem('content', self::l('Content'));
 
 				$menus[0]->appendChild(new \forge\components\Admin\MenuItem(
 					'sitemap',
-					_('Pages'),
+					self::l('Pages'),
 					'/admin/SiteMap'
 				));
 			}
 			
 			if (\forge\components\Identity::hasPermission('com.SiteMap.Robots')) {
-				$menus[] = new \forge\components\Admin\MenuItem('developer', _('Developer'));
+				$menus[] = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
 
 				$menus[1]->appendChild(new \forge\components\Admin\MenuItem(
 					'robots',
-					_('Robots'),
+					self::l('Robots'),
 					'/admin/SiteMap/robots'
 				));
 			}

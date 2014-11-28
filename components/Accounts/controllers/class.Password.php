@@ -30,31 +30,31 @@
 					$provider = $item;
 
 			if (is_null($provider))
-				throw new \forge\HttpException(_('You can\'t set a password on a non-account'), \forge\HttpException::HTTP_CONFLICT);
+				throw new \forge\HttpException('You can\'t set a password on a non-account', \forge\HttpException::HTTP_CONFLICT);
 			$account = new \forge\components\Accounts\db\Account($provider->getId());
 
 			if (empty($_POST['current']))
-				throw new \forge\HttpException(_('You must provide your current password'),
+				throw new \forge\HttpException('You must provide your current password',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			if ($account->user_password != $account->hashPassword($_POST['current']))
-				throw new \forge\HttpException(_('Invalid current password'),
+				throw new \forge\HttpException('Invalid current password',
 						\forge\HttpException::HTTP_FORBIDDEN);
 			if (empty($_POST['password1']))
-				throw new \forge\HttpException(_('You must provide a new password'),
+				throw new \forge\HttpException('You must provide a new password',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			if (strlen($_POST['password1']) < \forge\components\Accounts::MinimumPasswordLength)
-				throw new \forge\HttpException(_('Your new password is too short'),
+				throw new \forge\HttpException('Your new password is too short',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			if (empty($_POST['password2']))
-				throw new \forge\HttpException(_('You must confirm your new password'),
+				throw new \forge\HttpException('You must confirm your new password',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			if ($_POST['password1'] != $_POST['password2'])
-				throw new \forge\HttpException(_('The two passwords differ'),
+				throw new \forge\HttpException('The two passwords differ',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			
 			$account->user_password = $account->hashPassword($_POST['password1']);
 			$account->save();
 			
-			self::setResponse(_('Your password was changed!'), self::RESULT_OK);
+			self::setResponse(self::l('Your password was changed!'), self::RESULT_OK);
 		}
 	}

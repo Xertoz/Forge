@@ -23,7 +23,7 @@
 			
 			try {
 				if (empty($_POST['page']['id']))
-					throw new \forge\HttpException(_('The ID must not be empty'), \forge\HttpException::HTTP_BAD_REQUEST);
+					throw new \forge\HttpException('The ID must not be empty', \forge\HttpException::HTTP_BAD_REQUEST);
 				
 				\forge\components\Databases::DB()->beginTransaction();
 				

@@ -24,7 +24,7 @@
 			try {
 	
 				if (empty($_POST['template']))
-					throw new \Exception(_('No template was chosen'));
+					throw new Exception('No template was chosen');
 	
 				\forge\components\Templates::setTemplate($_POST['template'], true);
 			}

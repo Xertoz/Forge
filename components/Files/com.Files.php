@@ -28,11 +28,11 @@
 			if (!\forge\components\Identity::hasPermission('com.Files.Admin'))
 				return null;
 			
-			$menu = new \forge\components\Admin\MenuItem('content', _('Content'));
+			$menu = new \forge\components\Admin\MenuItem('content', self::l('Content'));
 			
 			$menu->appendChild(new \forge\components\Admin\MenuItem(
 				'files',
-				_('Files'),
+				self::l('Files'),
 				'/admin/Files'
 			));
 			

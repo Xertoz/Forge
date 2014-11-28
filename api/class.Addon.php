@@ -15,6 +15,7 @@
 	*/
 	abstract class Addon {
 		use Versioning;
+		use \forge\components\Locale\Translator;
 
 		/**
 		* Define permissions issued
