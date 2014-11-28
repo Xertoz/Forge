@@ -129,13 +129,11 @@
 		}
 
 		/**
-		 * Implement one of the available Forge JavaScript APIs
-		 * @param $api string Which API should be included?
+		 * Implement one of the Forge JavaScript API
 		 * @return void
 		 */
-		static public function forgeJS($api) {
-			self::addScriptFile('/script/forge.js');
-			self::addScriptFile('/script/'.$api.'.js');
+		static public function forgeJS() {
+			self::addScriptFile('/script/f.js');
 		}
 
 		/**

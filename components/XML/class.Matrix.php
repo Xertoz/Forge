@@ -83,12 +83,6 @@
 			// If we have a specific page, get it.
 			if (isset($_GET['page']))
 				$this->browse((int)$_GET['page']);
-			
-			// Do we require any JS libraries?
-			if ($this->isDraggable()) {
-				\forge\components\Templates\Engine::addScriptFile('/script/dom.js');
-				\forge\components\Templates\Engine::addScriptFile('/script/dragsort.js');
-			}
 
 			return \forge\components\Templates::display(
 				'components/XML/tpl/inc.table.php',

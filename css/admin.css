@@ -83,14 +83,6 @@ table.list td.actions form {
 	text-decoration:inherit;
 }
 
-.forge-dragsort-top {
-	border-top:2px dotted #000 !important;
-}
-
-.forge-dragsort-bottom {
-	border-bottom:2px dotted #000 !important;
-}
-
 .admin .mce-edit-area > iframe {
 	min-width:500px;
 	min-height:400px;

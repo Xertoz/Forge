@@ -16,7 +16,7 @@
 		<input type="hidden" name="forge[controller]" value="Identity\Permissions" />
 		<input type="hidden" name="identity[id]" value="<?php echo (int)$_GET['id']; ?>" />
 		<?php echo self::response('Identity\Permissions'); ?>
-		<table class="list">
+		<table id="identity-permissions" class="list">
 			<thead>
 				<tr>
 					<th><?php echo _('Name'); ?></th>
@@ -29,8 +29,8 @@
 					<td><?php echo self::html($permission); ?></td>
 					<td class="actions permissive">
 						<input type="hidden" name="permissions[<?php echo self::html($permission); ?>]" value="<?php echo $has = (int)$identity->hasPermission($permission); ?>" />
-						<img src="/images/led/accept.png" alt="<?php echo _('Yes'); ?>" onclick="revoke(this);"<?php if (!$has): ?> style="display:none;"<?php endif; ?> />
-						<img src="/images/led/cross.png" alt="<?php echo _('No'); ?>" onclick="grant(this);"<?php if ($has): ?> style="display:none;"<?php endif; ?> />
+						<img src="/images/led/accept.png" alt="<?php echo _('Yes'); ?>" class="accept"<?php if (!$has): ?> style="display:none;"<?php endif; ?> />
+						<img src="/images/led/cross.png" alt="<?php echo _('No'); ?>" class="deny"<?php if ($has): ?> style="display:none;"<?php endif; ?> />
 					</td>
 				</tr>
 				<?php endforeach; ?>

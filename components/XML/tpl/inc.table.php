@@ -1,4 +1,4 @@
-<table class="list"<?php foreach ($attributes as $attr => $value): ?>
+<table class="list<?php if ($matrix->isDraggable()): \forge\components\Templates\Engine::forgeJS(); ?> sortable<?php endif; ?>"<?php foreach ($attributes as $attr => $value): ?>
 	<?php echo $attr; ?>="<?php echo self::html($value); ?>"<?php endforeach; ?>>
 	<thead>
 		<tr>
@@ -9,14 +9,7 @@
 	</thead>
 	<tbody>
 		<?php foreach ($rows as $row_key => $row): ?>
-			<tr<?php if ($matrix->isDraggable()): ?> draggable="true"
-				ondragstart="forge.dragsort.start(event);"
-				ondragend="forge.dragsort.end(event);"
-				ondragenter="forge.dragsort.enter(event);"
-				ondragleave="forge.dragsort.leave(event);"
-				ondragover="forge.dragsort.over(event);"
-				ondrop="forge.dragsort.drop(event);"
-				style="cursor:move;"<?php endif; ?>>
+		<tr<?php if ($matrix->isDraggable()): ?> draggable="true"<?php endif; ?>>
 				<?php foreach ($columns as $key => $title): ?>
 					<?php if (isset($row[$key])): ?>
 						<td class="<?php echo $key; ?>"><?php echo isset($stylize[$key]) ? $stylize[$key]($row, $items[$row_key]) : self::html($row[$key]); ?></td>
