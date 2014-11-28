@@ -57,6 +57,16 @@
 		static public function addStyle($style) {
 			\forge\components\Templates\Engine::addStyle($style);
 		}
+		
+		/**
+		 * Add an external CSS file to the header element
+		 * @param string $file File name
+		 * @param bool $preserve Do not minify the source
+		 * @return void
+		 */
+		static public function addStyleFile($file, $preserve=false) {
+			\forge\components\Templates\Engine::addStyleFile($file, $preserve);
+		}
 
 		/**
 		* Display a template file
@@ -100,7 +110,7 @@
 
 			// Add CSS
 			if (file_exists($css = $path.$type.'.'.$name.'.css'))
-				self::addStyle('<link href="/'.$css.'" rel="stylesheet" media="screen">');
+				self::addStyleFile('/'.$css);
 
 			// Add JS
 			if (file_exists($path.$type.'.'.$name.'.js'))

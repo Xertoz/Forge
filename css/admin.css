@@ -1,6 +1,6 @@
-@import 'controller.css';
-@import 'messages.css';
-@import 'std.css';
+@import '/css/controller.css';
+@import '/css/messages.css';
+@import '/css/std.css';
 
 table.list {
 	margin:15px 0;

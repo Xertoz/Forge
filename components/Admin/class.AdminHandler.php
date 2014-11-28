@@ -35,7 +35,7 @@
 			$this->addon = !empty($parts[0]) ? $parts[0] : 'Dashboard';
 			$this->view = !empty($parts[1]) ? $parts[1] : 'index';
 
-			\forge\components\Templates::addStyle('<link href="/css/admin.css" rel="stylesheet" media="screen" />');
+			\forge\components\Templates::addStyleFile('/css/admin.css');
 
 			$this->setContentType('text/html;charset=UTF-8');
 			echo \forge\components\Admin::display($this->addon,$this->view);

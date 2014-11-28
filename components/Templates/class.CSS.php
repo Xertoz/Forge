@@ -1,6 +1,6 @@
 <?php
 	/**
-	* class.JavaScript.php
+	* class.CSS.php
 	* Copyright 2014 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
@@ -11,6 +11,6 @@
 	namespace forge\components\Templates;
 	
 	/**
-	 * A representation of a JavaScript source file
+	 * A representation of a CSS source file
 	 */
-	class JavaScript extends SourceCode {}
+	class CSS extends SourceCode {}

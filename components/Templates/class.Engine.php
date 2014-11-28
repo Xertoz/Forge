@@ -70,15 +70,24 @@
 		* @return void
 		*/
 		static public function addStyle($style) {
+			if (is_string($style))
+				$style = new CSS($style);
+			
 			foreach (self::$styles as $subject)
-				if ($subject == $style)
+				if ($subject->getHash() == $style->getHash())
 					return;
-
+				
 			self::$styles[] = $style;
 		}
 		
-		static public function addStyleFile($file) {
-			self::addStyle('<link href="'.self::html($file).'" rel="stylesheet" media="screen" />');
+		/**
+		 * Add an external CSS file to the header element
+		 * @param string $file File name
+		 * @param bool $preserve Do not minify the source
+		 * @return void
+		 */
+		static public function addStyleFile($file, $preserve=false) {
+			self::addStyle(new CSS($file, CSS::TYPE_FILE, !$preserve));
 		}
 
 		/**
@@ -199,7 +208,31 @@
 		* @return string
 		*/
 		static public function getStyles($glue) {
-			return implode($glue, self::$styles);
+			$local = '';
+			$elements = [];
+			
+			foreach (self::$styles as $style)
+				if ($style->isRemote())
+					$elements[] = '<link href="'.$style->getFile().'" rel="stylesheet" />';
+				elseif (!\forge\components\Identity::isDeveloper() && $style->isMinifiable())
+					$local .= $style->getSource();
+				elseif ($style->isLocal())
+					$elements[] = '<link href="'.$style->getFile().'" rel="stylesheet" />';
+				else
+					$elements[] = '<style type="text/css" media="screen">'.$style->getSource().'</style>';
+			
+			if (strlen($local)) {
+				$css = new CSS($local);
+				$hash = $css->getHash();
+				$cache = \forge\components\Files\File::create('cache/style/'.$hash.'.css');
+				if (!$cache->length()) {
+					$cache->set(\forge\CssMin::minify($local));
+					$cache->save();
+				}
+				$elements[] = '<link href="/files/cache/style/'.$hash.'.css" rel="stylesheet" />';
+			}
+			
+			return implode($glue, $elements);
 		}
 		
 		/**
