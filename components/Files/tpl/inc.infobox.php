@@ -1,5 +1,5 @@
 <div class="infobox files" onclick="window.location = '/admin/Files'">
 	<img class="icon" src="/components/Files/img/hdd.75x75.png" alt="<?php echo self::l('Hard drive'); ?>" title="<?php echo self::l('Hard drive'); ?>" />
 	<h2><?php echo self::l('Files'); ?>:</h2>
-	<p><?php echo $free; ?></p>
+	<p id="files-size"><img src="/components/Dashboard/img/loading.gif" alt="<?php echo self::l('Loading...'); ?>" title="<?php echo self::l('Loading...'); ?>" /></p>
 </div>

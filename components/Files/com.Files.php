@@ -47,13 +47,6 @@
 			if (!\forge\components\Identity::getIdentity()->hasPermission('com.Files.Admin'))
 				return null;
 
-			$free = 0;
-
-			foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator('files')) as $file)
-				$free += $file->getSize();
-
-			$free = \forge\String::bytesize($free);
-
-			return \forge\components\Templates::display('components/Files/tpl/inc.infobox.php',array('free'=>$free));
+			return \forge\components\Templates::display('components/Files/tpl/inc.infobox.php');
 		}
 	}

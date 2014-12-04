@@ -24,6 +24,12 @@ var f = (function() {
 	};
 	
 	/**
+	 * Void function which does... nothing
+	 * @returns {void}
+	 */
+	var voidFunction = function() {};
+	
+	/**
 	 * The local Forge object with targetted elements
 	 * @param {Window|Element|String} selector
 	 * @param {f_L14.o|undefined} context
@@ -283,6 +289,12 @@ var f = (function() {
 			}, this);
 		});
 	};
+	
+	o.prototype.text = function(text) {
+		this.elements.forEach(function(element) {
+			element.textContent = text;
+		});
+	};
 
 	/**
 	 * Set the value attribute of the elements
@@ -312,6 +324,86 @@ var f = (function() {
 	var f = function(selector, context) {
 		// Return a new instance of the local object
 		return new o(selector, context);
+	};
+	
+	/**
+	 * Make a JSON call to Forge (or any other host)
+	 * @param {Object} params
+	 * @returns {void}
+	 * @throws {Exception} Exceptions will be thrown on error
+	 */
+	f.json = function(params) {
+		// We must have a parameter object
+		if (typeof(params) !== 'object')
+			throw 'No parameters given';
+		
+		// We must have either an addon to inquire or a host
+		var url;
+		if (typeof(params.addon) === 'string') {
+			if (typeof(params.method) !== 'string')
+				throw 'Addon given without method';
+			
+			url = '/json/'+params.addon+'/'+params.method;
+		}
+		else {
+			if (typeof(params.url) === 'string')
+				url = params.url;
+			else
+				throw 'No addon or URL given';
+		}
+		
+		// Is there any Key-Value pairs to send as data?
+		var data = typeof(params.data) === 'object' ? params.data : {};
+		
+		// Was a HTTP method supplied?
+		var type = typeof(params.type) === 'string' ? params.type : 'GET';
+		
+		// Define a success callback if one exists
+		var success = typeof(params.success) === 'function' ? params.success : voidFunction;
+		
+		// Define an error callback if one exists
+		var error = typeof(params.error) === 'function' ? params.error : voidFunction;
+		
+		// Create the actual request
+		var xhr = new XMLHttpRequest();
+		xhr.addEventListener('loadend', function(event) {
+			try {
+				var json = JSON.parse(xhr.responseText);
+			}
+			catch (SyntaxError) {
+				throw 'Did not recieve JSON data from server';
+			}
+			if (xhr.status === 200)
+				success(json, xhr);
+			else
+				error(json.error, xhr);
+		}, false);
+		xhr.open(type, url);
+		
+		// Append the request URL if we use GET for the request
+		if (type === 'GET') {
+			var get = '';
+			for (var key in data)
+				get += encodeURIComponent(key)+'='+encodeURIComponent(data[key])+'&';
+			
+			url += get.length > 0 ? '?'+get.substr(0, get.length-1) : get;
+			data = '';
+		}
+		// Set the message body if we use POST for the request
+		else if (type === 'POST') {
+			var post = '';
+			for (var key in data)
+				post += encodeURIComponent(key)+'='+encodeURIComponent(data[key])+'&';
+			
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+			data = post.length > 0 ? post.substr(0, post.length-1) : post;
+		}
+		// If neither GET nor POST was requested, we don't know what to do
+		else
+			throw 'Neither GET nor POST was the given HTTP method';
+		
+		// Fire off the request
+		xhr.send(data);
 	};
 	
 	/**
