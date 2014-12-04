@@ -4,6 +4,7 @@
 		<?php echo self::header(2); ?>
 	</head>
 	<body>
+		<?php if (isset($menu)): /* Administration interface */ ?>
 		<header>
 			<h1><a href="/admin">Forge</a></h1>
 		</header>
@@ -26,5 +27,8 @@
 		<div id="admin-content" class="<?php echo $css; ?>">
 			<?php echo $content; ?>
 		</div>
+		<?php else: /* Login page, possibly? */ ?>
+		<?php echo $content; ?>
+		<?php endif; ?>
 	</body>
 </html>

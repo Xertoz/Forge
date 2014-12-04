@@ -84,3 +84,15 @@ body > nav > ul > li > ul > li > a:hover {
 	font:bold 28px 'PT Sans', sans-serif;
 	margin:0 0 16px 0;
 }
+
+.identity.login {
+	background:#fff;
+	margin:48px;
+	padding:16px;
+	font-family:'PT Sans', sans-serif;
+	border-radius:5px;
+}
+
+.identity.login > h1 {
+	margin:0;
+}

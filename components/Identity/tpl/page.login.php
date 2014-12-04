@@ -5,4 +5,5 @@
 		<?php echo $form; ?>
 	</div>
 	<?php endforeach; ?>
+	<div class="clear"></div>
 </div>
