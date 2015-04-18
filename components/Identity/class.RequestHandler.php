@@ -62,7 +62,7 @@
 					if (\forge\components\Identity::isAuthenticated())
 						\forge\components\SiteMap::redirect(!empty($_GET['from']) && $_GET['from'][0] == '/' ? $_GET['from'] : '/', 302);
 
-					if (substr($_GET['from'], 0, strlen('/admin')) === '/admin')
+					if (!empty($_GET['from']) && substr($_GET['from'], 0, strlen('/admin')) === '/admin')
 						\forge\components\Templates::setTemplate ('forge-admin');
 
 					echo \forge\components\Templates::display(
