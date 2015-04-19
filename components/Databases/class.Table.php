@@ -67,6 +67,7 @@
 			try {
 				if (!$properties instanceof Params) {
 					$params = new Params();
+					$params->table = $this;
 
 					if (is_string($properties))
 						$params->type = $properties;
@@ -253,10 +254,18 @@
 		}
 
 		/**
+		* Get the name of the ID column
+		* @return string
+		*/
+		final public function getIdColumn() {
+			return $this->__id;
+		}
+
+		/**
 		* Get the table name
 		* @return string
 		*/
-		final public function getTable() {
+		final static public function getTable() {
 			return static::$table;
 		}
 
@@ -306,12 +315,25 @@
 
 			list($query, $columns) = $this->__engine->buildInsert($this, $params);
 
-			for ($i=0;$i<count($columns);$i++)
+			for ($i=0;$i<count($columns);$i++) {
+				$value = $this->__columns[$columns[$i]]->get();
+				if (is_object($value)) {
+					if ($value instanceof Table) {
+						$value = $value->getId();
+						
+						if ($value === 0)
+							$value = null;
+					}
+					elseif ($value instanceof \forge\NullObject)
+						$value = null;
+				}
+				
 				$query->bindValue(
 					$i+1,
-					$this->__columns[$columns[$i]]->get(),
+					$value,
 					$this->__columns[$columns[$i]]->getDataType()
 				);
+			}
 
 			$query->execute();
 
@@ -382,8 +404,21 @@
 			$query = $this->__engine->buildUpdate($params);
 
 			$i = 1;
-			foreach ($this->__columns as $column => $type)
-				$query->bindValue($i++,$type->get(),$type->getDataType());
+			foreach ($this->__columns as $column => $type) {
+				$value = $type->get();
+				if (is_object($value)) {
+					if ($value instanceof Table) {
+						$value = $value->getId();
+						
+						if ($value === 0)
+							$value = null;
+					}
+					elseif ($value instanceof \forge\NullObject)
+						$value = null;
+				}
+				
+				$query->bindValue($i++,$value,$type->getDataType());
+			}
 			$query->bindValue(
 				$i,
 				$this->__columns[$this->__id]->get(),

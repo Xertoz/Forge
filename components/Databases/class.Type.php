@@ -21,6 +21,12 @@
 		protected $default = null;
 
 		/**
+		* Use FOREIGN KEY?
+		* @var bool|string
+		*/
+		protected $foreign = false;
+
+		/**
 		* Use AUTO_INCREMENT?
 		* @var bool
 		*/
@@ -67,6 +73,12 @@
 		protected $value = null;
 
 		/**
+		* The referencing table
+		* @var \forge\components\Databases\Table
+		*/
+		protected $table = null;
+
+		/**
 		* Construct an instance
 		* @return void
 		*/
@@ -107,6 +119,12 @@
 
 			if ($this->primary)
 				$indexes['primary'][] = 'PRIMARY KEY (`'.$column.'`)';
+			
+			if ($this->foreign) {
+				$this->index = true;
+				$constraint = $this->engine->getPrefix().$this->table->getTable().'_fk_'.$column;
+				$indexes['foreign'][] = 'CONSTRAINT `'.$constraint.'` FOREIGN KEY (`'.$column.'`) REFERENCES '.$this->foreign;
+			}
 
 			if ($this->index)
 				$indexes['key'][] = 'KEY `'.$column.'` (`'.$column.'`)';
