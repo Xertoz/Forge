@@ -212,6 +212,7 @@
 					else {
 						$operators = array(
 							'is' => '=',
+							'not' => '!=',
 							'gt' => '>',
 							'lt' => '<',
 							'in' => 'IN'
