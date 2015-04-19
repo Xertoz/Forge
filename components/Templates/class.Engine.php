@@ -410,6 +410,21 @@
 			
 			return $html;
 		}
+		
+		static public function select($name, $options, $value=null, $auto=true, $attr=[]) {
+			$attr['name'] = $name;
+			
+			$default = self::getRequestField($name, $value);
+			
+			return self::display(
+				'components/Templates/tpl/inc.select.php',
+				[
+					'attributes' => $attr,
+					'default' => $default,
+					'options' => $options
+				]
+			);
+		}
 
 		/**
 		* Set META elements
