@@ -21,17 +21,25 @@
 		public function process() {
 			\forge\components\Identity::restrict('com.Files.Admin');
 			
-			if (empty($_POST['source']))
+			$source = \forge\Post::getString('source');
+			if ($source === null)
 				throw new \forge\HttpException('A source file must be chosen',
 						\forge\HttpException::HTTP_BAD_REQUEST);
-			if (empty($_POST['target']))
+			$source = explode('/', $source);
+			$file = array_pop($source);
+			$dir = implode('/', $source);
+			
+			$target = \forge\Post::getString('target');
+			if ($target === null)
 				throw new \forge\HttpException('A new file name must be chosen',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			
 			try {
-				(new \forge\components\Files\File($_POST['source']))->rename($_POST['target']);
+				$repo = \forge\components\Files::getFilesRepository();
+				$folder = $repo->getFolder($dir);
+				$folder->getFolder($file)->rename($target);
 			}
-			catch (\Exception $e) {
+			catch (\Exception $e) {echo $e->getMessage();
 				throw new \forge\HttpException('The file does not exist!',
 						\forge\HttpException::HTTP_CONFLICT);
 			}

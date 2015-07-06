@@ -21,14 +21,17 @@
 		public function process() {
 			\forge\components\Identity::restrict('com.Files.Admin');
 			
-			if (!isset($_POST['path']))
+			$path = \forge\Post::getString('path');
+			if ($path === null)
 				throw new \forge\HttpException('A path must be chosen',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			
 			try {
-				\forge\components\Files\File::upload($_FILES['file'], $_POST['path']);
+				$repo = \forge\components\Files::getFilesRepository();
+				$folder = $repo->getFolder($path);
+				$folder->uploadFile($_FILES['file']);
 			}
-			catch (\Exception $e) {
+			catch (\Exception $e) {echo $e->getMessage();
 				throw new \forge\HttpException('The file could not be uploaded!',
 						\forge\HttpException::HTTP_CONFLICT);
 			}

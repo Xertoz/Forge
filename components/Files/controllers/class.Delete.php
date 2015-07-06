@@ -21,12 +21,19 @@
 		public function process() {
 			\forge\components\Identity::restrict('com.Files.Admin');
 			
-			if (empty($_POST['file']))
+			$path = \forge\Post::getString('file');
+			if ($path === null)
 				throw new \forge\HttpException('A file must be chosen',
 						\forge\HttpException::HTTP_BAD_REQUEST);
+			$path = explode('/', $path);
+			$file = array_pop($path);
+			$dir = implode('/', $path);
+			
+			$repo = \forge\components\Files::getFilesRepository();
+			$folder = $repo->getFolder($dir);
 			
 			try {
-				(new \forge\components\Files\File($_POST['file']))->delete();
+				$folder->deleteFile($file);
 			}
 			catch (\Exception $e) {
 				throw new \forge\HttpException('The file could not be deleted',

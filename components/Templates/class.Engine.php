@@ -193,12 +193,21 @@
 			if (strlen($local)) {
 				$js = new JavaScript($local);
 				$hash = $js->getHash();
-				$cache = \forge\components\Files\File::create('cache/script/'.$hash.'.js');
-				if (!$cache->length()) {
-					$cache->set(\forge\JSMin::minify($local));
-					$cache->save();
+				$repo = \forge\components\Files::getCacheRepository();
+				try {
+					$folder = $repo->getFolder('script');
 				}
-				$elements[] = '<script type="text/javascript" src="/files/cache/script/'.$hash.'.js"></script>';
+				catch (\forge\components\Files\exceptions\FileNotFound $e) {
+					$folder = $repo->createFolder('script');
+				}
+				$file = $hash.'.js';
+				try {
+					$folder->getFile($file);
+				}
+				catch (\forge\components\Files\exceptions\FileNotFound $e) {
+					$folder->createFile($file, \forge\JSMin::minify($local));
+				}
+				$elements[] = '<script type="text/javascript" src="/cache/script/'.$file.'"></script>';
 			}
 			
 			return implode($glue, $elements);
@@ -226,12 +235,19 @@
 			if (strlen($local)) {
 				$css = new CSS($local);
 				$hash = $css->getHash();
-				$cache = \forge\components\Files\File::create('cache/style/'.$hash.'.css');
-				if (!$cache->length()) {
-					$cache->set(\forge\CssMin::minify($local));
-					$cache->save();
+				$repo = \forge\components\Files::getCacheRepository();
+				try {
+					$folder = $repo->getFolder('style');
+				} catch (\forge\components\Files\exceptions\FileNotFound $e) {
+					$folder = $repo->createFolder('style');
 				}
-				$elements[] = '<link href="/files/cache/style/'.$hash.'.css" rel="stylesheet" />';
+				$file = $hash.'.css';
+				try {
+					$folder->getFile($file);
+				} catch (\forge\components\Files\exceptions\FileNotFound $e) {
+					$folder->createFile($file, \forge\CssMin::minify($local));
+				}
+				$elements[] = '<link href="/cache/style/'.$hash.'.css" rel="stylesheet" />';
 			}
 			
 			return implode($glue, $elements);

@@ -3,8 +3,8 @@ function rename(original) {
 	if (!target)
 		return;
 	
-	document.getElementById('renameSource').value = '<?php if (isset($_GET['path'])) echo $_GET['path'].'/'; ?>'+original;
-	document.getElementById('renameTarget').value = '<?php if (isset($_GET['path'])) echo $_GET['path'].'/'; ?>'+target;
+	document.getElementById('renameSource').value = f.get('path')+'/'+original;
+	document.getElementById('renameTarget').value = target;
 	document.rename.submit();
 }
 
@@ -12,6 +12,6 @@ function trash(file) {
 	if (!confirm('Are you sure you want to delete the file?'))
 		return;
 	
-	document.getElementById('trashFile').value = '<?php if (isset($_GET['path'])) echo $_GET['path'].'/'; ?>'+file;
+	document.getElementById('trashFile').value = f.get('path')+'/'+file;
 	document.trash.submit();
 }

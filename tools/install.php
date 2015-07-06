@@ -129,7 +129,8 @@
 				$handlers = [
 					'user' => 'forge\components\Accounts\UserHandler',
 					'admin' => 'forge\components\Admin\AdminHandler',
-					//'files' => 'forge\components\Files\FileRequest',
+					'files' => 'forge\components\Files\FileRequest',
+					'cache' => 'forge\components\Files\CacheRequest',
 					'thumbnail' => 'forge\components\Files\ThumbnailRequest',
 					null => 'forge\components\SiteMap\PageHandler',
 					'robots.txt' => 'forge\components\SiteMap\SiteMapHandler',
@@ -236,6 +237,14 @@
 				}
 				catch (\Exception $e) {
 					$install->add(false, 'Installing default template');
+				}
+				
+				// Create the neccessary file repositories
+				try {
+					\forge\components\Files::createRepositories();
+					$install->add(true, _('Creating file repositories'));
+				} catch (\Exception $e) {
+					$install->add(false, _('Creating file repositories'));
 				}
 
 				// Remove any configured files on failure

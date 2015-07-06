@@ -300,9 +300,6 @@
 		* @throws Exception
 		*/
 		final public function insert() {
-			if (!$this->__changed)
-				return;
-			
 			$this->beforeInsert();
 
 			$params = new Params();
@@ -433,7 +430,7 @@
 		/**
 		* Select a row from the table by the given constraints
 		* @param array Columns to bind
-		* @return void
+		* @return Table
 		* @throws Exception
 		*/
 		public function select($columns) {
@@ -443,8 +440,14 @@
 			
 			$params = new Params();
 			$params->type = $this;
-			foreach ($columns as $column)
-				$params->where[$column] = $this->__columns[$column]->get();
+			foreach ($columns as $column) {
+				$value = $this->__columns[$column]->get();
+				
+				if ($value instanceof Table)
+					$value = $value->getId();
+				
+				$params->where[$column] = $value;
+			}
 			$params->table = static::$table;
 
 			$query = $this->__engine->buildSelect($params);
@@ -452,12 +455,14 @@
 			$query->execute();
 			$result = $query->fetch(\PDO::FETCH_ASSOC);
 			if ($result === false)
-				throw new \Exception('No data could be loaded');
+				throw new exceptions\NoData;
 
 			foreach ($result as $column => $value)
 				$this->__columns[$column]->set($value);
 			
 			$this->__changed = false;
+			
+			return $this;
 		}
 
 		/**

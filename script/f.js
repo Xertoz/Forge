@@ -327,6 +327,24 @@ var f = (function() {
 	};
 	
 	/**
+	 * Retrieve a GET parameter
+	 * @param {string} param Name of the parameter
+	 * @returns {string|null}
+	 */
+	f.get = function(param) {
+		var value = '';
+		
+		location.search.substr(1).split('&').forEach(function(pair) {
+			var data = pair.split('=');
+			
+			if (data[0] === param)
+				value = decodeURIComponent(data[1]);
+		});
+		
+		return value;
+	};
+	
+	/**
 	 * Make a JSON call to Forge (or any other host)
 	 * @param {Object} params
 	 * @returns {void}

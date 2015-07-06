@@ -1,7 +1,7 @@
 <?php
 	/**
-	* page.FileRequest.php
-	* Copyright 2011-2012 Mattias Lindholm
+	* page.CacheRequest.php
+	* Copyright 2015 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -13,10 +13,10 @@
 	/**
 	* The view that accounts for file requests.
 	*/
-	class FileRequest extends \forge\RequestHandler {
+	class CacheRequest extends \forge\RequestHandler {
 		public function handle() {
 			try {
-				$repo = \forge\components\Files::getFilesRepository();
+				$repo = \forge\components\Files::getCacheRepository();
 				$file = $repo->getFile($this->getPathDecoded());
 				$file->passthru();
 			}

@@ -18,25 +18,20 @@
 		static public function index() {
 			\forge\components\Identity::restrict('com.Files.Admin');
 
-			$path = 'files/'.(empty($_REQUEST['path']) ? null : $_REQUEST['path'].'/').'*';
-			$path = preg_replace('/(\.){2,}/', '', $path);
-			$files = $folders = array();
-			foreach (glob($path) as $file)
-				if ($file != '..') {
-					if (is_dir($file))
-						$target = &$folders;
-					else
-						$target = &$files;
-
-					$target[] = array(
-						'date' => date('Y-m-d H:i:s',filectime($file)),
-						'name' => substr($file,strlen($path)-1),
-						'size' => filesize($file),
-						'type' => filetype($file)
-					);
-				}
-			$matrix = new \forge\components\XML\ArrayMatrix(array_merge($folders, $files),array('name','dir'));
-
+			$repo = \forge\components\Files::getFilesRepository();
+			$dir = $repo->getFolder(\forge\Get::getString('path', ''));
+			$children = $dir->getChildren(true);
+			$array = [];
+			foreach ($children as $child) {
+				$array[] = [
+					'date' => $child->created,
+					'name' => $child->name,
+					'size' => $child->size,
+					'type' => $child->blob ? 'file' : 'dir'
+				];
+			}
+			$matrix = new \forge\components\XML\ArrayMatrix($array, ['name','dir']);
+			
 			return \forge\components\Templates::display(
 				'components/Files/tpl/acp.files.php',
 				array(

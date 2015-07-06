@@ -33,7 +33,7 @@
 			$name = implode('/', $parts);
 			
 			try {
-				$file = new \forge\components\Files\File($name);
+				$file = new \forge\components\Files\PhysicalFile($name);
 				
 				if (!$file->isFile())
 					throw new \Exception('Not requesting a file');
@@ -50,7 +50,7 @@
 				$height,
 				isset($_GET['dimension']) ? (int)$_GET['dimension'] : Thumbnail::DIMENSION_STATIC)));
 			try {
-				echo new File(substr($parsed, strlen(FORGE_PATH.'/files/')));
+				echo new PhysicalFile(substr($parsed, strlen(FORGE_PATH.'/files/')));
 			}
 			catch (\Exception $e) {
 				throw new HttpException('Source image not found', HttpException::HTTP_NOT_FOUND);

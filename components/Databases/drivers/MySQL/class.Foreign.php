@@ -56,7 +56,7 @@
 		 * @return \forge\components\Databases\Table
 		 */
 		public function get() {
-			return $this->value !== null ? $this->value : new \forge\NullObject;
+			return $this->value !== null && $this->value !== 0 ? $this->value : new \forge\NullObject;
 		}
 
 		/**
@@ -74,7 +74,7 @@
 		* @throws Exception
 		*/
 		public function set($value) {
-			if (is_object($value) && $value instanceof \forge\components\Databases\Table)
+			if (is_object($value) && $value instanceof \forge\components\Databases\Table || $value == 0)
 				$this->value = $value;
 			else
 				$this->value = new $this->class($value);
