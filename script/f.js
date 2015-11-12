@@ -88,6 +88,20 @@ var f = (function() {
 				element.appendChild(document.createTextNode(content));
 		});
 	};
+	
+	/**
+	 * Get (first element) or set (all elements) the value of an attribute
+	 * @param {String} name
+	 * @param {undefined|String} value
+	 * @returns {String|undefined}
+	 */
+	o.prototype.attr = function(name, value) {
+		if (typeof(value) === 'undefined')
+			return this.elements[0].getAttribute(name);
+		this.elements.forEach(function(element) {
+			element.setAttribute(name, value);
+		});
+	};
 
 	/**
 	 * Insert an element before another
@@ -104,6 +118,17 @@ var f = (function() {
 
 		this.elements.forEach(function(element) {
 			element.insertBefore(content, target);
+		});
+	};
+	
+	/**
+	 * Listen to input changes
+	 * @param {Function} callback
+	 * @returns {void}
+	 */
+	o.prototype.change = function(callback) {
+		this.elements.forEach(function(element) {
+			element.addEventListener('change', call(callback), false);
 		});
 	};
 
@@ -164,6 +189,20 @@ var f = (function() {
 	o.prototype.hide = function() {
 		this.elements.forEach(function(element) {
 			element.style.display = 'none';
+		});
+	};
+	
+	/**
+	 * Get (first element) or set (all elements) the inner HTML
+	 * @param {undefined|String} html
+	 * @returns {String}
+	 */
+	o.prototype.html = function(html) {
+		if (typeof(html) === 'undefined')
+			return this.elements[0].innerHTML;
+		
+		this.elements.forEach(function(element) {
+			element.innerHTML = html;
 		});
 	};
 
@@ -297,14 +336,12 @@ var f = (function() {
 	};
 
 	/**
-	 * Set the value attribute of the elements
+	 * Get (first element) or set (all elements) the value attribute
 	 * @param {String} value
 	 * @returns {void}
 	 */
 	o.prototype.value = function(value) {
-		this.elements.forEach(function(element) {
-			element.setAttribute('value', value);
-		});
+		return this.attr('value', value);
 	};
 
 	/**
