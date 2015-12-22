@@ -235,8 +235,23 @@
 			// Get an instance from which to find tables
 			$class = 'forge\\'.($type=='COM'?'components':'modules').'\\'.$name;
 
+			// Get all models and sort them out with dependencies on top
+			$models = $class::getTables();
+			$sorted = [];
+			$search = function($list, $searched=[]) use (&$sorted, &$search) {
+				foreach ($list as $model) {
+					if (!in_array($model, $sorted) && !in_array($model, $searched)) {
+						$searched[] = $model;
+						$search((new $model)->getDependencies(), $searched);
+					}
+					if (!in_array($model, $sorted))
+						$sorted[] = $model;
+				}
+			};
+			$search($models);
+			
 			// Loop over table definitions
-			foreach ($class::getTables() as $model)
+			foreach ($sorted as $model)
 				if ($model::isHandled())
 					(new $model)->fixIntegrity();
 		}

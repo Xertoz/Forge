@@ -49,6 +49,9 @@
 		public function bindWhere(\PDOStatement $query, Params $params) {
 			$bind = function(\PDOStatement $query, $where, &$n=1) use (&$bind, $params) {
 				foreach ($where as $column => $value) {
+					if ($value instanceof Table)
+						$value = $value->getId();
+					
 					list($operator, $column) = $params->getColumnOperator($column);
 					
 					switch ($operator) {

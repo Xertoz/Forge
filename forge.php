@@ -76,6 +76,13 @@
 		// If it exists, include it
 		if (file_exists($file))
 			require_once $file;
+		else {
+			// Try to find out if Forge generated a file for this automatically
+			$extend = FORGE_PATH.'/extend/'.$path.'/'.$type.'.'.$class.'.php';
+			
+			if (file_exists($extend))
+				require_once $extend;
+		}
 	}
 
 	// Set up the autoloader for Forge

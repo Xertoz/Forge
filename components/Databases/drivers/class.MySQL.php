@@ -62,6 +62,9 @@
 			$lines = array();
 			$indexes = ['primary' => [], 'key' => [], 'unique' => [], 'foreign' => []];
 			foreach ($table->getColumns(true) as $column => $object) {
+				if ($object->isVirtual())
+					continue;
+				
 				$lines[] = $object->buildCreate($column);
 				foreach ($object->buildIndexes($column) as $key => $array)
 					foreach ($array as $index)

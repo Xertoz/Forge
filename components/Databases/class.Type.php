@@ -19,6 +19,12 @@
 		* @var string
 		*/
 		protected $default = null;
+		
+		/**
+		 * List of dependencies
+		 * @var array
+		 */
+		protected $dependencies = [];
 
 		/**
 		* Use FOREIGN KEY?
@@ -71,6 +77,12 @@
 		* The column value
 		*/
 		protected $value = null;
+		
+		/**
+		 * Virtual columns only exist in Forge
+		 * @var bool Is this a virtual column?
+		 */
+		protected $virtual = false;
 
 		/**
 		* The referencing table
@@ -95,6 +107,9 @@
 		* @return string
 		*/
 		public function buildCreate($column) {
+			if ($this->virtual === true)
+				return false;
+			
 			$sql = ['`'.$column.'`',$this->type.($this->length ? '('.$this->length.')' : null)];
 
 			if ($this->null !== null && !$this->null)
@@ -115,8 +130,11 @@
 		* Build the indexes part for a CREATE statement
 		*/
 		public function buildIndexes($column) {
+			if ($this->virtual === true)
+				return false;
+			
 			$indexes = array();
-
+			
 			if ($this->primary)
 				$indexes['primary'][] = 'PRIMARY KEY (`'.$column.'`)';
 			
@@ -133,6 +151,14 @@
 				$indexes['unique'][] = 'UNIQUE KEY `'.$column.'` (`'.$column.'`)';
 
 			return $indexes;
+		}
+		
+		/**
+		 * Is this a virtual column?
+		 * @return bool
+		 */
+		public function isVirtual() {
+			return $this->virtual;
 		}
 
 		/**
@@ -164,6 +190,14 @@
 		 */
 		public function getDefault() {
 			return $this->default;
+		}
+		
+		/**
+		 * Get a list of all models this column reference
+		 * @return array
+		 */
+		public function getDependencies() {
+			return $this->dependencies;
 		}
 
 		/**

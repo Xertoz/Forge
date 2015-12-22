@@ -18,8 +18,14 @@
 		static public function fix() {
 			$comparison = array();
 			$controller = 'forge\\'.(isset($_GET['com']) ? 'components\\'.$_GET['com'] : 'modules\\'.$_GET['mod']);
+			
+			// Instantiate models so all dynamic classes are generated
 			$models = $controller::getNamespace('db');
-
+			foreach ($models as $model)
+				new $model;
+			
+			// Loop all models
+			$models = $controller::getNamespace('db');
 			foreach ($models as $model) {
 				if (!$model::isHandled())
 					continue;

@@ -47,8 +47,11 @@
 			$model = explode('.', $this->model);
 			$type = \forge\Addon::existsComponent($model[0]) ? 'components' : 'modules';
 			$this->class = 'forge\\'.$type.'\\'.$model[0].'\\db\\'.$model[1];
-			$object = $this->table instanceof $this->class ? $this->table : new $this->class;
-			$this->foreign = '`'.$this->engine->getPrefix().$object->getTable().'` (`'.$object->getIdColumn().'`)';
+			if (!isset($params->reference) || $params->reference) {
+				$object = $this->table instanceof $this->class ? $this->table : new $this->class;
+				$this->foreign = '`'.$this->engine->getPrefix().$object->getTable().'` (`'.$object->getIdColumn().'`)';
+				$this->dependencies[] = get_class($object);
+			}
 		}
 		
 		/**

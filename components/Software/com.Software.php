@@ -100,8 +100,14 @@
 		static private function getAddonStatus($controller) {
 			// Verify the database integrity
 			$database = true;
+			
+			// Instantiate models so all dynamic classes are generated
 			$models = $controller::getNamespace('db');
-
+			foreach ($models as $model)
+				new $model;
+			
+			// Loop all models and check them
+			$models = $controller::getNamespace('db');
 			foreach ($models as $model)
 				if ($model::isHandled())
 					$database &= (new $model)->checkIntegrity();
