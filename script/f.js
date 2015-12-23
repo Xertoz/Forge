@@ -60,6 +60,8 @@ var f = (function() {
 					query.call(this, element);
 				}, this);
 		}
+		
+		this.length = this.elements.length;
 	};
 
 	/**
