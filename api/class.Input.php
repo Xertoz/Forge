@@ -23,7 +23,7 @@
 		* @return mixed
 		*/
 		static private function filter($param, $filter, $options=[]) {
-			return filter_input(static::getType(), $param, $filter, ['options' => $options]);
+			return filter_input(static::getType(), $param, $filter, $options);
 		}
 		
 		/**
@@ -39,6 +39,18 @@
 		}
 		
 		/**
+		* Get a list of booleans
+		* @param string $param Parameter name
+		* @param mixed $default Default value if input was invalid
+		* @return bool|null
+		*/
+		static public function getBools($param, $default=null) {
+			$v = self::filter($param, \FILTER_VALIDATE_BOOLEAN, \FILTER_REQUIRE_ARRAY);
+			
+			return is_array($v) ? $v : $default;
+		}
+		
+		/**
 		* Get an email address
 		* @param string $param Parameter name
 		* @param mixed $default Default value if input was invalid
@@ -48,6 +60,18 @@
 			$v = self::filter($param, \FILTER_VALIDATE_EMAIL);
 			
 			return is_string($v) ? $v : $default;
+		}
+		
+		/**
+		* Get a list of email addresses
+		* @param string $param Parameter name
+		* @param mixed $default Default value if input was invalid
+		* @return string|null
+		*/
+		static public function getEmails($param, $default=null) {
+			$v = self::filter($param, \FILTER_VALIDATE_EMAIL, \FILTER_REQUIRE_ARRAY);
+			
+			return is_array($v) ? $v : $default;
 		}
 		
 		/**
@@ -63,6 +87,18 @@
 		}
 		
 		/**
+		* Get a list of floats
+		* @param string $param Parameter name
+		* @param mixed $default Default value if input was invalid
+		* @return int|null
+		*/
+		static public function getFloats($param, $default=null) {
+			$v = self::filter($param, \FILTER_VALIDATE_FLOAT, \FILTER_REQUIRE_ARRAY);
+			
+			return is_array($v) ? $v : $default;
+		}
+		
+		/**
 		* Get an integer
 		* @param string $param Parameter name
 		* @param mixed $default Default value if input was invalid
@@ -72,6 +108,12 @@
 			$v = self::filter($param, \FILTER_VALIDATE_INT);
 			
 			return is_int($v) ? $v : $default;
+		}
+		
+		static public function getInts($param, $default=null) {
+			$v = self::filter($param, \FILTER_VALIDATE_INT, \FILTER_REQUIRE_ARRAY);
+			
+			return is_array($v) ? $v : $default;
 		}
 		
 		/**
@@ -87,13 +129,25 @@
 		}
 		
 		/**
+		* Get a list of IPs
+		* @param string $param Parameter name
+		* @param mixed $default Default value if input was invalid
+		* @return string|null
+		*/
+		static public function getIPs($param, $default=null) {
+			$v = self::filter($param, \FILTER_VALIDATE_IP, \FILTER_REQUIRE_ARRAY);
+			
+			return is_array($v) ? $v : $default;
+		}
+		
+		/**
 		* Get a string if it matches the regular expression
 		* @param string $param Parameter name
 		* @param mixed $default Default value if input was invalid
 		* @return string|null
 		*/
 		static public function getRegexp($param, $expr, $default=null) {
-			$v = self::filter($param, \FILTER_VALIDATE_REGEXP, ['regexp' => $expr]);
+			$v = self::filter($param, \FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => $expr]]);
 			
 			return is_string($v) ? $v : $default;
 		}
@@ -108,6 +162,18 @@
 			$v = self::filter($param, \FILTER_DEFAULT);
 			
 			return is_string($v) ? $v : $default;
+		}
+		
+		/**
+		* Get a list of strings
+		* @param string $param Parameter name
+		* @param mixed $default Default value if input was invalid
+		* @return string|null
+		*/
+		static public function getStrings($param, $default=null) {
+			$v = self::filter($param, \FILTER_DEFAULT, \FILTER_REQUIRE_ARRAY);
+			
+			return is_array($v) ? $v : $default;
 		}
 		
 		/**
@@ -129,5 +195,17 @@
 			$v = self::filter($param, \FILTER_VALIDATE_URL);
 			
 			return is_string($v) ? $v : $default;
+		}
+		
+		/**
+		* Get a list of URLs
+		* @param string $param Parameter name
+		* @param mixed $default Default value if input was invalid
+		* @return string|null
+		*/
+		static public function getURLs($param, $default=null) {
+			$v = self::filter($param, \FILTER_VALIDATE_URL, \FILTER_REQUIRE_ARRAY);
+			
+			return is_array($v) ? $v : $default;
 		}
 	}
