@@ -328,6 +328,17 @@ var f = (function() {
 			}, this);
 		});
 	};
+
+	/**
+	 * Listen to form submits
+	 * @param {Function} callback
+	 * @returns {void}
+	 */
+	o.prototype.submit = function(callback) {
+		this.elements.forEach(function(element) {
+			element.addEventListener('submit', call(callback), false);
+		});
+	};
 	
 	o.prototype.text = function(text) {
 		this.elements.forEach(function(element) {
