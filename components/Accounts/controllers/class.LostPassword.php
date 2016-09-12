@@ -35,7 +35,7 @@
 			
 			$lost = new \forge\components\Accounts\db\LostPassword();
 			$lost->user = $account->getId();
-			$lost->key = md5(\forge\String::randomize(32));
+			$lost->key = md5(\forge\Strings::randomize(32));
 			$lost->until = time()+24*60*60;
 			$lost->insert();
 			

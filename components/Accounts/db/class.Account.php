@@ -99,6 +99,6 @@
 		* @return void
 		*/
 		public function makeSalt() {
-			$this->__columns['user_salt']->set(\forge\String::randomize(8));
+			$this->__columns['user_salt']->set(\forge\Strings::randomize(8));
 		}
 	}

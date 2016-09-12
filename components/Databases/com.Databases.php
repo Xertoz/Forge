@@ -249,7 +249,7 @@
 				}
 			};
 			$search($models);
-			
+
 			// Loop over table definitions
 			foreach ($sorted as $model)
 				if ($model::isHandled())

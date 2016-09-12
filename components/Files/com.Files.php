@@ -81,7 +81,7 @@
 				return null;
 
 			$repo = self::getFilesRepository();
-			$free = \forge\String::bytesize($repo->getSize());
+			$free = \forge\Strings::bytesize($repo->getSize());
 
 			return \forge\components\Templates::display('components/Files/tpl/inc.infobox.php',array('free'=>$free));
 		}

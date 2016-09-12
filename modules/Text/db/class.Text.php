@@ -25,7 +25,7 @@
 		* @var int
 		*/
 		public $page_id = [
-			'Int',
+			'Integer',
 			'index' => true
 		];
 

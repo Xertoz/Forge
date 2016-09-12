@@ -25,7 +25,7 @@
 		* Page title
 		* @var DataType
 		*/
-		public $http = 'Int';
+		public $http = 'Integer';
 
 		/**
 		* URL

@@ -27,7 +27,7 @@
 					return '<img src="/images/led/'.$icon.'.png" /> '.$r['name'];
 				},
 				'size' => function($r) {
-					return is_null($r['size']) ? null : \forge\String::bytesize($r['size']);
+					return is_null($r['size']) ? null : \forge\Strings::bytesize($r['size']);
 				},
 				'actions' => function($r) {
 					$path = !empty($_GET['path']) ? $_GET['path'].'/' : '';

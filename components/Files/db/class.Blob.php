@@ -39,5 +39,5 @@
 		* Content size
 		* @var int
 		*/
-		public $size = 'Int';
+		public $size = 'Integer';
 	}

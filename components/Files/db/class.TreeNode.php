@@ -39,7 +39,7 @@
 		* Total size of this node's content
 		* @var int
 		*/
-		public $size = 'Int';
+		public $size = 'Integer';
 		
 		/**
 		 * Referencing BLOB, if any

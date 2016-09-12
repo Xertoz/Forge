@@ -31,13 +31,13 @@
 		* Account name
 		* @var int
 		*/
-		public $account = 'Int';
+		public $account = 'Integer';
 
 		/**
 		* Cookie expire date
 		* @var int
 		*/
-		public $expire = 'Int';
+		public $expire = 'Integer';
 
 		/**
 		* Cookie salt value
@@ -49,7 +49,7 @@
 		* Generate a salt and expire date before insertion
 		*/
 		protected function beforeInsert() {
-			$this->__set('salt',\forge\String::randomize(16));
+			$this->__set('salt',\forge\Strings::randomize(16));
 			$this->__set('expire',time()+30*24*3600);
 		}
 

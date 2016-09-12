@@ -10,7 +10,7 @@
 
 	namespace forge;
 	
-	class String {
+	class Strings {
 		/**
 		* Returns a random string
 		* @param int length
@@ -47,7 +47,7 @@
 				if ($String[$i] == ' ') {
 					$Short = substr($String,0,strlen($Short)-(strlen($Short)-$i)).'...';
 					if (strlen($Short) > $Length)
-						$Short = \forge\String::shorten($Short,$Length);
+						$Short = \forge\Strings::shorten($Short,$Length);
 					return $Short;
 				}
 	

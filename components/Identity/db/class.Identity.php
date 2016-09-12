@@ -36,7 +36,7 @@
 		 * Master identity in the relationships
 		 * @var int
 		 */
-		public $master = 'Int';
+		public $master = 'Integer';
 
 		/**
 		* Class reference which handles this identity
@@ -51,7 +51,7 @@
 		 * The derived identity class' unique identifier for this identity
 		 * @var int
 		 */
-		public $identifier = 'Int';
+		public $identifier = 'Integer';
 
 		/**
 		 * Override the construct to add loading of permissions

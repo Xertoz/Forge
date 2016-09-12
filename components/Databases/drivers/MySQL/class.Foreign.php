@@ -34,7 +34,7 @@
 		* SQL type
 		* @var string
 		*/
-		protected $type = 'int';
+		protected $type = 'Integer';
 
 		/**
 		* The column value

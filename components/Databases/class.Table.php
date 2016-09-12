@@ -106,7 +106,7 @@
 
 			// Make sure that we have an ID column
 			if (static::$__id == 'forge_id') {
-				$idType = $this->__engine->getNamespace().'\Int';
+				$idType = $this->__engine->getNamespace().'\Integer';
 				$params = new Params();
 				$params->default = null;
 				$params->null = false;
@@ -117,7 +117,7 @@
 
 			// We should have a website ID if this is a local model
 			if (static::$global === false) {
-				$globalType = $this->__engine->getNamespace().'\Int';
+				$globalType = $this->__engine->getNamespace().'\Integer';
 				$this->__columns['forge_website'] = new $globalType(new Params(['index'=>true]));
 				try {
 					$this->__columns['forge_website']->set(\forge\components\Websites::getId());

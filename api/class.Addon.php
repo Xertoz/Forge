@@ -122,7 +122,7 @@
 		*/
 		static public function getTables($long=true) {
 			$tables = self::getNamespace('db');
-			
+
 			if (!$long)
 				foreach ($tables as &$table) {
 					$table = explode('\\', $table);
@@ -140,18 +140,18 @@
 		static public function getNamespace($subspace=null) {
 			$classes = array();
 			$path = str_replace('\\', '/', substr(get_called_class(), strlen('forge\\'))).'/'.str_replace('\\', '/', $subspace).'/';
-			
+
 			$files = [];
 			if (($extend = glob('extend/'.$path.'class.*.php')) !== false)
 				$files = array_merge($files, $extend);
 			if (($developer = glob($path.'class.*.php')) !== false)
 				$files = array_merge($files, $developer);
-			
+
 			foreach ($files as $file) {
 				preg_match_all('#'.$path.'class.(\w+).php#', $file, $matches);
 				$classes[] = get_called_class().'\\'.(strlen($subspace) ? $subspace.'\\' : null).array_pop($matches[1]);
 			}
-			
+
 			return $classes;
 		}
 

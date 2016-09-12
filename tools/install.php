@@ -192,11 +192,12 @@
 
 				// Set up the root account
 				try {
+					$domain = strstr($_SERVER['HTTP_HOST'], '.') ? $_SERVER['HTTP_HOST'] : $_SERVER['HTTP_HOST'].'.com';
 					$account = \forge\components\Accounts::createAccount(
 						$_POST['root']['name'],
 						'Super',
 						'User',
-						'noreply@'.$_SERVER['HTTP_HOST'],
+						'noreply@'.$domain,
 						$_POST['root']['password1'],
 						$_POST['root']['password2'],
 						false
@@ -242,9 +243,9 @@
 				// Create the neccessary file repositories
 				try {
 					\forge\components\Files::createRepositories();
-					$install->add(true, _('Creating file repositories'));
+					$install->add(true, 'Creating file repositories');
 				} catch (\Exception $e) {
-					$install->add(false, _('Creating file repositories'));
+					$install->add(false, 'Creating file repositories');
 				}
 
 				// Remove any configured files on failure
