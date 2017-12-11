@@ -61,7 +61,7 @@
 				return;
 			
 			self::$controller = $_POST['forge']['controller'];
-			
+
 			try {
 				list($addon, $controller) = explode('\\', self::$controller);
 			}
@@ -70,7 +70,7 @@
 			}
 			
 			$class = 'forge\\'.(Addon::existsComponent($addon) ? 'components' : 'modules').'\\'.$addon.'\\controllers\\'.$controller;
-			
+
 			if (class_exists($class) && in_array('forge\\Controller', class_parents($class))) {
 				try {
 					(new $class)->process();
@@ -79,7 +79,7 @@
 					self::setResponse($e->getMessage(), self::RESULT_BAD);
 					self::$exception = $e;
 				}
-				
+
 				if (self::getCode() == self::RESULT_OK && isset($_POST['forge']['redirect']))
 					\forge\components\SiteMap::redirect($_POST['forge']['redirect'], 302);
 			}

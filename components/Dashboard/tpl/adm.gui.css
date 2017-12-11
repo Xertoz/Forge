@@ -1,22 +1,22 @@
-#dashboard > div.infobox {
+#admin-content > div.infobox {
 	display:inline-block;
 	width:225px;
 	height:75px;
 	overflow:hidden;
 	margin-bottom:15px;
 	cursor:pointer;
-	background:rgba(255, 255, 255, .4);
+	background:#fff;
 	padding:5px;
-	border-radius:10px;
+	border-radius:3px;
 	margin-right:15px;
 }
 
-#dashboard > div.infobox > img.icon {
+#admin-content > div.infobox > img.icon {
 	float:left;
 	margin-right:10px;
 }
 
-#dashboard > div.infobox > h2 {
+#admin-content > div.infobox > h2 {
 	font-size:14px;
 	font-weight:normal;
 	margin:10px 0 0 0;

@@ -78,6 +78,106 @@ var f = (function() {
 	};
 
 	/**
+	 * Animate an element
+	 * @param target Target CSS
+	 * @param duration Animation time
+	 * @returns {void}
+	 */
+	o.prototype.animate = function(target, duration) {
+		// Require 2nd argument to be a number
+		if (typeof(duration) !== 'number')
+			throw 'Requested duration of an animation wasn\'t a number';
+
+		// Go over the target CSS and make calculation functions for each key
+		this.elements.forEach(function(element) {
+			// Get the original CSS rules
+			var css = window.getComputedStyle(element);
+
+			// Loop the CSS rules
+			var original = {};
+			for (var key in target) {
+				// Get the original CSS value
+				var value = css.getPropertyValue(key);
+
+				// Color animation
+				if (/^(#[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(target[key])) {
+					var colors, R, r, G, g, B, b;
+
+					// Figure out the target colors
+					if (target[key].length == 7) {
+						colors = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(target[key]);
+						r = parseInt(colors[1], 16);
+						g = parseInt(colors[2], 16);
+						b = parseInt(colors[3], 16);
+					}
+					else {
+						colors = /^#?([a-f\d])([a-f\d])([a-f\d])$/i.exec(target[key]);
+						r = parseInt(colors[1]+colors[1], 16);
+						g = parseInt(colors[2]+colors[2], 16);
+						b = parseInt(colors[3]+colors[3], 16);
+					}
+
+					// Figure out the original colors (fallback to target colors)
+					var COLORS = /^rgb\((\d+), (\d+), (\d+)\)$/.exec(value);
+					if (COLORS != null) {
+						R = parseInt(COLORS[1]);
+						G = parseInt(COLORS[2]);
+						B = parseInt(COLORS[3]);
+					}
+					else {
+						R = r;
+						G = g;
+						B = b;
+					}
+
+					// Set the function
+					original[key] = function(p) {
+						return 'rgb('+Math.round(R+(r-R)*p)+', '+Math.round(G+(g-G)*p)+', '+Math.round(B+(b-B)*p)+')';
+					};
+				}
+				// Percentage and pixel value
+				else if (/^(\d+)(%|px)$/.test(target[key])) {
+					var Pr = /^(\d+)(%|px)$/.exec(value);
+					var P = parseInt(Pr[1]);
+					var Pt = Pr[2];
+					var pr = /^(\d+)(%|px)$/.exec(target[key]);
+					var p = parseInt(pr[1]);
+					var pt = pr[2]
+
+					if (Pt !== pt)
+						throw 'Incompatible types (% and px) in animation';
+
+					original[key] = function(n) {
+						return Math.round(P+(p-P)*n)+Pt;
+					};
+				}
+				// Throw an error if we don't know what type this is
+				else
+					throw 'Unknown value type for a requested animation';
+			}
+
+			// Figure out when we started
+			var start = Date.now();
+
+			// Paint the animation
+			var interval = setInterval(function() {
+				// How far into the animation are we?
+				var position = Math.min((Date.now()-start)/duration, 1);
+
+				// Loop the targetted properties and update them
+				var current = {};
+				for (var key in target)
+					current[key] = original[key](position);
+				f(element).css(current); // TODO: Performance tweak
+
+				// If we're past the animation time, we're done!
+				if (Date.now()-start >= duration)
+					clearInterval(interval);
+			}, 1);
+		});
+	};
+
+	/**
 	 * Append content to the elements
 	 * @param {Element|String} content
 	 * @returns {void}
@@ -341,11 +441,23 @@ var f = (function() {
 			element.addEventListener('submit', call(callback), false);
 		});
 	};
-	
+
+    /**
+	 * Set or get the text of the given elements
+     * @param text|undefined Text value to be set
+     * @returns {string} The resulting text value in the elements
+     */
 	o.prototype.text = function(text) {
-		this.elements.forEach(function(element) {
-			element.textContent = text;
-		});
+		var result = typeof(text) !== 'undefined' ? text : '';
+
+        this.elements.forEach(function(element) {
+        	if (typeof(text) !== 'undefined')
+            	element.textContent = text;
+        	else
+        		result += element.textContent;
+        });
+
+        return result;
 	};
 
 	/**
@@ -374,6 +486,22 @@ var f = (function() {
 	var f = function(selector, context) {
 		// Return a new instance of the local object
 		return new o(selector, context);
+	};
+	
+	/**
+	 * Get (or set) a cookie key
+	 * @param {String} key
+	 * @param {String} value
+	 * @returns {undefined}
+	 */
+	f.cookie = function(key, value) {
+		// Set if requested to
+		if (typeof(value) !== 'undefined')
+			document.cookie = key+'='+value;
+		
+		// Get the cookie value
+		var firstPass = (';'+document.cookie).split(';'+key+'=');
+		return firstPass.length === 2 ? firstPass[1].split(';').shift() : null;
 	};
 	
 	/**

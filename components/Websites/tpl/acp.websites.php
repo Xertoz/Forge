@@ -1,7 +1,6 @@
+<h1><?php echo self::l('Websites'); ?></h1>
 <div class="panel">
-	<h1><?php echo self::l('Websites'); ?></h1>
-	<p><?php echo self::l('The system handles all requests available to it, and as it may be requests made on multiple domains, it uses this table to determine what site to use.'); ?></p>
-	<p><?php echo self::l('You may set up what web sites the system is supposed to handle and also its alias domains.'); ?></p>
+	<h1><?php echo self::l('Handled'); ?></h1>
 	<table class="list">
 		<thead>
 			<tr>
@@ -26,7 +25,9 @@
 			<?php endforeach; ?>
 		</tbody>
 	</table>
-	<h2><?php echo self::l('New website'); ?></h2>
+</div>
+<div class="panel green">
+	<h1><?php echo self::l('Add new'); ?></h1>
 	<form action="/admin/Websites" method="post" name="create_website">
 		<input type="hidden" name="forge[controller]" value="Websites\Create" />
 		<table>

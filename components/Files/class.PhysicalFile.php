@@ -129,7 +129,7 @@
 			catch (\Exception $e) {
 				throw new \Exception('File could not be created');
 			}
-			
+
 			return new PhysicalFile($name);
 		}
 		

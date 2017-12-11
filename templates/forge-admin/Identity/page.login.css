@@ -1,0 +1,39 @@
+#login {
+	width:302px;
+	height:242px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-left:-151px;
+	margin-top:-121px;
+	background:#fff;
+	border-radius:15px;
+	padding:25px;
+	box-sizing:border-box;
+}
+
+#login > h1 {
+	margin:0;
+	font:bold 18px 'Oswald', sans-serif;
+}
+
+#login > h2 {
+	margin:0;
+	font:bold 14px 'Oswald', sans-serif;
+}
+
+#login > form > p > label {
+	display:inline-block;
+    width:100px;
+}
+
+#lost-password {
+	font-size:11px;
+	color:#666;
+	text-decoration:none;
+}
+
+#lost-password:hover {
+	color:#000;
+	text-decoration:underline;
+}

@@ -339,8 +339,6 @@
 						if ($value === 0)
 							$value = null;
 					}
-					elseif ($value instanceof \forge\NullObject)
-						$value = null;
 				}
 				
 				$query->bindValue(
@@ -435,8 +433,6 @@
 						if ($value === 0)
 							$value = null;
 					}
-					elseif ($value instanceof \forge\NullObject)
-						$value = null;
 				}
 				
 				$query->bindValue($i++,$value,$type->getDataType());

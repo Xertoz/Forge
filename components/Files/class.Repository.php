@@ -33,8 +33,10 @@
 			$this->root->size += (int)$size;
 			$this->root->save();
 			
-			if ($this->root->parent != 0)
-				$this->root->parent->addSize($size);
+			if ($this->root->parent instanceof db\TreeNode) {
+				$parent = new Repository($this->root->parent);
+				$parent->addSize($size);
+			}
 		}
 		
 		/**

@@ -105,8 +105,8 @@
 			$page->select('page_id');
 			return \forge\components\Templates::display(
 				array(
-					'%T/page.text.php',
-					'modules/Text/tpl/page.text.php'
+					'%T/page.merge.php',
+					'modules/Text/tpl/page.merge.php'
 				),
 				array(
 					'text'=>$page

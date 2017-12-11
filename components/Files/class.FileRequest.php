@@ -23,7 +23,5 @@
 			catch (\forge\components\Files\exceptions\FileNotFound $e) {
 				throw new \forge\HttpException('File not found', \forge\HttpException::HTTP_NOT_FOUND, $e);
 			}
-
-			return (string)null;
 		}
 	}

@@ -219,36 +219,34 @@
 		* @return string
 		*/
 		static public function getStyles($glue) {
-			$local = '';
+            $repo = \forge\components\Files::getCacheRepository();
 			$elements = [];
-			
+
+            try {
+                $folder = $repo->getFolder('style');
+            } catch (\forge\components\Files\exceptions\FileNotFound $e) {
+                $folder = $repo->createFolder('style');
+            }
+
 			foreach (self::$styles as $style)
 				if ($style->isRemote())
 					$elements[] = '<link href="'.$style->getFile().'" rel="stylesheet" />';
-				elseif (!\forge\components\Identity::isDeveloper() && $style->isMinifiable())
-					$local .= $style->getSource();
+				elseif (!\forge\components\Identity::isDeveloper() && $style->isMinifiable()) {
+                    $css = new CSS($style->getSource());
+                    $hash = $css->getHash();
+                    $file = $hash.'.css';
+                    try {
+                        $folder->getFile($file);
+                    } catch (\forge\components\Files\exceptions\FileNotFound $e) {
+                        $folder->createFile($file, \forge\CssMin::minify($style->getSource()));
+                    }
+                    $elements[] = '<link href="/cache/style/'.$hash.'.css" rel="stylesheet" />';
+                }
 				elseif ($style->isLocal())
 					$elements[] = '<link href="'.$style->getFile().'" rel="stylesheet" />';
 				else
 					$elements[] = '<style type="text/css" media="screen">'.$style->getSource().'</style>';
-			
-			if (strlen($local)) {
-				$css = new CSS($local);
-				$hash = $css->getHash();
-				$repo = \forge\components\Files::getCacheRepository();
-				try {
-					$folder = $repo->getFolder('style');
-				} catch (\forge\components\Files\exceptions\FileNotFound $e) {
-					$folder = $repo->createFolder('style');
-				}
-				$file = $hash.'.css';
-				try {
-					$folder->getFile($file);
-				} catch (\forge\components\Files\exceptions\FileNotFound $e) {
-					$folder->createFile($file, \forge\CssMin::minify($local));
-				}
-				$elements[] = '<link href="/cache/style/'.$hash.'.css" rel="stylesheet" />';
-			}
+
 			
 			return implode($glue, $elements);
 		}
@@ -418,12 +416,13 @@
 
 				return $html;
 			}
-			
+
 			if (\forge\Controller::getController() == $controller && \forge\Controller::getCode() != \forge\Controller::RESULT_PENDING) {
-				$class = \forge\Controller::getCode() == \forge\Controller::RESULT_OK ? 'success' : 'error';
+				self::addStyleFile('/css/controller.css');
+			    $class = \forge\Controller::getCode() == \forge\Controller::RESULT_OK ? 'success' : 'error';
 				$html = '<p class="controller '.$class.'">'.self::html(\forge\Controller::getMessage()).'</p>';
 			}
-			
+
 			return $html;
 		}
 		

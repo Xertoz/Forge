@@ -34,7 +34,7 @@
 		* SQL type
 		* @var string
 		*/
-		protected $type = 'Integer';
+		protected $type = 'int';
 
 		/**
 		* The column value
@@ -59,7 +59,7 @@
 		 * @return \forge\components\Databases\Table
 		 */
 		public function get() {
-			return $this->value !== null && $this->value !== 0 ? $this->value : new \forge\NullObject;
+			return $this->value !== null && $this->value !== 0 ? $this->value : null;
 		}
 
 		/**

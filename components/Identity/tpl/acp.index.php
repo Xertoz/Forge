@@ -1,5 +1,6 @@
+<h1><?php echo self::l('People'); ?></h1>
 <div class="panel">
-	<h1><?php echo self::l('People'); ?></h1>
+	<h1><?php echo self::l('Accounts'); ?></h1>
 	<table class="list">
 		<thead>
 			<tr>

@@ -1,7 +1,7 @@
 <?php
 	/**
 	 * class.RequestHandler.php
-	 * Copyright 2012 Mattias Lindholm
+	 * Copyright 2012-2017 Mattias Lindholm
 	 *
 	 * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	 * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -90,6 +90,14 @@
 		 * @return void
 		 */
 		abstract public function handle();
+		
+		/**
+		 * Tell the client what the attached file is named
+		 * @param string $name File name
+		 */
+		final static public function setAttachment($name) {
+			header('Content-disposition: attachment; filename='.$name);
+		}
 
 		/**
 		 * Set the Content-Length header
@@ -108,13 +116,23 @@
 		final static public function setContentType($type) {
 			header('Content-Type: '.$type, true);
 		}
-		
+
 		/**
-		 * Tell the client what the attached file is named
-		 * @param string $name File name
+		 * Set the ETag header
+		 * @param $type string Value to set the ETag field to
+		 * @return void
 		 */
-		final static public function setAttachment($name) {
-			header('Content-disposition: attachment; filename='.$name);
+		final static public function setETag($etag) {
+			header('ETag: '.$etag); 
+		}
+
+		/**
+		 * Set the Last-Modified header
+		 * @param $type string Value to set the Last-Modified field to
+		 * @return void
+		 */
+		final static public function setLastModified($time) {
+			header('Last-Modified: '.gmdate('D, d M Y H:i:s', $time).' GMT'); 
 		}
 
 		/**

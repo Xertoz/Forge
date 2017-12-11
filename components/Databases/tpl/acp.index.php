@@ -1,5 +1,5 @@
+<h1><?php echo self::l('Databases'); ?></h1>
 <div class="panel">
-	<h1><?php echo self::l('Databases'); ?></h1>
 	<?php echo self::response('Databases\Select'); ?>
 	<table class="list">
 		<thead>
@@ -38,9 +38,11 @@
 			<?php endforeach; ?>
 		</tbody>
 	</table>
+</div>
+<div class="panel green">
+	<h1><?php echo self::l('Add new'); ?></h1>
 	<form action="/admin/Databases" method="POST">
 		<input type="hidden" name="forge[controller]" value="Databases\Add" />
-		<h2><?php echo self::l('New connection'); ?></h2>
 		<?php echo self::response('Databases\Add'); ?>
 		<table>
 			<tr>

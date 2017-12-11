@@ -1,6 +1,6 @@
+<h1><?php echo self::l('Individual'); ?></h1>
 <div class="panel">
-	<h1><?php echo self::l('Identity'); ?></h1>
-	<h2><?php echo self::l('Personal'); ?></h2>
+	<h1><?php echo self::l('Personal information'); ?></h1>
 	<table>
 		<tr>
 			<td><?php echo self::l('Name'); ?>:</td>
@@ -11,7 +11,9 @@
 			<td><?php echo self::html($identity->getEmail()); ?></td>
 		</tr>
 	</table>
-	<h2><?php echo self::l('Permissions'); ?></h2>
+</div>
+<div class="panel red">
+	<h1><?php echo self::l('Permissions'); ?></h1>
 	<form action="/admin/Identity/view?id=<?php echo (int)$_GET['id']; ?>" method="POST">
 		<input type="hidden" name="forge[controller]" value="Identity\Permissions" />
 		<input type="hidden" name="identity[id]" value="<?php echo (int)$_GET['id']; ?>" />

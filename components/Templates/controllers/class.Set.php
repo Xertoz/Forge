@@ -27,6 +27,8 @@
 					throw new Exception('No template was chosen');
 	
 				\forge\components\Templates::setTemplate($_POST['template'], true);
+				
+				self::setResponse(self::l('The default template was changed!'), self::RESULT_OK);
 			}
 			catch (\Exception $e) {
 				self::setResponse($e->getMessage(), self::RESULT_BAD);

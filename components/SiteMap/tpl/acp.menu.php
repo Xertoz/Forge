@@ -1,5 +1,6 @@
+<h1><?php echo self::l('Pages'); ?></h1>
 <div class="panel">
-	<h1><?php echo self::l('Pages'); ?></h1>
+	<h1><?php echo self::l('Menu'); ?></h1>
 	<?php echo self::response('SiteMap\Delete'); ?>
 	<?php echo self::response('SiteMap\Organize'); ?>
 	<?php echo $pages->drawTable(

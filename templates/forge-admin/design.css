@@ -6,7 +6,8 @@ html, body {
 	height:100%;
 	margin:0;
 	padding:0;
-	background:#333;
+	background:#ecf0f5;
+	font-family:'PT Sans', sans-serif;
 }
 
 body > header {
@@ -14,27 +15,68 @@ body > header {
 	z-index:1;
 	top:0;
 	left:0;
-	height:32px;
+	height:50px;
 	min-width:100%;
+	background:#3c8dbc;
 }
 
 body > header > h1 {
-	font:bold 18px/32px 'Oswald', sans-serif;
-	margin:0 0 0 8px;
+	display:inline-block;
+	font:20px/50px 'Helvetica Neue',Helvetica,Arial,sans-serif;
+	margin:0;
+	background:#367fa9;
+	width:230px;
+	height:100%;
+	overflow:hidden;
+	text-align:center;
 }
 
 body > header > h1 > a {
-	color:#e0e0e0;
+	display:inline-block;
+	color:#fff;
 	text-decoration:none;
+}
+
+body > header > h1 > a > img {
+	vertical-align:middle;
+}
+
+body > header > a {
+	display:inline-block;
+	vertical-align:top;
+	margin:14px 0 0 14px;
+}
+
+body > header > a > img {
+	vertical-align:middle;
+}
+
+body > header > div.right {
+	float:right;
+	height:32px;
+	padding-right:25px;
+	font-size:13px;
+	line-height:32px;
+}
+
+body > header > div.right > a {
+	color:#fff;
+	text-decoration:none;
+}
+
+body > header > div.right > a:hover {
+	text-decoration:underline;
 }
 
 body > nav {
 	position:absolute;
 	top:0;
 	left:0;
-	width:180px;
-	padding-top:32px;
+	width:230px;
+	padding-top:50px;
+	min-height:100%;
 	box-sizing:border-box;
+	background:#222d32;
 }
 
 body > nav > ul {
@@ -68,21 +110,83 @@ body > nav > ul > li > ul > li > a:hover {
 }
 
 #admin-content {
-	width:100%;
-	padding:48px 16px 16px 196px;
 	box-sizing:border-box;
-	font-family:'PT Sans', sans-serif;
+	width:100%;
+	padding:66px 16px 16px 246px;
+	font:13px 'PT Sans', sans-serif;
 }
 
-#admin-content > div.panel {
-	background:#fff;
-	padding:10px;
-	border-radius:5px;
-}
-
-#admin-content h1 {
-	font:bold 28px 'PT Sans', sans-serif;
+#admin-content > h1 {
+	font:24px 'PT Sans', sans-serif;
 	margin:0 0 16px 0;
+}
+
+#admin-content a {
+	color:#069;
+	text-decoration:none;
+}
+
+#admin-content a:hover {
+	text-decoration:underline;
+}
+
+#admin-content div.panel {
+	box-sizing:border-box;
+	width:100%;
+	background:#fff;
+	border-top:3px solid #069;
+	border-radius:3px;
+	margin:16px 0;
+	padding:8px;
+}
+
+#admin-content div.panel.green {
+	border-top-color:#006600;
+}
+
+#admin-content div.panel.orange {
+	border-top-color:#DD7700;
+}
+
+#admin-content div.panel.red {
+	border-top-color:#990000;
+}
+
+#admin-content div.panel.yellow {
+	border-top-color:#f7f433;
+}
+
+#admin-content div.panel > h1 {
+	font:18px/18px 'PT Sans', sans-serif;
+	color:#353535;
+	margin:0 -8px 8px -8px;
+	padding:0 8px 8px 8px;
+	border-bottom:1px #efefef solid;
+}
+
+#admin-content > div.col-2 {
+	column-count:2;
+	margin:16px 0;
+}
+
+#admin-content > div.col-3 {
+	column-count:3;
+	margin:16px 0;
+}
+
+#admin-content > div.col-4 {
+	column-count:4;
+	margin:16px 0;
+}
+
+#admin-content > div.col-2 > div.panel,
+#admin-content > div.col-3 > div.panel,
+#admin-content > div.col-4 > div.panel {
+	display:block;
+	margin:0 0 16px 0;
+	break-inside:avoid;
+	page-break-inside:avoid;
+	-webkit-column-break-inside: avoid;
 }
 
 .identity.login {

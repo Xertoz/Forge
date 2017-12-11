@@ -1,3 +1,4 @@
+<h1><?php echo self::l('Template'); ?></h1>
 <div class="panel">
 	<h1><?php echo self::html($template->getName()); ?></h1>
 	<p><?php printf(self::l('This template was written by %s, copyright &copy; %s.'),$template->getAuthor(),$template->getCopyright()); ?></p>

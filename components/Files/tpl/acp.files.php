@@ -1,17 +1,15 @@
+<h1><?php echo self::l('Files'); ?></h1>
 <div class="panel">
-	<h1><?php echo self::l('Files'); ?></h1>
-	<p><?php echo self::l('Browsing'); ?> /<a href="?path=">files</a>/<?php if (!empty($_GET['path'])) {
+	<h1>/ <a href="?path=">files</a> / <?php if (!empty($_GET['path'])) {
 			$folders = explode('/', $_GET['path']);
 			$link = '?path=';
 			foreach ($folders as $folder) {
 				$link .= urlencode($folder.'/');
-				echo '<a href="'.substr($link, 0, strlen($link)-3).'">'.self::html($folder).'</a>/';
+				echo '<a href="'.substr($link, 0, strlen($link)-3).'">'.self::html($folder).'</a> / ';
 			}
 		}
-	?></p>
-	<?php echo self::response('Files\Delete'); ?>
-	<?php echo self::response('Files\Rename'); ?>
-	<?php echo self::response('Files\Upload'); ?>
+	?></h1>
+	<?php echo self::response(['Files\Delete', 'Files\Rename', 'Files\Upload', 'Files\CreateFolder']); ?>
 	<?php
 		echo $matrix->drawTable(
 			array(
@@ -42,12 +40,26 @@
 			)
 		);
 	?>
-	<form action="<?php echo self::html($_SERVER['REQUEST_URI']); ?>" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="forge[controller]" value="Files\Upload" />
-		<?php echo self::input('hidden', 'path', !empty($_GET['path']) ? $_GET['path'] : ''); ?>
-		<p><?php echo self::l('Upload:'); ?> <input type="file" name="file" /></p>
-		<p><input type="submit" value="<?php echo self::l('Upload'); ?>" /></p>
-	</form>
+</div>
+<div class="col-2">
+	<div class="panel green">
+		<h1><?php echo self::l('Upload file'); ?></h1>
+		<form action="<?php echo self::html($_SERVER['REQUEST_URI']); ?>" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="forge[controller]" value="Files\Upload" />
+			<?php echo self::input('hidden', 'path', !empty($_GET['path']) ? $_GET['path'] : ''); ?>
+			<p><?php echo self::l('File:'); ?> <input type="file" name="file" /></p>
+			<p><input type="submit" value="<?php echo self::l('Upload'); ?>" /></p>
+		</form>
+	</div>
+	<div class="panel green">
+		<h1><?php echo self::l('Create folder'); ?></h1>
+		<form action="<?php echo self::html($_SERVER['REQUEST_URI']); ?>" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="forge[controller]" value="Files\CreateFolder" />
+			<?php echo self::input('hidden', 'path', !empty($_GET['path']) ? $_GET['path'] : ''); ?>
+			<p><?php echo self::l('Name:'); ?> <input type="text" name="name" /></p>
+			<p><input type="submit" value="<?php echo self::l('Create'); ?>" /></p>
+		</form>
+	</div>
 </div>
 <form name="rename" action="<?php echo isset($_GET['path']) ? '?path='.self::html($_GET['path']) : '/admin/Files'; ?>" method="POST">
 	<input type="hidden" name="forge[controller]" value="Files\Rename" />

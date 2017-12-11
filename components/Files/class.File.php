@@ -56,14 +56,19 @@
 		}
 		
 		public function passthru() {
-			header('Content-type: '.MimeType::fromExtension($this->node->name));
-			header('Content-length: '.filesize($this->path));
-
-			if (($fh = fopen($this->path,'rb')) !== false) {
-				fpassthru($fh);
-				fclose($fh);
+			$modified = filemtime($this->path);
+			
+			\forge\RequestHandler::setContentType(MimeType::fromExtension($this->node->name));
+			\forge\RequestHandler::setContentLength(filesize($this->path));
+			\forge\RequestHandler::setLastModified($modified);
+			\forge\RequestHandler::setETag($this->blob->hash);
+			
+			if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])
+					&& strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $modified)
+				header('HTTP/1.1 304 Not Modified');
+			else {
+				header('HTTP/1.1 200 OK', true);
+				readfile($this->path);
 			}
-			else
-				throw new exceptions\FileNotFound;
 		}
 	}

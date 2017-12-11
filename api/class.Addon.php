@@ -142,9 +142,9 @@
 			$path = str_replace('\\', '/', substr(get_called_class(), strlen('forge\\'))).'/'.str_replace('\\', '/', $subspace).'/';
 
 			$files = [];
-			if (($extend = glob('extend/'.$path.'class.*.php')) !== false)
+			if (($extend = glob(FORGE_PATH.'/'.'extend/'.$path.'class.*.php')) !== false)
 				$files = array_merge($files, $extend);
-			if (($developer = glob($path.'class.*.php')) !== false)
+			if (($developer = glob(FORGE_PATH.'/'.$path.'class.*.php')) !== false)
 				$files = array_merge($files, $developer);
 
 			foreach ($files as $file) {

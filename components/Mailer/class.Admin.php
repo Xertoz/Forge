@@ -24,7 +24,7 @@
 					'name' => \forge\components\Mailer::getFromName()
 				),
 				'smtp' => array(
-					'use' => (int)\forge\components\Mailer::getSMTPUsage(),
+					'use' => \forge\components\Mailer::getSMTPUsage(),
 					'hostname' => \forge\components\Mailer::getSMTPServer(),
 					'username' => \forge\components\Mailer::getSMTPUsername(),
 					'password' => null

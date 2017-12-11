@@ -31,7 +31,7 @@
 
 			try {
 				\forge\components\Databases::fixDatabase($_POST['name'], $_POST['type']);
-				self::setCode(self::RESULT_OK);
+				self::setResponse(self::l('The database was updated!'), self::RESULT_OK);
 			}
 			catch (\forge\HttpException $e) {
 				self::setResponse($e->getMessage(), self::RESULT_BAD);

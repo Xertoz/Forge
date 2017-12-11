@@ -1,3 +1,8 @@
+<?php
+	self::addScriptFile('/templates/forge-admin/sys.design.js');
+
+	$user = \forge\components\Identity::getIdentity();
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -6,7 +11,11 @@
 	<body>
 		<?php if (isset($menu)): /* Administration interface */ ?>
 		<header>
-			<h1><a href="/admin">Forge</a></h1>
+			<h1><a href="/admin"><b>Forge</b> <?php echo self::html(FORGE_VERSION); ?></a></h1>
+            <a href="javascript:menu.toggle();"><img src="/templates/forge-admin/img/menu.png" /></a>
+			<div class="right">
+				<a href="/admin/Identity/view?id=<?php echo $user->getId(); ?>"><?php echo $user->getName(); ?></a>
+			</div>
 		</header>
 		<nav>
 			<ul>
@@ -24,6 +33,7 @@
 				<?php endforeach; ?>
 			</ul>
 		</nav>
+		<script type="text/javascript">menu.init();</script>
 		<div id="admin-content" class="<?php echo $css; ?>">
 			<?php echo $content; ?>
 		</div>
