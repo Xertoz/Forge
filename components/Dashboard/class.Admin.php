@@ -19,7 +19,7 @@
 			$infoboxes = array();
 
 			foreach (\forge\Addon::getAddons(true) as $addon)
-				if (in_array('forge\components\Dashboard\InfoBox', class_implements($addon)))
+				if (class_exists($addon) && in_array('forge\components\Dashboard\InfoBox', class_implements($addon)))
 					try {
 						$infoboxes[] = $addon::getInfoBox();
 					}

@@ -40,7 +40,7 @@
 			$fired = 0;
 
 			foreach ($addons as $addon)
-				if (in_array('forge\EventListener',class_implements($addon)))
+				if (class_exists($addon) && in_array('forge\EventListener',class_implements($addon)))
 					try {
 						$addon::event($this);
 						$fired++;

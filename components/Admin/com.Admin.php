@@ -58,7 +58,7 @@
 			// Populate the menu with items
 			$menu = [];
 			foreach (\forge\components\Software::getAddons(true) as $addon)
-				if (in_array('forge\\components\\Admin\\Menu', class_implements($addon))) {
+				if (class_exists($addon) && in_array('forge\\components\\Admin\\Menu', class_implements($addon))) {
 					$items = $addon::getAdminMenu();
 					if (!is_array($items)) {
 						if ($items instanceof \forge\components\Admin\MenuItem)
