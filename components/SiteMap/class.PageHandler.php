@@ -95,6 +95,7 @@
 				}
 			}
 
+			\forge\components\Templates\Engine::setTitle($this->page->page_title);
 			\forge\components\Templates::setMeta(array(
 				'description' => $this->page->meta_description,
 				'keywords' => $this->page->meta_keywords,
