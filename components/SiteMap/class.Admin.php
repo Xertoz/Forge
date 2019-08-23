@@ -39,16 +39,16 @@
 
 		static public function index() {
 			\forge\components\Identity::restrict('com.SiteMap.Admin');
-			
-			$pages = new \forge\components\Databases\ListMatrix(new \forge\components\Databases\Params([
+
+			$pages = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
 				'type' => new \forge\components\SiteMap\db\Page,
 				'order' => ['page_order' => 'DESC'],
 				'where' => ['page_parent' => empty($_GET['parent']) ? 0 : (int)$_GET['parent']]
 			]));
-			$pages->isDraggable(true);
+			//$pages->isDraggable(true);
 
 			return \forge\components\Templates::display('components/SiteMap/tpl/acp.menu.php',[
-				'pages' => $pages
+				'pages' => new \forge\components\Templates\DataTable($pages)
 			]);
 		}
 	}

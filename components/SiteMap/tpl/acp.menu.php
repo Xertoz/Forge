@@ -4,7 +4,7 @@
         <h1><?php echo self::l('Site structure'); ?></h1>
         <?php echo self::response('SiteMap\Delete'); ?>
         <?php echo self::response('SiteMap\Organize'); ?>
-        <?php echo $pages->drawTable(
+        <?php echo $pages->draw(
             array(
                 'page_title' => self::l('Title'),
                 'page_url' => self::l('URL'),
@@ -14,9 +14,9 @@
                 'page_url' => function($r) {
                     return '<a href="/'.self::html($r['page_url']).'">/'.self::html($r['page_url']).'</a>';
                 },
-                'actions' => function($r, $item) use(&$page) {
+                'actions' => function($r) use(&$page) {
                     $output = '<input type="hidden" name="menu[]" value="'.$r['forge_id'].'" class="forge-sitemap-menu-row" />';
-                    if ($item->getChildren()->length())
+                    if ($r->getChildren()->length())
                         $output .= '<a href="?parent='.$r['forge_id'].'"><img src="/images/led/find.png" alt="'.self::l('View children')." title=".self::l('View children').'" /></a> ';
                     $output .= '<button type="button" onclick="location =\'/'.$page->page_url.'/SiteMap/page?id='.$r['forge_id'].'\';">'.self::l('Edit').'</button>'.PHP_EOL;
                     $output .= '<form action="/'.$page->page_url.'/SiteMap" method="POST">';

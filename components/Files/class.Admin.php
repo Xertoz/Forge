@@ -18,7 +18,7 @@
 		static public function edit() {
 			$node = new db\TreeNode(\forge\Get::getInt('id'));
 			$blob = new db\Blob($node->blob);
-			
+
 			return \forge\components\Templates::display(
 				'components/Files/tpl/acp.edit.php',
 				[
@@ -27,50 +27,41 @@
 				]
 			);
 		}
-		
+
 		static public function index() {
 			\forge\components\Identity::restrict('com.Files.Admin');
-			
+
 			$nodes = new \forge\components\Databases\TableList([
 				'type' => new \forge\components\Files\db\TreeNode,
 				'where' => ['null:parent' => null]
 			]);
-			
+
 			$repos = [];
 			$size = 0;
 			foreach ($nodes as $node) {
 				$repos[] = Repository::newFromNode($node);
 				$size += $repos[count($repos)-1]->getSize();
 			}
-			
+
 			return \forge\components\Templates::display('components/Files/tpl/adm.index.php', [
 				'repos' => $repos,
 				'size' => $size
 			]);
 		}
-		
+
 		static public function repo() {
 			\forge\components\Identity::restrict('com.Files.Admin');
 
 			$repo = new Repository(\forge\Get::getInt('id'));
-			$dir = $repo->getFolder(\forge\Get::getString('path', ''));
+			$dir = $repo->getFolder($path = \forge\Get::getString('path', ''));
 			$children = $dir->getChildren(true);
-			$array = [];
-			foreach ($children as $child) {
-				$array[] = [
-					'id' => $child->getId(),
-					'date' => $child->created,
-					'name' => $child->name,
-					'size' => $child->size,
-					'type' => $child->blob ? 'file' : 'dir'
-				];
-			}
-			$matrix = new \forge\components\XML\ArrayMatrix($array, ['name','dir']);
-			
+			$table = new \forge\components\Templates\DataTable($children);
+
 			return \forge\components\Templates::display(
 				'components/Files/tpl/adm.repo.php',
 				array(
-					'matrix' => $matrix,
+					'path' => $path,
+					'table' => $table,
 					'repo' => $repo
 				)
 			);

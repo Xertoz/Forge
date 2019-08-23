@@ -131,7 +131,6 @@
 					'cache' => 'forge\components\Files\CacheRequest',
 					'thumbnail' => 'forge\components\Files\ThumbnailRequest',
 					null => 'forge\components\SiteMap\PageHandler',
-					'xml' => 'forge\components\XML\XMLHandler',
 					'json' => 'forge\components\JSON\JSONHandler',
 					'identity' => 'forge\components\Identity\RequestHandler'
 				];

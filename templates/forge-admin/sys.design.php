@@ -11,6 +11,7 @@
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 		<link rel="icon" href="/images/led/blog.png">
 		<link rel="stylesheet" href="/templates/forge-admin/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/templates/forge-admin/css/dataTables.bootstrap.min.css">
 		<link rel="stylesheet" href="/templates/forge-admin/css/adminlte.min.css">
 		<link rel="stylesheet" href="/templates/forge-admin/css/ionicons.min.css">
 		<link rel="stylesheet" href="/templates/forge-admin/css/font-awesome.min.css">
@@ -35,6 +36,7 @@
 			<?php endif; ?>
 		</div>
 		<script src="/script/jquery-3.3.1.min.js"></script>
+		<script src="/templates/forge-admin/script/jquery.dataTables.min.js"></script>
 		<script src="/templates/forge-admin/script/bootstrap.min.js"></script>
 		<script src="/templates/forge-admin/script/adminlte.min.js"></script>
 	</body>

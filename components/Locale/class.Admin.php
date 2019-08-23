@@ -61,7 +61,7 @@
 				'components/Locale/tpl/adm.view.php',
 				[
 					'locale' => $_GET['locale'],
-					'library' => new \forge\components\XML\ArrayMatrix($rows, $columns),
+					'library' => new \forge\components\Templates\DataTable($rows),
 					'missing' => $missing
 				]
 			);
