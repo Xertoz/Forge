@@ -21,6 +21,11 @@
 		public function process() {
 			\forge\components\Identity::restrict('com.Files.Admin');
 			
+			$id = \forge\Post::getInt('id');
+			if ($id === null)
+				throw new \forge\HttpException('A repo ID must be set',
+						\forge\HttpException::HTTP_BAD_REQUEST);
+			
 			$name = \forge\Post::getString('name');
 			if ($name === null)
 				throw new \forge\HttpException('A folder name must be chosen',
@@ -32,7 +37,7 @@
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			
 			try {
-				$repo = \forge\components\Files::getFilesRepository();
+				$repo = new \forge\components\Files\Repository($id);
 				$folder = $repo->getFolder($path);
 				$folder->createFolder($name);
 			}

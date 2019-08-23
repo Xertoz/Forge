@@ -1,5 +1,9 @@
-<div class="infobox identity" onclick="window.location = '/admin/Identity'">
-	<img class="icon" src="/components/Identity/img/infobox.png" alt="<?php echo self::l('Identity'); ?>" title="<?php echo self::l('Identity'); ?>" />
-	<h2><?php echo self::l('People'); ?>:</h2>
-	<p><?php echo $total; ?></p>
+<div class="col-md-3 col-sm-6 col-xs-12">
+	<div class="info-box">
+		<span class="info-box-icon bg-orange"><i class="ion ion-ios-people"></i></span>
+		<div class="info-box-content">
+			<span class="info-box-text"><?php echo self::l('People'); ?></span>
+			<span class="info-box-number"><?php echo $total; ?></span>
+		</div>
+	</div>
 </div>

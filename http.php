@@ -32,6 +32,12 @@
 	
 	// Respond to the HTTP request
 	try {
+		// Don't stop processing becaues of the client
+		ignore_user_abort(true);
+		
+		// Buffer the output data
+		ob_start();
+		
 		// Handle any POST data
 		Controller::handle();
 		
@@ -41,6 +47,20 @@
 		// Factor a request handler and let it run
 		$handler = RequestHandler::factory($url);
 		$handler->handle();
+		
+		// Close the connection to the HTTP client
+		header('Content-Encoding: none');
+		header('Content-Length: '.ob_get_length());
+		header('Connection: close');
+		ob_end_flush();
+		flush();
+		session_write_close();
+		
+		// Note some statistics
+		\forge\components\Statistics::runCount();
+		
+		// Handle any cronjobs
+		\forge\components\Cron::runJobs();
 	}
 	catch (\forge\HttpException $e) {
 		// Tell the user about the error in HTML

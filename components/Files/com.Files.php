@@ -13,7 +13,7 @@
 	/**
 	* File manager
 	*/
-	class Files extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
+	class Files extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox, \forge\components\Templates\RequireJS {
 		use \forge\Configurable;
 		
 		/**
@@ -39,19 +39,19 @@
 		
 		/**
 		 * Get the menu items
+		 * @param \forge\components\SiteMap\db\Page Page
+		 * @param string Addon
+		 * @param string View
 		 * @return array[AdminMenu]|MenuItem
 		 */
-		static public function getAdminMenu() {
+		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Files.Admin'))
 				return null;
 			
-			$menu = new \forge\components\Admin\MenuItem('content', self::l('Content'));
+			$menu = new \forge\components\Admin\MenuItem('files', self::l('Files'), '/'.$page->page_url.'/Files', 'ion ion-folder');
 			
-			$menu->appendChild(new \forge\components\Admin\MenuItem(
-				'files',
-				self::l('Files'),
-				'/admin/Files'
-			));
+			if ($addon === '\\forge\\components\\Files')
+				$menu->setActive();
 			
 			return $menu;
 		}
@@ -80,9 +80,25 @@
 			if (!\forge\components\Identity::getIdentity()->hasPermission('com.Files.Admin'))
 				return null;
 
-			$repo = self::getFilesRepository();
-			$free = \forge\Strings::bytesize($repo->getSize());
+			$nodes = new \forge\components\Databases\TableList([
+				'type' => new \forge\components\Files\db\TreeNode,
+				'where' => ['null:parent' => null]
+			]);
+			
+			$size = 0;
+			foreach ($nodes as $node)
+				$size += Files\Repository::newFromNode($node)->getSize();
+			$free = \forge\Strings::bytesize($size);
 
 			return \forge\components\Templates::display('components/Files/tpl/inc.infobox.php',array('free'=>$free));
+		}
+		
+		static public function getRequireJS() {
+			$plugins = [];
+			
+			if (\forge\components\Identity::hasPermission('com.Files.Admin'))
+				$plugins['files-admin'] = '/components/Files/script/files-admin';
+			
+			return $plugins;
 		}
 	}

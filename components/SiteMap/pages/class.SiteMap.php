@@ -1,70 +1,56 @@
 <?php
 	/**
-	* view.SiteMap.php
-	* Copyright 2011-2012 Mattias Lindholm
+	* class.SiteMap.php
+	* Copyright 2019 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
 	* to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
 	*/
-
-	namespace forge\components\SiteMap;
+	
+	namespace forge\components\SiteMap\pages;
 
 	/**
-	* The sitemap view
+	* Display a robots.txt file to the client
 	*/
-	class SiteMapHandler extends \forge\RequestHandler {
+	class SiteMap extends \forge\components\SiteMap\Page {
 		/**
-		* Initialize the request
+		* Title
+		* @var string
 		*/
-		public function handle() {
-			switch ($this->getPrefix()) {
+		protected $title = 'SEO: Site Map';
+
+		/**
+		* Search engine disabled
+		* @var string
+		*/
+		const SEO_ENABLE = false;
+		
+		protected $dynamic = true;
+
+		/**
+		* View the page
+		* @param \forge\components\SiteMap\db\Page Page
+		* @param array Page vars
+		* @return string
+		* @throws Exception
+		*/
+		public function view($page, $vars) {
+			switch ($vars['SUB_URI']) {
 				default:
-					throw new \forge\HttpException('Page not found',\forge\HttpException::HTTP_NOT_FOUND);
-
-				case 'robots.txt':
-					$this->makeRobots();
-				break;
-
-				case 'sitemap':
-					switch ($this->getPath()) {
-						default:
-							throw new \forge\HttpException('Page not found',\forge\HttpException::HTTP_NOT_FOUND);
-
-						case null:
-							\forge\components\SiteMap::redirect('/sitemap/xml');
-
-						case 'xml':
-							$this->makeXML();
-						break;
-
-						case 'xsl':
-							$this->makeXSL();
-						break;
-					}
-				break;
+					throw new \forge\HttpException('Page not found', \forge\HttpException::HTTP_NOT_FOUND);
+				
+				case null:
+					\forge\components\SiteMap::redirect('/'.$page->page_url.'/xml');
+				
+				case 'xml':
+					return $this->makeXML();
+				
+				case 'xsl':
+					return $this->makeXSL();
 			}
 		}
-
-		/**
-		* Generate robots.txt
-		* @return void
-		*/
-		protected function makeRobots() {
-			$this->setContentType('text/plain;charset=UTF-8');
-
-			$output = "User-agent: *\n";
-			if (\forge\components\SiteMap::getRobots()) {
-				$output .= "Disallow: /admin/\n";
-				$output .= "Disallow: /xml/\n";
-				$output .= 'Sitemap: http://'.$_SERVER['SERVER_NAME'].'/sitemap/xml';
-			}
-			else
-				$output .= 'Disallow: /';
-
-			echo $output;
-		}
-
+		
 		/**
 		* Generate sitemap.xml
 		* @return void
@@ -86,6 +72,9 @@
 				'where' => array('page_publish'=>1)
 			]));
 			foreach ($pages as $page) {
+				if (!constant($page->page_type.'::SEO_ENABLE'))
+					continue;
+				
 				// Start page element
 				$xml->startElement('url');
 
@@ -114,8 +103,8 @@
 			$xml->endElement();
 
 			// Output the XML
-			$this->setContentType('text/xml;charset=UTF-8');
-			echo $xml->outputMemory();
+			header('Content-type: text/xml;charset=UTF-8', true);
+			return $xml->outputMemory();
 		}
 
 		/**
@@ -123,7 +112,7 @@
 		* @return void
 		*/
 		protected function makeXSL() {
-			$this->setContentType('text/xsl;charset=UTF-8');
-			echo file_get_contents('components/SiteMap/tpl/sitemap.xsl');
+			header('Content-type: text/xsl;charset=UTF-8', true);
+			return file_get_contents('components/SiteMap/tpl/sitemap.xsl');
 		}
 	}

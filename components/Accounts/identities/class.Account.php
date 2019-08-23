@@ -77,6 +77,10 @@
 			\forge\Memory::cookie('password', '');
 		}
 
+		public function showAdmin() {
+			return \forge\components\Templates::display(['components/Accounts/tpl/adm.info.php'], ['account'=>$this->account]);
+		}
+
 		static public function showBind() {
 			return \forge\components\Templates::display(['components/Accounts/tpl/inc.bind.php']);
 		}

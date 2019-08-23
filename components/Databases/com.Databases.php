@@ -258,9 +258,12 @@
 		
 		/**
 		 * Get the menu items
+		 * @param \forge\components\SiteMap\db\Page Page
+		 * @param string Addon
+		 * @param string View
 		 * @return array[AdminMenu]|MenuItem
 		 */
-		static public function getAdminMenu() {
+		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Databases.Admin'))
 				return null;
 			
@@ -269,7 +272,7 @@
 			$menu->appendChild(new \forge\components\Admin\MenuItem(
 				'databases',
 				self::l('Databases'),
-				'/admin/Databases'
+				'Databases'
 			));
 			
 			return $menu;

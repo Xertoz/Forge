@@ -401,10 +401,11 @@
 
 		/**
 		* Save row changes to the database
+		* @param bool Force update even if there are no changes
 		* @return bool
 		*/
-		final public function save() {
-			if (!$this->__changed)
+		final public function save($force=false) {
+			if (!$force && !$this->__changed)
 				return;
 			
 			$this->beforeSave();
@@ -488,13 +489,14 @@
 
 		/**
 		* Write a row to the table by either insertion or updating
+		* @param bool Force update even if there are no changes
 		* @return void
 		* @throws Exception
 		*/
-		final public function write() {
-			if ($this->__columns[static::$__id]->get() == 0)
+		final public function write($force=false) {
+			if ($this->getId() == 0)
 				$this->insert();
 			else
-				$this->save();
+				$this->save($force);
 		}
 	}

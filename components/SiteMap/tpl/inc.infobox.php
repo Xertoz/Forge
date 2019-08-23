@@ -1,14 +1,9 @@
-<?php if (\forge\components\Identity::hasPermission('com.SiteMap.Admin')): ?>
-<div class="infobox pages" onclick="window.location = '/admin/SiteMap'">
-	<img class="icon" src="/components/SiteMap/img/page.75x75.png" alt="<?php echo self::l('Pages'); ?>" title="<?php echo self::l('Pages'); ?>" />
-	<h2><?php echo self::l('Pages');; ?>:</h2>
-	<p><?php echo $pages; ?></p>
+<div class="col-md-3 col-sm-6 col-xs-12">
+	<div class="info-box">
+		<span class="info-box-icon bg-green"><i class="ion ion-document"></i></span>
+		<div class="info-box-content">
+			<span class="info-box-text"><?php echo self::l('Pages'); ?></span>
+			<span class="info-box-number"><?php echo $pages; ?></span>
+		</div>
+	</div>
 </div>
-<?php endif; ?>
-<?php if (\forge\components\Identity::hasPermission('com.SiteMap.Robots')): ?>
-<div class="infobox pages" onclick="window.location = '/admin/SiteMap/robots'">
-	<img class="icon" src="/components/SiteMap/img/robots.png" alt="<?php echo self::l('Robots'); ?>" title="<?php echo self::l('Robots'); ?>" />
-	<h2><?php echo self::l('Robots');; ?>:</h2>
-	<p><?php echo $robots ? self::l('On') : self::l('Off'); ?></p>
-</div>
-<?php endif; ?>

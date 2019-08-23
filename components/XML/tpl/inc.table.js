@@ -6,7 +6,7 @@
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
  * to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  */
-
+/*
 f.ready(function() {
 	var source = null;
 	
@@ -47,4 +47,4 @@ f.ready(function() {
 			this.css('opacity', .25);
 		}
 	});
-});
+});*/

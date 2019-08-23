@@ -15,7 +15,7 @@
 	*/
 	class Engine {
 		use \forge\components\Locale\Translator;
-		
+
 		/**
 		* META data
 		* @var array
@@ -33,7 +33,7 @@
 		* @var array
 		*/
 		static private $styles = array();
-		
+
 		/**
 		 * The page title
 		 * @var string
@@ -48,14 +48,14 @@
 		static public function addScript($script) {
 			if (is_string($script))
 				$script = new JavaScript($script);
-			
+
 			foreach (self::$scripts as $subject)
 				if ($subject->getHash() == $script->getHash())
 					return;
 
 			self::$scripts[] = $script;
 		}
-		
+
 		/**
 		 * Add an external JavaScript file to the header element
 		 * @param string $file File name
@@ -74,14 +74,14 @@
 		static public function addStyle($style) {
 			if (is_string($style))
 				$style = new CSS($style);
-			
+
 			foreach (self::$styles as $subject)
 				if ($subject->getHash() == $style->getHash())
 					return;
-				
+
 			self::$styles[] = $style;
 		}
-		
+
 		/**
 		 * Add an external CSS file to the header element
 		 * @param string $file File name
@@ -140,21 +140,13 @@
 		}
 
 		/**
-		 * Implement one of the Forge JavaScript API
-		 * @return void
-		 */
-		static public function forgeJS() {
-			self::addScriptFile('/script/f.js');
-		}
-
-		/**
 		* Get META elements
 		* @return array
 		*/
 		static public function getMeta() {
 			return self::$meta;
 		}
-		
+
 		/**
 		 * Get a parameter from the REQUEST input
 		 * @param string $name Field name
@@ -163,11 +155,11 @@
 		 */
 		static private function getRequestField($name, $default) {
 			preg_match_all('/\w+/', $name, $matches);
-			
+
 			$ref = array_merge($_GET, $_POST);
 			while ($matches[0])
 				$ref = &$ref[array_shift($matches[0])];
-			
+
 			return isset($ref) ? $ref : $default;
 		}
 
@@ -179,7 +171,7 @@
 		static public function getScripts($glue) {
 			$local = '';
 			$elements = [];
-			
+
 			foreach (self::$scripts as $script)
 				if ($script->isRemote())
 					$elements[] = '<script type="text/javascript" src="'.$script->getFile().'"></script>';
@@ -189,7 +181,7 @@
 					$elements[] = '<script type="text/javascript" src="'.$script->getFile().'"></script>';
 				else
 					$elements[] = '<script type="text/javascript">'.$script->getSource().'</script>';
-			
+
 			if (strlen($local)) {
 				$js = new JavaScript($local);
 				$hash = $js->getHash();
@@ -209,7 +201,7 @@
 				}
 				$elements[] = '<script type="text/javascript" src="/cache/script/'.$file.'"></script>';
 			}
-			
+
 			return implode($glue, $elements);
 		}
 
@@ -247,10 +239,10 @@
 				else
 					$elements[] = '<style type="text/css" media="screen">'.$style->getSource().'</style>';
 
-			
+
 			return implode($glue, $elements);
 		}
-		
+
 		/**
 		 * Get the page title
 		 * @return string
@@ -298,16 +290,16 @@
 
 			if (empty($vars['value']))
 				$vars['value'] = null;
-			
+
 			self::addScriptFile('/script/tinymce/tinymce.min.js', true);
 			self::addScriptFile('/components/Templates/script/editor.js');
-			
+
 			$id = uniqid();
 			$textarea = '<textarea name="'.htmlspecialchars($vars['name']).'" class="editable" id="'.$id.'">'.htmlentities($vars['value']).'</textarea>';
 
 			return $textarea;
 		}
-		
+
 		/**
 		 * Write an image here which is selected by the client depending on its
 		 * pixel density.
@@ -343,7 +335,7 @@
 
 			return $script;
 		}
-		
+
 		/**
 		 * Create an INPUT element based on default values and POST/GET data
 		 * @param $type string Type attribute
@@ -356,36 +348,36 @@
 		static public function input($type, $name, $value=null, $auto=true, $attr=array()) {
 			$attr['name'] = $name;
 			$attr['type'] = $type;
-			
+
 			switch ($attr['type']) {
 				case 'password':
 					$attr['value'] = null;
 					break;
-				
+
 				case 'checkbox':
 					$attr['value'] = 1;
-					
+
 					if ($auto && (self::getRequestField($name, false) !== false || $value))
 						$attr['checked'] = 'checked';
-					
+
 					break;
-					
+
 				case 'radio':
 					$attr['value'] = $value;
-					
+
 					if ($auto && self::getRequestField($name, false) === $value)
 						$attr['checked'] = 'checked';
-					
+
 					break;
-				
+
 				default:
 					$attr['value'] = $auto ? self::getRequestField($name, $value) : $value;
 					break;
 			}
-			
+
 			return self::display('components/Templates/tpl/inc.input.php', ['attributes' => $attr]);
 		}
-		
+
 		/**
 		* Get META elements
 		* @param string Glue
@@ -401,7 +393,7 @@
 
 			return implode($glue, $output);
 		}
-		
+
 		/**
 		 * Handle any response from a specific controller
 		 * @param string|array $controller
@@ -425,12 +417,30 @@
 
 			return $html;
 		}
-		
+
+		/**
+		 * Load require.js and all available plugins
+		 */
+		static public function requireJS() {
+			self::addScriptFile('/script/require.js', true);
+
+			$plugins = [
+				'cookie' => '//cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
+				'jquery' => '//ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min'
+			];
+			foreach (\forge\Addon::getAddons(true) as $addon)
+				if (in_array('forge\components\Templates\RequireJS', class_implements($addon)))
+					$plugins = array_merge($plugins, $addon::getRequireJS());
+			ksort($plugins);
+
+			self::addScript(self::display('components/Templates/tpl/js.requirejs.php', ['plugins' => $plugins]));
+		}
+
 		static public function select($name, $options, $value=null, $auto=true, $attr=[]) {
 			$attr['name'] = $name;
-			
+
 			$default = self::getRequestField($name, $value);
-			
+
 			return self::display(
 				'components/Templates/tpl/inc.select.php',
 				[
@@ -449,7 +459,7 @@
 		static public function setMeta($meta) {
 			self::$meta = array_merge(self::$meta,$meta);
 		}
-		
+
 		/**
 		 * Set the page title
 		 * @param string $title
@@ -468,7 +478,7 @@
 		static public function thumb($file,$width,$height) {
 			return '/thumbnail/'.$width.'/'.$height.'/'.$file;
 		}
-		
+
 		/**
 		 * Get the title element
 		 * @return string

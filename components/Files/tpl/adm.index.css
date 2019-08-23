@@ -1,0 +1,47 @@
+div#repos > div.repo {
+	display:inline-block;
+	height:128px;
+	width:256px;
+	margin-right:32px;
+	background:#fff;
+	cursor:pointer;
+	overflow:hidden;
+}
+
+div#repos > div.repo > img.icon {
+	float:left;
+	width:90px;
+	height:90px;
+	margin-right:8px;
+	background:#00c0ef;
+	object-fit:none;
+	overflow:hidden;
+}
+
+div#repos > div.infobox > img.icon.green {
+	background:#00a65a;
+}
+
+div#repos > div.infobox > img.icon.orange {
+	background:#f39c12;
+}
+
+div#repos > div.infobox > img.icon.red {
+	background:#dd4b39 ;
+}
+
+div#repos > div.infobox > h2 {
+	font-size:13px;
+	font-weight:normal;
+	text-transform:uppercase;
+	margin:4px 0;
+}
+
+div#repos > div.infobox > p {
+	font-size:17px;
+	font-weight:bold;
+	margin:0;
+}
+
+#maintenance {
+}

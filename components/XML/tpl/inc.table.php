@@ -1,4 +1,4 @@
-<table class="list<?php if ($matrix->isDraggable()): \forge\components\Templates\Engine::forgeJS(); ?> sortable<?php endif; ?>"<?php foreach ($attributes as $attr => $value): ?>
+<table class="list<?php if ($matrix->isDraggable()): ?> sortable<?php endif; ?>"<?php foreach ($attributes as $attr => $value): ?>
 	<?php echo $attr; ?>="<?php echo self::html($value); ?>"<?php endforeach; ?>>
 	<thead>
 		<tr>

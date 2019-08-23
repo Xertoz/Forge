@@ -36,6 +36,15 @@
 		];
 
 		/**
+		* Page ID
+		* @var int
+		*/
+		public $link = [
+			'Foreign',
+			'model' => 'SiteMap.Page'
+		];
+
+		/**
 		* Total size of this node's content
 		* @var int
 		*/

@@ -72,4 +72,9 @@ abstract class Provider implements ProviderInterface {
 	 * This is called when the Identity component decides to log out an identity with this provider
 	 */
 	static public function logout() {}
+	
+	/**
+	 * Show a panel in the administration of this identity
+	 */
+	public function showAdmin() {}
 }

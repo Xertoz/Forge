@@ -107,7 +107,7 @@
 			$uri = ($s = strpos($_SERVER['REQUEST_URI'],'?')) !== false ? substr($_SERVER['REQUEST_URI'],1,--$s) : substr($_SERVER['REQUEST_URI'],1);
 
 			$this->setContentType('text/html;charset=UTF-8');
-			echo $type->view($this->page->getId(),array(
+			echo $type->view($this->page,array(
 				'REQ_URI' => $uri,
 				'PAGE_URI' => $this->page->page_url,
 				'SUB_URI' => substr($uri,1+strlen($this->page->page_url))

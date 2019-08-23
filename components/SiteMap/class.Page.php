@@ -36,6 +36,12 @@
 		* How often this is updated for sitemap.xml
 		* @var string
 		*/
+		const SEO_ENABLE = true;
+
+		/**
+		* How often this is updated for sitemap.xml
+		* @var string
+		*/
 		const SEO_FREQUENCY = 'weekly';
 
 		/**
@@ -122,12 +128,12 @@
 
 		/**
 		* View the page
-		* @var int Page id
+		* @var db\Page Page
 		* @var array Page params
 		* @return string
 		* @throws Exception
 		*/
-		abstract public function view($pageId,$vars);
+		abstract public function view($page,$vars);
 
 		/**
 		* Get all dynamic children

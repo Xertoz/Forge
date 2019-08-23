@@ -14,14 +14,16 @@
 	* Any addon who wish to append itself to the admin menu must implement this interface
 	*/
 	class MenuItem {
+		private $active = false;
 		private $children = [];
 		private $icon;
 		private $href;
 		private $name;
 		private $title;
 		
-		public function __construct($name, $title=null, $href=null) {
+		public function __construct($name, $title=null, $href=null, $icon='fa fa-link') {
 			$this->href = $href;
+			$this->icon = $icon;
 			$this->name = $name;
 			$this->title = $title;
 		}
@@ -40,7 +42,7 @@
 					}
 				
 				if ($master === null)
-					self::appendChild($item);
+					$this->appendChild($item);
 				else
 					$master->merge($item);
 			}
@@ -52,6 +54,10 @@
 		
 		public function getHREF() {
 			return $this->href;
+		}
+		
+		public function getIcon() {
+			return $this->icon;
 		}
 		
 		public function getLength() {
@@ -70,6 +76,10 @@
 			return count($this->children) > 0;
 		}
 		
+		public function isActive() {
+			return $this->active;
+		}
+		
 		public function merge(MenuItem $item) {
 			if ($item->getName() != $this->getName())
 				throw new Exception('Not allowed to merge incompatible menu items.');
@@ -81,5 +91,13 @@
 				$this->href = $item->getHREF();
 			
 			$this->appendChildren($item->getChildren());
+		}
+		
+		public function setActive(bool $active=true) {
+			$this->active = $active;
+		}
+		
+		public function setIcon(string $icon) {
+			$this->icon = $icon;
 		}
 	}

@@ -13,7 +13,7 @@
 	/**
 	* Locale component
 	*/
-	class Locale extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
+	class Locale extends \forge\Component implements \forge\components\Admin\Menu {
 		use \forge\Configurable;
 
 		/**
@@ -46,9 +46,12 @@
 		
 		/**
 		 * Get the menu items
+		 * @param \forge\components\SiteMap\db\Page Page
+		 * @param string Addon
+		 * @param string View
 		 * @return array[AdminMenu]|MenuItem
 		 */
-		static public function getAdminMenu() {
+		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Locale.Admin'))
 				return null;
 			
@@ -57,26 +60,10 @@
 			$menu->appendChild(new \forge\components\Admin\MenuItem(
 				'locale',
 				self::l('Locale'),
-				'/admin/Locale'
+				'Locale'
 			));
 			
 			return $menu;
-		}
-
-		/**
-		 * Get the infobox for the dashboard as HTML source code
-		 * @return string
-		 */
-		static public function getInfoBox() {
-			if (!\forge\components\Identity::getIdentity()->hasPermission('com.Locale.Admin'))
-				return null;
-
-			return \forge\components\Templates::display(
-				'components/Locale/tpl/inc.infobox.php',
-				[
-					'locale' => self::getLocale()
-				]
-			);
 		}
 
 		/**

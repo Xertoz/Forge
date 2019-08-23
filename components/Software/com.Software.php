@@ -14,7 +14,7 @@
 	/**
 	* Patch component
 	*/
-	class Software extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
+	class Software extends \forge\Component implements \forge\components\Admin\Menu {
 		/**
 		* Default table engine
 		*/
@@ -122,9 +122,12 @@
 		
 		/**
 		 * Get the menu items
+		 * @param \forge\components\SiteMap\db\Page Page
+		 * @param string Addon
+		 * @param string View
 		 * @return array[AdminMenu]|MenuItem
 		 */
-		static public function getAdminMenu() {
+		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Software.Admin'))
 				return null;
 			
@@ -133,7 +136,7 @@
 			$menu->appendChild(new \forge\components\Admin\MenuItem(
 				'software',
 				self::l('Modules'),
-				'/admin/Software'
+				'Software'
 			));
 			
 			return $menu;
@@ -155,21 +158,5 @@
 		*/
 		static public function getModuleStatus($component) {
 			return self::getAddonStatus('\\forge\\modules\\'.$component);
-		}
-		
-		/**
-		 * Get the infobox for the dashboard as HTML source code
-		 * @return string
-		 */
-		static public function getInfoBox() {
-			if (!\forge\components\Identity::getIdentity()->hasPermission('com.Software.Admin'))
-				return null;
-
-			return \forge\components\Templates::display(
-				'components/Software/tpl/inc.infobox.php',
-				array(
-					'addons' => count(\forge\Addon::getAddons())
-				)
-			);
 		}
 	}

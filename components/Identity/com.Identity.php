@@ -138,19 +138,19 @@
 		
 		/**
 		 * Get the menu items
+		 * @param \forge\components\SiteMap\db\Page Page
+		 * @param string Addon
+		 * @param string View
 		 * @return array[AdminMenu]|MenuItem
 		 */
-		static public function getAdminMenu() {
+		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Identity.Admin'))
 				return null;
 			
-			$menu = new \forge\components\Admin\MenuItem('identity', self::l('People'));
+			$menu = new \forge\components\Admin\MenuItem('identity', self::l('People'), '/'.$page->page_url.'/Identity', 'ion ion-ios-people');
 			
-			$menu->appendChild(new \forge\components\Admin\MenuItem(
-				'manage',
-				self::l('Users'),
-				'/admin/Identity'
-			));
+			if ($addon === '\\forge\\components\\Identity')
+				$menu->setActive();
 			
 			return $menu;
 		}
@@ -183,7 +183,7 @@
 		 * @return bool
 		 */
 		static public function isDeveloper() {
-			return isset($_COOKIE['developer']) && sha1($_COOKIE['developer']) == self::getConfig('developer');
+			return sha1(\forge\Memory::cookie('developer')) === self::getConfig('developer');
 		}
 
 		/**

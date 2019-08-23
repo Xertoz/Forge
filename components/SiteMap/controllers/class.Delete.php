@@ -28,6 +28,10 @@
 				\forge\components\Databases::DB()->beginTransaction();
 				
 				$entry = new \forge\components\SiteMap\db\Page($_POST['page']['id']);
+				
+				if (!$entry->allowRemove)
+					throw new \forge\HttpException('The page is not allowed to be removed', \forge\HttpException::HTTP_FORBIDDEN);
+				
 				(new $entry->page_type)->delete($entry->getID());
 				$entry->delete();
 				

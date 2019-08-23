@@ -28,7 +28,7 @@
 
 			// We are either setting our own account, or have admin access
 			if ($provider && $_POST['account']['id'] == $provider->getId())
-				$admin = false;
+				$admin = \forge\components\Identity::hasPermission('com.Accounts.Admin');
 			else {
 				$admin = true;
 				\forge\components\Identity::restrict('com.Accounts.Admin');

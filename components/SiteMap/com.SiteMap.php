@@ -28,8 +28,7 @@
 		 * @return string
 		 */
 		static public function getInfoBox() {
-			if (!\forge\components\Identity::getIdentity()->hasPermission('com.SiteMap.Admin')
-			&& !\forge\components\Identity::getIdentity()->hasPermission('com.SiteMap.Robots'))
+			if (!\forge\components\Identity::getIdentity()->hasPermission('com.SiteMap.Admin'))
 				return null;
 
 			$accounts = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
@@ -40,8 +39,7 @@
 			return \forge\components\Templates::display(
 				'components/SiteMap/tpl/inc.infobox.php',
 				array(
-					'pages' => $accounts->getPages(),
-					'robots' => self::getRobots()
+					'pages' => $accounts->getPages()
 				)
 			);
 		}
@@ -188,27 +186,29 @@
 		*/
 		static public function getPageTypes() {
 			$types = array();
-			foreach (\forge\Addon::getModules() as $module)
-				foreach (call_user_func('\forge\modules\\'.$module.'::getNamespace','pages') as $class)
+			foreach (\forge\Addon::getAddons(true) as $addon)
+				foreach (call_user_func($addon.'::getNamespace','pages') as $class)
 					$types[] = new $class;
 			return $types;
 		}
 		
 		/**
 		 * Get the menu items
+		 * @param \forge\components\SiteMap\db\Page Page
+		 * @param string Addon
+		 * @param string View
 		 * @return array[AdminMenu]|MenuItem
 		 */
-		static public function getAdminMenu() {
+		static public function getAdminMenu($page, $addon, $view) {
 			$menus = [];
 			
 			if (\forge\components\Identity::hasPermission('com.SiteMap.Admin')) {
-				$menus[] = new \forge\components\Admin\MenuItem('content', self::l('Content'));
-
-				$menus[0]->appendChild(new \forge\components\Admin\MenuItem(
-					'sitemap',
-					self::l('Pages'),
-					'/admin/SiteMap'
-				));
+				$menu = new \forge\components\Admin\MenuItem('pages', self::l('Pages'), '/'.$page->page_url.'/SiteMap', 'fa fa-files-o');
+				
+				if ($addon === '\\forge\\components\\SiteMap' && ($view === 'index' || $view === 'page'))
+					$menu->setActive();
+				
+				$menus[] = $menu;
 			}
 			
 			if (\forge\components\Identity::hasPermission('com.SiteMap.Robots')) {
@@ -217,7 +217,7 @@
 				$menus[1]->appendChild(new \forge\components\Admin\MenuItem(
 					'robots',
 					self::l('Robots'),
-					'/admin/SiteMap/robots'
+					'SiteMap/robots'
 				));
 			}
 			

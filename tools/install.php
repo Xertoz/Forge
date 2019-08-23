@@ -128,13 +128,9 @@
 				// Install the handlers
 				$handlers = [
 					'user' => 'forge\components\Accounts\UserHandler',
-					'admin' => 'forge\components\Admin\AdminHandler',
-					'files' => 'forge\components\Files\FileRequest',
 					'cache' => 'forge\components\Files\CacheRequest',
 					'thumbnail' => 'forge\components\Files\ThumbnailRequest',
 					null => 'forge\components\SiteMap\PageHandler',
-					'robots.txt' => 'forge\components\SiteMap\SiteMapHandler',
-					'sitemap' => 'forge\components\SiteMap\SiteMapHandler',
 					'xml' => 'forge\components\XML\XMLHandler',
 					'json' => 'forge\components\JSON\JSONHandler',
 					'identity' => 'forge\components\Identity\RequestHandler'
@@ -239,7 +235,7 @@
 				catch (\Exception $e) {
 					$install->add(false, 'Installing default template');
 				}
-				
+
 				// Create the neccessary file repositories
 				try {
 					\forge\components\Files::createRepositories();

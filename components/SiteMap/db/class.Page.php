@@ -104,6 +104,11 @@
 		* @var string
 		*/
 		public $meta_keywords = 'TinyText';
+		
+		public $allowRemove = [
+			'Boolean',
+			'default' => true
+		];
 
 		/**
 		* Update timestamps on insertion

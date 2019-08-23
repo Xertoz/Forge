@@ -21,6 +21,11 @@
 		public function process() {
 			\forge\components\Identity::restrict('com.Files.Admin');
 			
+			$id = \forge\Post::getInt('id');
+			if ($id === null)
+				throw new \forge\HttpException('A repo ID must be set',
+						\forge\HttpException::HTTP_BAD_REQUEST);
+			
 			$path = \forge\Post::getString('file');
 			if ($path === null)
 				throw new \forge\HttpException('A file must be chosen',
@@ -29,7 +34,7 @@
 			$file = array_pop($path);
 			$dir = implode('/', $path);
 			
-			$repo = \forge\components\Files::getFilesRepository();
+			$repo = new \forge\components\Files\Repository($id);
 			$folder = $repo->getFolder($dir);
 			
 			try {

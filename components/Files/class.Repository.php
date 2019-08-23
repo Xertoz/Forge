@@ -45,7 +45,7 @@
 		 * @param string File contents
 		 * @return Files\db\TreeNode
 		 */
-		public function createFile($filename, $content) {
+		public function createFile($filename, $content='') {
 			// Todo: Add folders
 			//$folders = explode('/', substr($target, strlen(FORGE_PATH)));
 			//array_pop($folders);
@@ -83,6 +83,8 @@
 			$node->size = $blob->size;
 			$node->blob = $blob;
 			$node->insert();
+			
+			$this->addSize($blob->size);
 			
 			return $node;
 		}
@@ -127,8 +129,10 @@
 			try {
 				$search->select('blob');
 			} catch (\forge\components\Databases\exceptions\NoData $e) {
-				$file = new File($blob);
-				$size = $file->delete();
+				try {
+					$file = new File($blob);
+					$size = $file->delete();
+				} catch (\Exception $e) {}
 				
 				$this->addSize(-$size);
 			}
@@ -157,12 +161,26 @@
 			return $repos;
 		}
 		
+		public function get($path) {
+			try {
+				$node = $this->getNode($path);
+			}
+			catch (\forge\components\Databases\exceptions\NoData $e) {
+				throw new exceptions\FileNotFound;
+			}
+			
+			if ($node === null)
+				throw new exceptions\FileNotFound;
+			
+			return $node->blob === null ? Folder::newFromNode($node) : new File($node->blob, $node);
+		}
+		
 		/**
 		 * Get a particular file relative to this path
 		 * @param string $path Path to the requested file
 		 * @return \forge\components\Files\PhysicalFile
 		 */
-		public function getFile($path) {
+		public function getFile($path='') {
 			try {
 				$node = $this->getNode($path);
 			}
@@ -181,7 +199,7 @@
 		 * @param string $path Path to the requested folder
 		 * @return \forge\components\Files\Repository
 		 */
-		public function getFolder($path) {
+		public function getFolder($path='') {
 			try {
 				$node = $this->getNode($path);
 			}
@@ -193,6 +211,14 @@
 				throw new exceptions\FileNotFound;
 			
 			return Folder::newFromNode($node);
+		}
+		
+		public function getId() {
+			return $this->root->getId();
+		}
+		
+		public function getName() {
+			return is_null($this->root->link) ? $this->root->name : $this->root->link->page_title;
 		}
 		
 		/**
@@ -225,6 +251,22 @@
 			return $this->root->size;
 		}
 		
+		static public function loadLink($id) {
+			$node = new db\TreeNode();
+			$node->link = $id;
+			$node->select('link');
+			
+			return new Repository($node->getId());
+		}
+		
+		public function isFile() {
+			return !self::isFolder();
+		}
+		
+		public function isFolder() {
+			return $this->root->blob === null;
+		}
+		
 		/**
 		 * Load a node
 		 * @param \forge\components\Files\db\TreeNode $node
@@ -251,78 +293,93 @@
 		}
 
 		/**
-		 * Upload a file to a folder
+		 * Upload multiple files to a folder
 		 * @param array $file $_FILE entry of the file
 		 * @return File
 		 * @throws \Exception
 		 */
-		public function uploadFile($file) {
-			// The uploaded file should exist
-			if (!is_uploaded_file($file['tmp_name']))
-				throw new exceptions\FileNotFound;
+		public function uploadFiles($files) {
+			// The uploaded files should exist
+			foreach ($files['tmp_name'] as $tmp_name)
+				if (!is_uploaded_file($tmp_name))
+					throw new exceptions\FileNotFound;
 			
-			// Does the file already exist?
 			$child = new db\TreeNode();
 			$child->parent = $this->root;
-			$child->name = $file['name'];
-			try {
-				$child->select(['parent', 'name']);
-				
-				throw new exceptions\AlreadyExists;
-			} catch (\forge\components\Databases\exceptions\NoData $e) {}
 			
-			// Get the hash of the file and find out its path components
-			$hash = sha1_file($file['tmp_name']);
-			$dirname = FORGE_PATH.'/files/'.substr($hash, 0, 2);
-			$filename = $dirname.'/'.substr($hash, 2);
-
-			// Move the uploaded file into the target
-			if (!file_exists($filename)) {
-				if (!file_exists($dirname))
-					mkdir($dirname);
-				move_uploaded_file($file['tmp_name'], $filename);
-				
-				try {
-					$blob = new db\Blob;
-					$blob->hash = $hash;
-					$blob->size = filesize($filename);
-					$blob->insert();
-				}
-				catch (\Exception $e) {
-					unlink($filename);
+			$return = [];
+			for ($i=0;$i<count($files['tmp_name']);++$i) {
+				// Find a new name if the parent already exists
+				$j = -1;
+				$name = pathinfo($files['name'][$i], \PATHINFO_FILENAME);
+				$ext = pathinfo($files['name'][$i], \PATHINFO_EXTENSION);
+				do {
+					$exists = false;
+					$child->name = ++$j > 0 ? $name.' ('.$j.')' : $name;
+					if ($ext)
+						$child->name .= '.'.$ext;
 					
-					throw new \Exception('Could not insert blob into database', 0, $e);
-				}
-			}
-			else {
-				try {
-					$blob = new db\Blob;
-					$blob->hash = $hash;
-					$blob->size = filesize($filename);
-					$blob->select(['hash']);
-				}
-				catch (\forge\components\Databases\exceptions\NoData $e) {
 					try {
+						$child->select(['parent', 'name']);
+						$exists = true;
+					} catch (\forge\components\Databases\exceptions\NoData $e) {}
+				} while ($exists);
+				
+				// Get the hash of the file and find out its path components
+				$hash = sha1_file($files['tmp_name'][$i]);
+				$dirname = FORGE_PATH.'/files/'.substr($hash, 0, 2);
+				$filename = $dirname.'/'.substr($hash, 2);
+				
+				// Move the uploaded file into the target
+				if (!file_exists($filename)) {
+					if (!file_exists($dirname))
+						mkdir($dirname);
+					move_uploaded_file($files['tmp_name'][$i], $filename);
+					
+					try {
+						$blob = new db\Blob;
+						$blob->hash = $hash;
+						$blob->size = filesize($filename);
 						$blob->insert();
 					}
 					catch (\Exception $e) {
 						unlink($filename);
-
+						
 						throw new \Exception('Could not insert blob into database', 0, $e);
 					}
 				}
+				else {
+					try {
+						$blob = new db\Blob;
+						$blob->hash = $hash;
+						$blob->select(['hash']);
+					}
+					catch (\forge\components\Databases\exceptions\NoData $e) {
+						try {
+							$blob->size = filesize($filename);
+							$blob->insert();
+						}
+						catch (\Exception $e) {
+							throw new \Exception('Could not insert blob into database', 0, $e);
+						}
+					}
+				}
+				
+				// Create the virtual file
+				$node = new db\TreeNode;
+				$node->name = $child->name;
+				$node->blob = $blob;
+				$node->parent = $this->root;
+				$node->size = $blob->size;
+				$node->insert();
+				
+				// Update the folder sizes
+				$this->addSize($node->size);
+				
+				$return[] = new File($blob, $node);
 			}
-			$node = new db\TreeNode;
-			$node->name = $file['name'];
-			$node->blob = $blob;
-			$node->parent = $this->root;
-			$node->size = $blob->size;
-			$node->insert();
 			
-			// Update the folder sizes
-			$this->addSize($node->size);
-
 			// Return a File object for the result
-			return new File($blob, $node);
+			return $return;
 		}
 	}

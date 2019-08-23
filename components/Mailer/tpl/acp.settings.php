@@ -3,7 +3,7 @@
 <div class="col-2">
 	<div class="panel">
 		<h1><?php echo self::l('Sender'); ?></h1>
-		<form action="/admin/Mailer" method="post">
+		<form action="/admin/Mailer" method="post" id="mailer-settings">
 			<input type="hidden" name="forge[controller]" value="Mailer\Settings" />
 			<p>
 				<?php echo self::l('Name'); ?>:
@@ -13,12 +13,16 @@
 				<?php echo self::l('Email'); ?>:
 				<?php echo self::input('text', 'address', $from['address']); ?>
 			</p>
-			<p><input type="submit" value="<?php echo self::l('Save'); ?>"></p>
 		</form>
+        <footer>
+            <button type="submit" form="mailer-settings"><?php echo self::l('Save'); ?></button>
+        </footer>
 	</div>
+</div>
+<div class="col-2">
 	<div class="panel red">
 		<h1><?php echo self::l('Server'); ?></h1>
-		<form action="/admin/Mailer" method="post">
+		<form action="/admin/Mailer" method="post" id="mailer-server">
 			<input type="hidden" name="forge[controller]" value="Mailer\Server" />
 			<p>
 				<?php echo self::l('SMTP'); ?>:
@@ -37,16 +41,9 @@
 				<?php echo self::l('Password'); ?>
 				<?php echo self::input('password', 'password', $smtp['password']); ?>
 			</p>
-			<p><input type="submit" value="<?php echo self::l('Save'); ?>"></p>
 		</form>
+        <footer>
+            <button type="submit" form="mailer-server"><?php echo self::l('Save'); ?></button>
+        </footer>
 	</div>
 </div>
-<script type="text/javascript">
-	function form_settings_success() {
-		forge.displayMessage('<?php echo self::l('The settings were successfully saved.'); ?>',forge.MESSAGE_GOOD);
-	}
-	
-	function form_settings_error() {
-		forge.displayMessage('<?php echo self::l('The settings could not be saved.'); ?>',forge.MESSAGE_BAD);
-	}
-</script>

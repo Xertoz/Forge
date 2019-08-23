@@ -216,6 +216,7 @@
 						$operators = array(
 							'is' => '=',
 							'not' => '!=',
+							'null' => 'IS NULL',
 							'gt' => '>',
 							'lt' => '<',
 							'in' => 'IN'
@@ -236,6 +237,10 @@
 									$operator = '!=';
 									$param = $t[1];
 								}
+							
+							case 'IS NULL':
+								$param = null;
+								break;
 						}
 
 						$statements[] = '`'.$t[1].'` '.$operator.' '.$param;

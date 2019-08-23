@@ -22,12 +22,13 @@
 
 		/**
 		* Display the administration panel
+		* @param \forge\components\SiteMap\db\Page Page
 		* @param string Name of the addon
 		* @param string Name of the view
 		* @return string
 		* @throws Exception
 		*/
-		static public function display($addon,$view) {
+		static public function display($page, $addon,$view) {
 			// Explicitly force authentication
 			\forge\components\Identity::auth();
 
@@ -57,9 +58,9 @@
 
 			// Populate the menu with items
 			$menu = [];
-			foreach (\forge\components\Software::getAddons(true) as $addon)
-				if (class_exists($addon) && in_array('forge\\components\\Admin\\Menu', class_implements($addon))) {
-					$items = $addon::getAdminMenu();
+			foreach (\forge\components\Software::getAddons(true) as $addon2)
+				if (class_exists($addon2) && in_array('forge\\components\\Admin\\Menu', class_implements($addon2))) {
+					$items = $addon2::getAdminMenu($page, $addon, $view);
 					if (!is_array($items)) {
 						if ($items instanceof \forge\components\Admin\MenuItem)
 							$items = [$items];
@@ -77,7 +78,6 @@
 			// If the view exists, then we should return the administration output
 			if (method_exists($class,$view)) {
 				\forge\components\Templates::setTemplate('forge-admin');
-				\forge\components\Templates\Engine::forgeJS('f');
 				
 				return \forge\components\Templates::display(
 					'components/Admin/tpl/page.view.php',

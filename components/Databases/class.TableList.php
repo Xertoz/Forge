@@ -19,7 +19,7 @@
 		 * @var int
 		 */
 		private $count = false;
-                
+
                 /**
                  * Current row from the result set
                  * @var Table
@@ -31,13 +31,13 @@
 		* @var Params
 		*/
 		private $params;
-		
+
 		/**
 		 * Current position of the iterator
 		 * @var int
 		 */
 		private $position;
-                
+
 		/**
 		 * The query for looping results
 		 * @var \PDOStatement
@@ -49,7 +49,7 @@
 		* @var int
 		*/
 		private $rows;
-		
+
 		/**
 		* Data type to handle
 		* @var Table
@@ -102,11 +102,11 @@
 				$query = $this->params->engine->buildCount($this->params);
 				$this->params->engine->bindWhere($query, $this->params);
 				$query->execute();
-			
+
 				$this->count = $query->fetch(\PDO::FETCH_COLUMN);
 			}
 		}
-		
+
 		/**
 		* Get the results in an array
 		* @return array
@@ -137,7 +137,7 @@
 		*/
 		public function getPages() {
 			self::count();
-						
+
 			return $this->params->limit > 0 ? ceil($this->count/$this->params->limit) : 1;
 		}
 
@@ -164,7 +164,7 @@
 		public function current() {
 			return $this->current;
 		}
-		
+
 		/**
 		 * Fetch a new row from the result set
 		 * @return void
@@ -175,7 +175,7 @@
 			if ($row !== false) {
 				$class = get_class($this->params->type);
 				$this->current = new $class;
-				
+
 				foreach ($row as $column => $value)
 					$this->current->$column = $value;
 			}
@@ -204,34 +204,34 @@
 		public function offsetExists($offset) {
 			return (is_int($offset) && $offset >= 0 && $offset < $this->rows);
 		}
-		
+
 		/**
 		 * Get an offset
 		 */
 		public function offsetGet($offset) {
 			if ($offset < $this->position)
 				$this->query();
-			
+
 			while ($this->position < $offset)
 				$this->next();
-			
+
 			return $this->current;
 		}
-		
+
 		/**
 		 * Set an offset
 		 */
 		public function offsetSet($offset, $value) {
 			/* void */
 		}
-		
+
 		/**
 		 * Unset an offset
 		 */
 		public function offsetUnset($offset) {
 			/* void */
 		}
-		
+
 		/**
 		* ?
 		* @return ?
@@ -266,7 +266,7 @@
 
 			// Set the parameters
 			$this->params->engine->bindWhere($this->query, $this->params);
-			
+
 			// Run the query & fetch the results
 			$this->query->execute();
 			$this->position = -1;

@@ -2,43 +2,40 @@
 	self::addScriptFile('/templates/forge-admin/sys.design.js');
 
 	$user = \forge\components\Identity::getIdentity();
-?>
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html>
 	<head>
-		<?php echo self::header(2); ?>
+		<?=self::header()?>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<link rel="icon" href="/images/led/blog.png">
+		<link rel="stylesheet" href="/templates/forge-admin/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/templates/forge-admin/css/adminlte.min.css">
+		<link rel="stylesheet" href="/templates/forge-admin/css/ionicons.min.css">
+		<link rel="stylesheet" href="/templates/forge-admin/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/templates/forge-admin/css/skin-blue.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	</head>
-	<body>
-		<?php if (isset($menu)): /* Administration interface */ ?>
-		<header>
-			<h1><a href="/admin"><b>Forge</b> <?php echo self::html(FORGE_VERSION); ?></a></h1>
-            <a href="javascript:menu.toggle();"><img src="/templates/forge-admin/img/menu.png" /></a>
-			<div class="right">
-				<a href="/admin/Identity/view?id=<?php echo $user->getId(); ?>"><?php echo $user->getName(); ?></a>
+	<body class="hold-transition skin-blue sidebar-mini">
+		<div class="wrapper">
+			<?php if (isset($page)): ?>
+			<?php require_once 'inc.navbar.php'; ?>
+			<?php require_once 'inc.sidebar.php'; ?>
+			<div class="content-wrapper" style="min-height: 1250px;">
+				<?=$content?>
 			</div>
-		</header>
-		<nav>
-			<ul>
-				<?php foreach ($menu as $item): ?>
-				<li>
-					<span><?php echo self::html($item->getTitle()); ?></span>
-					<?php if ($item->hasChildren()): ?>
-					<ul>
-						<?php foreach ($item->getChildren() as $child): ?>
-						<li><a href="<?php echo $child->getHREF(); ?>"><?php echo self::html($child->getTitle()); ?></a></li>
-						<?php endforeach; ?>
-					</ul>
-					<?php endif; ?>
-				</li>
-				<?php endforeach; ?>
-			</ul>
-		</nav>
-		<script type="text/javascript">menu.init();</script>
-		<div id="admin-content" class="<?php echo $css; ?>">
+			<footer class="main-footer">
+				<div class="pull-right hidden-xs"><b><?php echo self::l('Version'); ?></b> <?php echo FORGE_VERSION; ?></div>
+				<strong><?php echo self::l('Copyright'); ?> © 2009-2019 <a href="https://www.arosdigital.se/" target="_blank">Forge</a>.</strong>
+				<?php echo self::l('All rights reserved.'); ?>
+			</footer>
+			<?php else: ?>
 			<?php echo $content; ?>
+			<?php endif; ?>
 		</div>
-		<?php else: /* Login page, possibly? */ ?>
-		<?php echo $content; ?>
-		<?php endif; ?>
+		<script src="/script/jquery-3.3.1.min.js"></script>
+		<script src="/templates/forge-admin/script/bootstrap.min.js"></script>
+		<script src="/templates/forge-admin/script/adminlte.min.js"></script>
 	</body>
 </html>
