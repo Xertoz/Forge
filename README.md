@@ -3,7 +3,7 @@
 ## About
 The author of the original source code is [Mattias Lindholm](mattias@xertoz.se).
 
-The software is released under a license, see the [LICENSE](../LICENSE) file for more information. Note that the license only applies to Forge of the distributed package. Any bundled software has its own licensing.
+The software is released under a license, see the [LICENSE](/LICENSE) file for more information. Note that the license only applies to Forge of the distributed package. Any bundled software has its own licensing.
 
 ## Installation
 1. Upload Forge into your website's root path.
