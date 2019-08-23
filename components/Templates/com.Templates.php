@@ -10,12 +10,14 @@
 
 	namespace forge\components;
 
+	use \forge\components\Templates\Engine;
+
 	/**
 	* Manage templates
 	*/
 	class Templates extends \forge\Component implements \forge\components\Admin\Menu {
 		use \forge\Configurable;
-		
+
 		/**
 		* Template information
 		* @var array
@@ -46,7 +48,7 @@
 		* @return void
 		*/
 		static public function addScript($script) {
-			\forge\components\Templates\Engine::addScript($script);
+			Engine::addScript($script);
 		}
 
 		/**
@@ -55,9 +57,9 @@
 		* @return void
 		*/
 		static public function addStyle($style) {
-			\forge\components\Templates\Engine::addStyle($style);
+			Engine::addStyle($style);
 		}
-		
+
 		/**
 		 * Add an external CSS file to the header element
 		 * @param string $file File name
@@ -65,7 +67,7 @@
 		 * @return void
 		 */
 		static public function addStyleFile($file, $preserve=false) {
-			\forge\components\Templates\Engine::addStyleFile($file, $preserve);
+			Engine::addStyleFile($file, $preserve);
 		}
 
 		/**
@@ -106,16 +108,16 @@
 			$path = implode('/',$path).'/';
 
 			// Try to execute the template code
-			$output = \forge\components\Templates\Engine::display($file,$tv=array_merge(self::$vars,$variables));
+			$output = Engine::display($file,$tv=array_merge(self::$vars,$variables));
 
 			// Add CSS
 			if (file_exists($css = $path.$type.'.'.$name.'.css'))
 				self::addStyleFile('/'.$css);
 
 			// Add JS
-			Templates\Engine::requireJS();
+			Engine::requireJS();
 			if (file_exists($path.$type.'.'.$name.'.js'))
-				self::addScript(\forge\components\Templates\Engine::display($path.$type.'.'.$name.'.js',$tv));
+				Engine::addScriptFile('/'.$path.$type.'.'.$name.'.js');
 
 			// Return the template
 			if ($type == 'page')
@@ -129,7 +131,7 @@
 			else
 				return $output;
 		}
-		
+
 		/**
 		 * Get the menu items
 		 * @param \forge\components\SiteMap\db\Page Page
@@ -140,15 +142,15 @@
 		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Templates.Admin'))
 				return null;
-			
+
 			$menu = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
-			
+
 			$menu->appendChild(new \forge\components\Admin\MenuItem(
 				'templates',
 				self::l('Templates'),
 				'Templates'
 			));
-			
+
 			return $menu;
 		}
 
@@ -168,7 +170,7 @@
 
 			$templates = self::getConfig('templates', array());
 			$key = $hostname ? $hostname : $_SERVER['HTTP_HOST'];
-			
+
 			return isset($templates[$key]) ? $templates[$key] : 'anvil';
 		}
 
@@ -185,7 +187,7 @@
 						self::$templates[$folder] = $template;
 				});
 			ksort(self::$templates);
-			
+
 			return self::$templates;
 		}
 
@@ -215,7 +217,7 @@
 		* @return void
 		*/
 		static public function setMeta($meta) {
-			\forge\components\Templates\Engine::setMeta($meta);
+			Engine::setMeta($meta);
 		}
 
 		/**
