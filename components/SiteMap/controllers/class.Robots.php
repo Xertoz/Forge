@@ -22,10 +22,10 @@
 			\forge\components\Identity::restrict('com.SiteMap.Robots');
 
 			if (!isset($_POST['enable']))
-				throw new \forge\HttpException(_('You must specify a new setting'), \forge\HttpException::HTTP_BAD_REQUEST);
+				throw new \forge\HttpException('You must specify a new setting', \forge\HttpException::HTTP_BAD_REQUEST);
 
 			\forge\components\SiteMap::setRobots($_POST['enable']);
 
-			self::setResponse(_('Your settings were saved!'), self::RESULT_OK);
+			self::setResponse(self::l('Your settings were saved!'), self::RESULT_OK);
 		}
 	}

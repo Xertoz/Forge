@@ -13,7 +13,7 @@
 	/**
 	* Locale component
 	*/
-	class Locale extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Locale extends \forge\Component implements \forge\components\Admin\Menu {
 		use \forge\Configurable;
 
 		/**
@@ -35,7 +35,7 @@
 		 */
 		static public function buildLocale($locale) {
 			if (!self::isLocale($locale))
-				throw new \Exception(_('Trying to build to an invalid locale'));
+				throw new \Exception('Trying to build to an invalid locale');
 
 			require_once FORGE_PATH.'/components/Locale/api/php-mo.php';
 
@@ -43,21 +43,27 @@
 
 			return phpmo_convert($path.'Forge.po', $path.'Forge.mo');
 		}
-
+		
 		/**
-		 * Get the infobox for the dashboard as HTML source code
-		 * @return string
+		 * Get the menu items
+		 * @param \forge\components\SiteMap\db\Page Page
+		 * @param string Addon
+		 * @param string View
+		 * @return array[AdminMenu]|MenuItem
 		 */
-		static public function getInfoBox() {
-			if (!\forge\components\Identity::getIdentity()->hasPermission('com.Locale.Admin'))
+		static public function getAdminMenu($page, $addon, $view) {
+			if (!\forge\components\Identity::hasPermission('com.Locale.Admin'))
 				return null;
-
-			return \forge\components\Templates::display(
-				'components/Locale/tpl/inc.infobox.php',
-				[
-					'locale' => self::getLocale()
-				]
-			);
+			
+			$menu = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
+			
+			$menu->appendChild(new \forge\components\Admin\MenuItem(
+				'locale',
+				self::l('Locale'),
+				'Locale'
+			));
+			
+			return $menu;
 		}
 
 		/**
@@ -66,6 +72,15 @@
 		 */
 		static public function getLocale() {
 			return is_null(self::$locale) ? self::getConfig('locale', 'en_US') : self::$locale;
+		}
+		
+		/**
+		 * Attempt to get a string translated
+		 * @param string $string
+		 * @return string
+		 */
+		static public function getString($string) {
+			return self::getConfig('locale.'.self::$locale.'.'.$string, $string);
 		}
 
 		/**
@@ -89,14 +104,8 @@
 			if (!self::isLocale($locale))
 				return false;
 
-			// Set the language
-			putenv('LC_ALL='.$locale);
-			setlocale(LC_ALL, $locale);
-			self::$locale = $locale;
-
-			// Set the locale location and load it
-			bindtextdomain('Forge', FORGE_PATH.'/files/.locales');
-			textdomain('Forge');
+			// Load the locale
+			self::setLocale($locale);
 
 			return true;
 		}
@@ -110,7 +119,7 @@
 		 */
 		static public function setLocale($locale, $load=false) {
 			if (!self::isLocale($locale))
-				throw new \Exception(_('Trying to set to an invalid locale'));
+				throw new Exception('Trying to set to an invalid locale');
 
 			self::setConfig('locale', $locale, true);
 

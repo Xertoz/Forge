@@ -10,12 +10,14 @@
 
 	namespace forge\components;
 
+	use \forge\components\Templates\Engine;
+
 	/**
 	* Manage templates
 	*/
-	class Templates extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Templates extends \forge\Component implements \forge\components\Admin\Menu {
 		use \forge\Configurable;
-		
+
 		/**
 		* Template information
 		* @var array
@@ -46,7 +48,7 @@
 		* @return void
 		*/
 		static public function addScript($script) {
-			\forge\components\Templates\Engine::addScript($script);
+			Engine::addScript($script);
 		}
 
 		/**
@@ -55,7 +57,17 @@
 		* @return void
 		*/
 		static public function addStyle($style) {
-			\forge\components\Templates\Engine::addStyle($style);
+			Engine::addStyle($style);
+		}
+
+		/**
+		 * Add an external CSS file to the header element
+		 * @param string $file File name
+		 * @param bool $preserve Do not minify the source
+		 * @return void
+		 */
+		static public function addStyleFile($file, $preserve=false) {
+			Engine::addStyleFile($file, $preserve);
 		}
 
 		/**
@@ -96,23 +108,16 @@
 			$path = implode('/',$path).'/';
 
 			// Try to execute the template code
-			$output = \forge\components\Templates\Engine::display($file,$tv=array_merge(self::$vars,$variables));
+			$output = Engine::display($file,$tv=array_merge(self::$vars,$variables));
 
 			// Add CSS
-			if (file_exists($path.$type.'.'.$name.'.css'))
-				self::addStyle(implode(array(
-					'<style type="text/css" media="screen">',
-					\forge\components\Templates\Engine::display($path.$type.'.'.$name.'.css',$tv),
-					'</style>'
-				)));
+			if (file_exists($css = $path.$type.'.'.$name.'.css'))
+				self::addStyleFile('/'.$css);
 
 			// Add JS
+			Engine::requireJS();
 			if (file_exists($path.$type.'.'.$name.'.js'))
-				self::addScript(implode(array(
-					'<script type="text/javascript">',
-					\forge\components\Templates\Engine::display($path.$type.'.'.$name.'.js',$tv),
-					'</script>'
-				)));
+				Engine::addScriptFile('/'.$path.$type.'.'.$name.'.js');
 
 			// Return the template
 			if ($type == 'page')
@@ -126,21 +131,27 @@
 			else
 				return $output;
 		}
-		
+
 		/**
-		 * Get the infobox for the dashboard as HTML source code
-		 * @return string
+		 * Get the menu items
+		 * @param \forge\components\SiteMap\db\Page Page
+		 * @param string Addon
+		 * @param string View
+		 * @return array[AdminMenu]|MenuItem
 		 */
-		static public function getInfoBox() {
-			if (!\forge\components\Identity::getIdentity()->hasPermission('com.Templates.Admin'))
+		static public function getAdminMenu($page, $addon, $view) {
+			if (!\forge\components\Identity::hasPermission('com.Templates.Admin'))
 				return null;
 
-			return self::display(
-				'components/Templates/tpl/inc.infobox.php',
-				array(
-					'templates' => count(self::getTemplates())
-				)
-			);
+			$menu = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
+
+			$menu->appendChild(new \forge\components\Admin\MenuItem(
+				'templates',
+				self::l('Templates'),
+				'Templates'
+			));
+
+			return $menu;
 		}
 
 		/**
@@ -159,7 +170,7 @@
 
 			$templates = self::getConfig('templates', array());
 			$key = $hostname ? $hostname : $_SERVER['HTTP_HOST'];
-			
+
 			return isset($templates[$key]) ? $templates[$key] : 'anvil';
 		}
 
@@ -172,10 +183,11 @@
 				\forge\Helper::run(function() use ($target) {
 					$folder = substr($target, strlen('templates/'));
 					$template = new Templates\Template($folder);
-					self::$templates[$folder] = $template;
+					if ($template->isSelectable())
+						self::$templates[$folder] = $template;
 				});
 			ksort(self::$templates);
-			
+
 			return self::$templates;
 		}
 
@@ -205,7 +217,7 @@
 		* @return void
 		*/
 		static public function setMeta($meta) {
-			\forge\components\Templates\Engine::setMeta($meta);
+			Engine::setMeta($meta);
 		}
 
 		/**

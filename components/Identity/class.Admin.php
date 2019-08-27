@@ -27,11 +27,29 @@
 		static public function view() {
 			\forge\components\Identity::restrict('com.Identity.Admin');
 
+			$identity = new \forge\components\Identity\Identity($_GET['id']);
+
+			$activity = [];
+			foreach (new \forge\components\Databases\TableList([
+			    'type' => new \forge\components\Statistics\db\Visitor,
+                'where' => ['identity' => $identity->getId()]
+            ]) as $entry) {
+                $activity[] = [
+                    'date' => $entry->arrived,
+                    'message' => \forge\components\Locale::l('Logged in')
+                ];
+                $activity[] = [
+                    'date' => $entry->departed,
+                    'message' => \forge\components\Locale::l('Logged out')
+                ];
+            }
+
 			return \forge\components\Templates::display(
 				'components/Identity/tpl/acp.view.php',
 				[
-					'identity' => new \forge\components\Identity\Identity($_GET['id']),
-					'permissions' => \forge\components\Identity::getAllPermissions()
+					'identity' => $identity,
+					'permissions' => \forge\components\Identity::getAllPermissions(),
+                    'activity' => $activity
 				]
 			);
 		}

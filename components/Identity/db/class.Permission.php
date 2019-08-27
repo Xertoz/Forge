@@ -30,7 +30,7 @@
 		* User id
 		* @var int
 		*/
-		public $identity = 'Int';
+		public $identity = 'Integer';
 
 		/**
 		* Permission domain

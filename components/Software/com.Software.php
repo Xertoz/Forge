@@ -14,7 +14,7 @@
 	/**
 	* Patch component
 	*/
-	class Software extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Software extends \forge\Component implements \forge\components\Admin\Menu {
 		/**
 		* Default table engine
 		*/
@@ -100,8 +100,14 @@
 		static private function getAddonStatus($controller) {
 			// Verify the database integrity
 			$database = true;
+			
+			// Instantiate models so all dynamic classes are generated
 			$models = $controller::getNamespace('db');
-
+			foreach ($models as $model)
+				new $model;
+			
+			// Loop all models and check them
+			$models = $controller::getNamespace('db');
 			foreach ($models as $model)
 				if ($model::isHandled())
 					$database &= (new $model)->checkIntegrity();
@@ -112,6 +118,28 @@
 				'config' => in_array('forge\\Configurable', class_uses($controller)) ? $controller::isConfigured() : -1,
 				'database' => count($models) ? $database : -1
 			);
+		}
+		
+		/**
+		 * Get the menu items
+		 * @param \forge\components\SiteMap\db\Page Page
+		 * @param string Addon
+		 * @param string View
+		 * @return array[AdminMenu]|MenuItem
+		 */
+		static public function getAdminMenu($page, $addon, $view) {
+			if (!\forge\components\Identity::hasPermission('com.Software.Admin'))
+				return null;
+			
+			$menu = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
+			
+			$menu->appendChild(new \forge\components\Admin\MenuItem(
+				'software',
+				self::l('Modules'),
+				'Software'
+			));
+			
+			return $menu;
 		}
 
 		/**
@@ -130,21 +158,5 @@
 		*/
 		static public function getModuleStatus($component) {
 			return self::getAddonStatus('\\forge\\modules\\'.$component);
-		}
-		
-		/**
-		 * Get the infobox for the dashboard as HTML source code
-		 * @return string
-		 */
-		static public function getInfoBox() {
-			if (!\forge\components\Identity::getIdentity()->hasPermission('com.Software.Admin'))
-				return null;
-
-			return \forge\components\Templates::display(
-				'components/Software/tpl/inc.infobox.php',
-				array(
-					'addons' => count(\forge\Addon::getAddons())
-				)
-			);
 		}
 	}

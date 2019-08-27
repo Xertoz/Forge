@@ -1,3 +1,7 @@
-.admin .plugin-form {
-	display:none;
+#admin-content .plugin-form {
+	display:none !important;
+}
+
+#admin-content .plugin-form.visible {
+	display:inline-block !important;
 }

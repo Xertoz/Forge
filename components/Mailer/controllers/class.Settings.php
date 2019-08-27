@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Settings.php
-	* Copyright 2012-2013 Mattias Lindholm
+	* Copyright 2012-2017 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -21,33 +21,22 @@
 		public function process() {
 			\forge\components\Identity::restrict('com.Mailer.Admin');
 
-			// Update sender info
-			if (empty($_REQUEST['from']['name']))
-				throw new \forge\HttpException(_('You must provide a sender name'),
+			// Get the name
+			$name = \forge\Post::getString('name');
+			if (empty($name))
+				throw new \forge\HttpException('You must provide a sender name',
 						\forge\HttpException::HTTP_BAD_REQUEST);
-			if (empty($_REQUEST['from']['address']))
-				throw new \forge\HttpException(_('You must provide a sender address'),
-						\forge\HttpException::HTTP_BAD_REQUEST);
-			\forge\components\Mailer::setSender($_REQUEST['from']['name'],
-					$_REQUEST['from']['address']);
-
-			// Update SMTP settings
-			if (isset($_REQUEST['smtp']['use'])) {
-				if (empty($_REQUEST['smtp']['hostname']))
-					throw new \forge\HttpException(_('You have to specify which SMTP server to use'),
-							\forge\HttpException::HTTP_BAD_REQUEST);
-				
-				\forge\components\Mailer::setSMTP(true,
-						$_REQUEST['smtp']['hostname'],
-						$_REQUEST['smtp']['username'],
-						$_REQUEST['smtp']['password']);
-			}
-			else
-				\forge\components\Mailer::setSMTP(false,
-						$_REQUEST['smtp']['hostname'],
-						$_REQUEST['smtp']['username'],
-						$_REQUEST['smtp']['password']);
 			
-			self::setResponse(_('Mail settings were updated successfully!'), self::RESULT_OK);
+			// Get the address
+			$address = \forge\Post::getString('address');
+			if (empty($address))
+				throw new \forge\HttpException('You must provide a sender address',
+						\forge\HttpException::HTTP_BAD_REQUEST);
+			
+			// Set the new name & email
+			\forge\components\Mailer::setSender($name, $address);
+			
+			// We're done!
+			self::setResponse(self::l('Mail settings were updated successfully!'), self::RESULT_OK);
 		}
 	}

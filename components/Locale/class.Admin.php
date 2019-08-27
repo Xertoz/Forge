@@ -18,7 +18,7 @@
 			\forge\components\Identity::restrict('com.Locale.Build');
 
 			if (empty($_GET['locale']) || !\forge\components\Locale::isLocale($_GET['locale']))
-				throw new \forge\HttpException(_('Locale not found'), \forge\HttpException::HTTP_NOT_FOUND);
+				throw new \forge\HttpException('Locale not found', \forge\HttpException::HTTP_NOT_FOUND);
 
 			return \forge\components\Templates::display(
 				'components/Locale/tpl/adm.build.php',
@@ -41,7 +41,7 @@
 			\forge\components\Identity::restrict('com.Locale.Admin');
 
 			if (empty($_GET['locale']) || !\forge\components\Locale::isLocale($_GET['locale']))
-				throw new \forge\HttpException(_('Locale not found'), \forge\HttpException::HTTP_NOT_FOUND);
+				throw new \forge\HttpException('Locale not found', \forge\HttpException::HTTP_NOT_FOUND);
 
 			$missing = isset($_GET['type']) && $_GET['type'] == 'missing';
 			if ($missing) {
@@ -61,7 +61,7 @@
 				'components/Locale/tpl/adm.view.php',
 				[
 					'locale' => $_GET['locale'],
-					'library' => new \forge\components\XML\ArrayMatrix($rows, $columns),
+					'library' => new \forge\components\Templates\DataTable($rows),
 					'missing' => $missing
 				]
 			);

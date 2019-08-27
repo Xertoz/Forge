@@ -52,7 +52,7 @@
 		* The ID column of the row
 		* @var string
 		*/
-		protected $__id = 'forge_id';
+		static protected $__id = 'forge_id';
 
 		/**
 		* Add a column to this table model
@@ -67,6 +67,7 @@
 			try {
 				if (!$properties instanceof Params) {
 					$params = new Params();
+					$params->table = $this;
 
 					if (is_string($properties))
 						$params->type = $properties;
@@ -80,6 +81,10 @@
 					else
 						throw new \Exception('Invalid argument');
 				}
+				else
+					$params = $properties;
+				
+				$params->column = $column;
 
 				$type = $this->__engine->getType($params);
 				$this->__columns[$column] = new $type($params);
@@ -100,8 +105,8 @@
 			$this->__engine = $engine !== false ? $engine : \forge\components\Databases::getEngine();
 
 			// Make sure that we have an ID column
-			if ($this->__id == 'forge_id') {
-				$idType = $this->__engine->getNamespace().'\Int';
+			if (static::$__id == 'forge_id') {
+				$idType = $this->__engine->getNamespace().'\Integer';
 				$params = new Params();
 				$params->default = null;
 				$params->null = false;
@@ -112,7 +117,7 @@
 
 			// We should have a website ID if this is a local model
 			if (static::$global === false) {
-				$globalType = $this->__engine->getNamespace().'\Int';
+				$globalType = $this->__engine->getNamespace().'\Integer';
 				$this->__columns['forge_website'] = new $globalType(new Params(['index'=>true]));
 				try {
 					$this->__columns['forge_website']->set(\forge\components\Websites::getId());
@@ -136,8 +141,8 @@
 
 			// Was a specific ID requested?
 			if ($id !== false && !is_null($id)) {
-				$this->__columns[$this->__id]->set($id);
-				$this->select($this->__id);
+				$this->__columns[static::$__id]->set($id);
+				$this->select(static::$__id);
 			}
 		}
 
@@ -206,14 +211,14 @@
 			$params = new Params();
 
 			$params->table = static::$table;
-			$params->where = array($this->__id);
+			$params->where = array(static::$__id);
 
 			$query = $this->__engine->buildDelete($params);
 
 			$query->bindValue(
 				1,
-				$this->__columns[$this->__id]->get(),
-				$this->__columns[$this->__id]->getDataType()
+				$this->__columns[static::$__id]->get(),
+				$this->__columns[static::$__id]->getDataType()
 			);
 
 			$query->execute();
@@ -243,20 +248,42 @@
 		final public function getCreate() {
 			return $this->__engine->getCreate($this);
 		}
+		
+		/**
+		 * Return all models we depend upon
+		 * @return array
+		 */
+		final public function getDependencies() {
+			$dependencies = [];
+			
+			foreach ($this->__columns as $column)
+				foreach ($column->getDependencies() as $dependency)
+					$dependencies[] = $dependency;
+			
+			return array_unique($dependencies);
+		}
 
 		/**
 		* Get the row ID
 		* @return mixed
 		*/
 		final public function getId() {
-			return $this->__columns[$this->__id]->get();
+			return $this->__columns[static::$__id]->get();
+		}
+
+		/**
+		* Get the name of the ID column
+		* @return string
+		*/
+		final static public function getIdColumn() {
+			return static::$__id;
 		}
 
 		/**
 		* Get the table name
 		* @return string
 		*/
-		final public function getTable() {
+		final static public function getTable() {
 			return static::$table;
 		}
 
@@ -291,9 +318,6 @@
 		* @throws Exception
 		*/
 		final public function insert() {
-			if (!$this->__changed)
-				return;
-			
 			$this->beforeInsert();
 
 			$params = new Params();
@@ -301,23 +325,34 @@
 			$params->table = static::$table;
 			$params->columns = array();
 			foreach ($this->__columns as $column => $type)
-				if ($column != $this->__id || !$this->__columns[$column]->getIncrement())
+				if (($column != static::$__id || !$this->__columns[$column]->getIncrement()) && !$this->__columns[$column]->isVirtual())
 					$params->columns[] = $column;
 
 			list($query, $columns) = $this->__engine->buildInsert($this, $params);
 
-			for ($i=0;$i<count($columns);$i++)
+			for ($i=0;$i<count($columns);$i++) {
+				$value = $this->__columns[$columns[$i]]->get();
+				if (is_object($value)) {
+					if ($value instanceof Table) {
+						$value = $value->getId();
+						
+						if ($value === 0)
+							$value = null;
+					}
+				}
+				
 				$query->bindValue(
 					$i+1,
-					$this->__columns[$columns[$i]]->get(),
+					$value,
 					$this->__columns[$columns[$i]]->getDataType()
 				);
+			}
 
 			$query->execute();
 
 			$this->__changed = false;
-			if ($this->__columns[$this->__id]->getIncrement())
-				$this->__columns[$this->__id]->set($this->__engine->getPDO()->lastInsertId());
+			if ($this->__columns[static::$__id]->getIncrement())
+				$this->__columns[static::$__id]->set($this->__engine->getPDO()->lastInsertId());
 		}
 
 		/**
@@ -366,10 +401,11 @@
 
 		/**
 		* Save row changes to the database
+		* @param bool Force update even if there are no changes
 		* @return bool
 		*/
-		final public function save() {
-			if (!$this->__changed)
+		final public function save($force=false) {
+			if (!$force && !$this->__changed)
 				return;
 			
 			$this->beforeSave();
@@ -377,17 +413,35 @@
 			$params = new Params();
 
 			$params->columns = array_keys($this->__columns);
+			$params->columns = [];
+			foreach ($this->__columns as $column => $object)
+				if (!$object->isVirtual())
+					$params->columns[] = $column;
 			$params->table = static::$table;
-			$params->where = array($this->__id);
+			$params->where = array(static::$__id);
 			$query = $this->__engine->buildUpdate($params);
 
 			$i = 1;
-			foreach ($this->__columns as $column => $type)
-				$query->bindValue($i++,$type->get(),$type->getDataType());
+			foreach ($this->__columns as $column => $type) {
+				if ($type->isVirtual())
+					continue;
+				
+				$value = $type->get();
+				if (is_object($value)) {
+					if ($value instanceof Table) {
+						$value = $value->getId();
+						
+						if ($value === 0)
+							$value = null;
+					}
+				}
+				
+				$query->bindValue($i++,$value,$type->getDataType());
+			}
 			$query->bindValue(
 				$i,
-				$this->__columns[$this->__id]->get(),
-				$this->__columns[$this->__id]->getDataType()
+				$this->__columns[static::$__id]->get(),
+				$this->__columns[static::$__id]->getDataType()
 			);
 
 			$query->execute();
@@ -398,18 +452,24 @@
 		/**
 		* Select a row from the table by the given constraints
 		* @param array Columns to bind
-		* @return void
+		* @return Table
 		* @throws Exception
 		*/
 		public function select($columns) {
 			$columns = !is_array($columns) ? array($columns) : $columns;
-			if (!$this->isGlobal() && !in_array($this->__id, $columns))
+			if (!$this->isGlobal() && !in_array(static::$__id, $columns))
 				$columns[] = 'forge_website';
 			
 			$params = new Params();
 			$params->type = $this;
-			foreach ($columns as $column)
-				$params->where[$column] = $this->__columns[$column]->get();
+			foreach ($columns as $column) {
+				$value = $this->__columns[$column]->get();
+				
+				if ($value instanceof Table)
+					$value = $value->getId();
+				
+				$params->where[$column] = $value;
+			}
 			$params->table = static::$table;
 
 			$query = $this->__engine->buildSelect($params);
@@ -417,23 +477,26 @@
 			$query->execute();
 			$result = $query->fetch(\PDO::FETCH_ASSOC);
 			if ($result === false)
-				throw new \Exception('No data could be loaded');
+				throw new exceptions\NoData;
 
 			foreach ($result as $column => $value)
 				$this->__columns[$column]->set($value);
 			
 			$this->__changed = false;
+			
+			return $this;
 		}
 
 		/**
 		* Write a row to the table by either insertion or updating
+		* @param bool Force update even if there are no changes
 		* @return void
 		* @throws Exception
 		*/
-		final public function write() {
-			if ($this->__columns[$this->__id]->get() == 0)
+		final public function write($force=false) {
+			if ($this->getId() == 0)
 				$this->insert();
 			else
-				$this->save();
+				$this->save($force);
 		}
 	}

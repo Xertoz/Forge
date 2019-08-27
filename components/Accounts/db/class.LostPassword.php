@@ -30,13 +30,13 @@
 		* Account ID
 		* @var int
 		*/
-		public $user = 'Int';
+		public $user = 'Integer';
 
 		/**
 		* This key will be usable until this unix timestamp
 		* @var int
 		*/
-		public $until = 'Int';
+		public $until = 'Integer';
 
 		/**
 		* Key to use in the link

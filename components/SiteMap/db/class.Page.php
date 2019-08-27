@@ -24,7 +24,7 @@
 		* Page parent
 		* @var int
 		*/
-		public $page_parent = 'Int';
+		public $page_parent = 'Integer';
 
 		/**
 		* Publish page
@@ -57,7 +57,7 @@
 		* Page order within menu
 		* @var int
 		*/
-		public $page_order = 'Int';
+		public $page_order = 'Integer';
 
 		/**
 		* Page creation date
@@ -104,6 +104,11 @@
 		* @var string
 		*/
 		public $meta_keywords = 'TinyText';
+		
+		public $allowRemove = [
+			'Boolean',
+			'default' => true
+		];
 
 		/**
 		* Update timestamps on insertion

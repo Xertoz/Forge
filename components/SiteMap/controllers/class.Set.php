@@ -23,16 +23,16 @@
 			
 			try {
 				if (empty($_POST['page']['title']))
-					throw new \Exception(_('The title must not be empty'));
+					throw new Exception('The title must not be empty');
 				
 				if (empty($_POST['page']['url']))
-					throw new \Exception(_('The URL must not be empty'));
+					throw new Exception('The URL must not be empty');
 				
 				if (empty($_POST['page']['type']))
-					throw new \Exception(_('The type must not be empty'));
+					throw new Exception('The type must not be empty');
 				
 				if (!($instance = new $_POST['page']['type']) instanceof \forge\components\SiteMap\Page)
-					throw new \Exception(_('The requested page type was not a valid type'));
+					throw new Exception('The requested page type was not a valid type');
 				
 				\forge\components\Databases::DB()->beginTransaction();
 			

@@ -15,6 +15,7 @@
 	*/
 	abstract class Addon {
 		use Versioning;
+		use \forge\components\Locale\Translator;
 
 		/**
 		* Define permissions issued
@@ -120,15 +121,13 @@
 		* @throws Exception
 		*/
 		static public function getTables($long=true) {
-			$tables = array();
-			$files = glob(FORGE_PATH.'/'.($path = (substr(str_replace('\\', '/', get_called_class()), strlen('forge/')).'/db/')).'*');
+			$tables = self::getNamespace('db');
 
-			foreach ($files as $file) {
-				preg_match('$'.$path.'class.(\w+).php$', $file, $m);
-				
-				if (count($m))
-					$tables[] = ($long ? 'forge\\'.str_replace('/', '\\', $path) : null).$m[1];
-			}
+			if (!$long)
+				foreach ($tables as &$table) {
+					$table = explode('\\', $table);
+					$table = $table[count($table)-1];
+				}
 
 			return $tables;
 		}
@@ -141,13 +140,16 @@
 		static public function getNamespace($subspace=null) {
 			$classes = array();
 			$path = str_replace('\\', '/', substr(get_called_class(), strlen('forge\\'))).'/'.str_replace('\\', '/', $subspace).'/';
-			
-			if (($files = glob($path.'class.*.php')) !== false)
-				foreach ($files as $file) {
-					preg_match_all('#'.$path.'class.(\w+).php#', $file, $matches);
-					$classes[] = get_called_class().'\\'.(strlen($subspace) ? $subspace.'\\' : null).array_pop($matches[1]);
-				}
-			
+
+			$files = [];
+			if (($developer = glob(FORGE_PATH.'/'.$path.'class.*.php')) !== false)
+				$files = array_merge($files, $developer);
+
+			foreach ($files as $file) {
+				preg_match_all('#'.$path.'class.(\w+).php#', $file, $matches);
+				$classes[] = get_called_class().'\\'.(strlen($subspace) ? $subspace.'\\' : null).array_pop($matches[1]);
+			}
+
 			return $classes;
 		}
 

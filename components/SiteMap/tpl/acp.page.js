@@ -1,10 +1,6 @@
 function display(id) {
-	var list = document.getElementsByClassName('plugin-form');
-	
-	for (var i=0;i<list.length;++i)
-		list[i].style.display = 'none';
-	
-	document.getElementById(id).style.display = 'block';
+	$('.plugin-form.visible').removeClass('visible');
+	$('#'+id).addClass('visible');
 }
 
 function mkuri() {

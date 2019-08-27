@@ -23,12 +23,12 @@
 
 			// We must set something
 			if (empty($_POST['id']))
-				throw new \forge\HttpException(_('Bad request'),
+				throw new \forge\HttpException('Bad request',
 					\forge\HttpException::HTTP_BAD_REQUEST);
 
 			// Set it
 			\forge\components\Databases::setDefaultConnection($_POST['id']);
 			
-			self::setResponse(_('The connection is now used!'), self::RESULT_OK);
+			self::setResponse(self::l('The connection is now used!'), self::RESULT_OK);
 		}
 	}

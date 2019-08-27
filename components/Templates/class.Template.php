@@ -39,17 +39,23 @@
 		 */
 		private $path;
 		
+		/**
+		 * @var bool Wether or not the admin can select this template
+		 */
+		private $selectable;
+		
 		public function __construct($template) {
 			$this->path = FORGE_PATH.'/templates/'.$template;
 			
 			if (!file_exists($file = $this->path.'/template.xml'))
-				throw new \Exception(_('File template.xml not found'));
+				throw new Exception('File template.xml not found');
 			$xml = simplexml_load_file($file);
 			
 			$this->author = (string)$xml->author;
 			$this->copyright = (string)$xml->copyright;
 			$this->name = (string)$xml->name;
-			
+			$this->selectable = isset($xml->selectable) && (string)$xml->selectable == "false" ? false : true;
+
 			foreach ($xml->modules as $element) 
 				$this->modules[] = (string)$element->module;
 		}
@@ -68,5 +74,9 @@
 		
 		public function getName() {
 			return $this->name;
+		}
+		
+		public function isSelectable() {
+			return $this->selectable;
 		}
 	}

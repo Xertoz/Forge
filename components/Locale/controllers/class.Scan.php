@@ -26,10 +26,10 @@
 				\forge\components\Locale\Library::scanMessages();
 			}
 			catch (\Exception $e) {
-				throw new \forge\HttpException(_('An error occured during the scan!'),
+				throw new \forge\HttpException('An error occured during the scan!',
 					\forge\HttpException::HTTP_INTERNAL_SERVER_ERROR);
 			}
 
-			self::setResponse(_('Messages were successfully scanned!'), self::RESULT_OK);
+			self::setResponse(self::l('Messages were successfully scanned!'), self::RESULT_OK);
 		}
 	}

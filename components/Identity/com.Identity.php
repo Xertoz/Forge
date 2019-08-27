@@ -13,7 +13,7 @@
 	/**
 	* Manage different user account types with a unified identification
 	*/
-	class Identity extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Identity extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
 		use \forge\Configurable;
 
 		/**
@@ -135,6 +135,25 @@
 				$permissions = array_merge($permissions, $addon::getPermissions());
 			return $permissions;
 		}
+		
+		/**
+		 * Get the menu items
+		 * @param \forge\components\SiteMap\db\Page Page
+		 * @param string Addon
+		 * @param string View
+		 * @return array[AdminMenu]|MenuItem
+		 */
+		static public function getAdminMenu($page, $addon, $view) {
+			if (!\forge\components\Identity::hasPermission('com.Identity.Admin'))
+				return null;
+			
+			$menu = new \forge\components\Admin\MenuItem('identity', self::l('People'), '/'.$page->page_url.'/Identity', 'ion ion-ios-people');
+			
+			if ($addon === '\\forge\\components\\Identity')
+				$menu->setActive();
+			
+			return $menu;
+		}
 
 		/**
 		 * Is the logged in user an administrator?
@@ -164,7 +183,7 @@
 		 * @return bool
 		 */
 		static public function isDeveloper() {
-			return isset($_COOKIE['developer']) && sha1($_COOKIE['developer']) == self::getConfig('developer');
+			return sha1(\forge\Memory::cookie('developer')) === self::getConfig('developer');
 		}
 
 		/**
@@ -194,7 +213,7 @@
 		 */
 		static public function restrict($permission) {
 			if (!self::hasPermission($permission))
-				throw new \forge\HttpException(_('Forbidden'), \forge\HttpException::HTTP_FORBIDDEN);
+				throw new \forge\HttpException('Forbidden', \forge\HttpException::HTTP_FORBIDDEN);
 		}
 
 		/**

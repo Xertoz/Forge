@@ -13,7 +13,7 @@
 	/**
 	* Enable Forge to provide multiple website support on one installation
 	*/
-	class Websites extends \forge\Component implements \forge\components\Dashboard\InfoBox {
+	class Websites extends \forge\Component implements \forge\components\Admin\Menu {
 		/**
 		* Permissions
 		* @var array
@@ -25,6 +25,28 @@
 		* @var \forge\components\Websites\db\tables\Website
 		*/
 		static private $website = null;
+		
+		/**
+		 * Get the menu items
+		 * @param \forge\components\SiteMap\db\Page Page
+		 * @param string Addon
+		 * @param string View
+		 * @return array[AdminMenu]|MenuItem
+		 */
+		static public function getAdminMenu($page, $addon, $view) {
+			if (!\forge\components\Identity::hasPermission('com.Websites.Admin'))
+				return null;
+			
+			$menu = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
+			
+			$menu->appendChild(new \forge\components\Admin\MenuItem(
+				'websites',
+				self::l('Websites'),
+				'Websites'
+			));
+			
+			return $menu;
+		}
 
 		/**
 		* Get the domain of the current website
@@ -69,21 +91,6 @@
 			$website->select('domain');
 
 			return $website->getId();
-		}
-		/**
-		 * Get the infobox for the dashboard as HTML source code
-		 * @return string
-		 */
-		static public function getInfoBox() {
-			if (!\forge\components\Identity::getIdentity()->hasPermission('com.Websites.Admin'))
-				return null;
-
-			return \forge\components\Templates::display(
-				'components/Websites/tpl/inc.infobox.php',
-				array(
-					'websites' => \forge\components\Websites::getDomains(true)->length()
-				)
-			);
 		}
 		
 		/**

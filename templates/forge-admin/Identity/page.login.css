@@ -1,0 +1,74 @@
+#login {
+	display:inline-block;
+	position:fixed;
+	top:50%;
+	left:50%;
+	transform:translateY(-50%) translateX(-50%);
+	width:33%;
+	background:#fff;
+	border-radius:3px;
+	padding:8px;
+	box-sizing:border-box;
+	border-radius:3px;
+	border-top:3px solid #069;
+	font:13px 'PT Sans', sans-serif;
+}
+
+#login > h1 {
+	font:18px/18px 'PT Sans', sans-serif;
+	color:#353535;
+	margin:0 -8px 8px -8px;
+	padding:0 8px 8px 8px;
+	border-bottom:1px #efefef solid;
+}
+
+#login form label {
+	display:block;
+	font-weight:bold;
+}
+
+#login form input {
+	display:block;
+	box-sizing:border-box;
+	width:100%;
+	padding:6px 12px;
+	margin:5px 0 15px 0;
+	border:1px solid #d2d6de;
+	border-radius:0;
+	font-size:13px;
+	color:#555;
+}
+
+#login > footer {
+	border-top:1px #efefef solid;
+	margin:8px -8px 0 -8px;
+	padding:8px 8px 0 8px;
+	text-align:right;
+}
+
+#login > footer > button {
+	color:#fff;
+	background-color:#3c8dbc;
+	border:1px solid #367fa9;
+	border-radius:3px;
+	padding:6px 12px;
+	cursor:pointer;
+	margin-left:8px;
+}
+
+#login > footer > button.gray {
+	background-color:#f4f4f4;
+	border-color:#ddd;
+	color:#444;
+}
+
+#lost-password {
+	font-size:11px;
+	color:#666;
+	text-decoration:none;
+}
+
+#lost-password:hover {
+	color:#000;
+	text-decoration:underline;
+}

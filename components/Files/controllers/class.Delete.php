@@ -21,18 +21,30 @@
 		public function process() {
 			\forge\components\Identity::restrict('com.Files.Admin');
 			
-			if (empty($_POST['file']))
-				throw new \forge\HttpException(_('A file must be chosen'),
+			$id = \forge\Post::getInt('id');
+			if ($id === null)
+				throw new \forge\HttpException('A repo ID must be set',
 						\forge\HttpException::HTTP_BAD_REQUEST);
 			
+			$path = \forge\Post::getString('file');
+			if ($path === null)
+				throw new \forge\HttpException('A file must be chosen',
+						\forge\HttpException::HTTP_BAD_REQUEST);
+			$path = explode('/', $path);
+			$file = array_pop($path);
+			$dir = implode('/', $path);
+			
+			$repo = new \forge\components\Files\Repository($id);
+			$folder = $repo->getFolder($dir);
+			
 			try {
-				(new \forge\components\Files\File($_POST['file']))->delete();
+				$folder->deleteFile($file);
 			}
 			catch (\Exception $e) {
-				throw new \forge\HttpException(_('The file could not be deleted'),
+				throw new \forge\HttpException('The file could not be deleted',
 						\forge\HttpException::HTTP_CONFLICT);
 			}
 			
-			self::setResponse(_('The file was successfully deleted!'), self::RESULT_OK);
+			self::setResponse(self::l('The file was successfully deleted!'), self::RESULT_OK);
 		}
 	}

@@ -56,7 +56,7 @@
 				// Show a form for resetting an account password
 				case 'recover-password':
 					if (empty($_GET['key']))
-						throw new \forge\HttpException(_('No key provided'),
+						throw new \forge\HttpException('No key provided',
 								\forge\HttpException::HTTP_BAD_REQUEST);
 
 					try {

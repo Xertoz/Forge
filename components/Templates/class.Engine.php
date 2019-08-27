@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Engine.php
-	* Copyright 2011-2012 Mattias Lindholm
+	* Copyright 2011-2014 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -14,6 +14,8 @@
 	* The actual template engine
 	*/
 	class Engine {
+		use \forge\components\Locale\Translator;
+
 		/**
 		* META data
 		* @var array
@@ -33,27 +35,35 @@
 		static private $styles = array();
 
 		/**
+		 * The page title
+		 * @var string
+		 */
+		static private $title = null;
+
+		/**
 		* Add some JavaScript to the header element
 		* @param string
 		* @return void
 		*/
 		static public function addScript($script) {
+			if (is_string($script))
+				$script = new JavaScript($script);
+
 			foreach (self::$scripts as $subject)
-				if ($subject == $script)
+				if ($subject->getHash() == $script->getHash())
 					return;
 
 			self::$scripts[] = $script;
 		}
-		
+
 		/**
 		 * Add an external JavaScript file to the header element
 		 * @param string $file File name
+		 * @param bool $preserve Do not minify the source
 		 * @return void
 		 */
-		static public function addScriptFile($file) {
-			$script = '<script src="'.self::html($file).'" type="text/javascript"></script>';
-			
-			self::addScript($script);
+		static public function addScriptFile($file, $preserve=false) {
+			self::addScript(new JavaScript($file, JavaScript::TYPE_FILE, !$preserve));
 		}
 
 		/**
@@ -62,15 +72,24 @@
 		* @return void
 		*/
 		static public function addStyle($style) {
+			if (is_string($style))
+				$style = new CSS($style);
+
 			foreach (self::$styles as $subject)
-				if ($subject == $style)
+				if ($subject->getHash() == $style->getHash())
 					return;
 
 			self::$styles[] = $style;
 		}
-		
-		static public function addStyleFile($file) {
-			self::addStyle('<link href="'.self::html($file).'" rel="stylesheet" media="screen" />');
+
+		/**
+		 * Add an external CSS file to the header element
+		 * @param string $file File name
+		 * @param bool $preserve Do not minify the source
+		 * @return void
+		 */
+		static public function addStyleFile($file, $preserve=false) {
+			self::addStyle(new CSS($file, CSS::TYPE_FILE, !$preserve));
 		}
 
 		/**
@@ -121,22 +140,13 @@
 		}
 
 		/**
-		 * Implement one of the available Forge JavaScript APIs
-		 * @param $api string Which API should be included?
-		 * @return void
-		 */
-		static public function forgeJS($api) {
-			self::addScriptFile('/script/'.$api.'.js');
-		}
-
-		/**
 		* Get META elements
 		* @return array
 		*/
 		static public function getMeta() {
 			return self::$meta;
 		}
-		
+
 		/**
 		 * Get a parameter from the REQUEST input
 		 * @param string $name Field name
@@ -145,40 +155,118 @@
 		 */
 		static private function getRequestField($name, $default) {
 			preg_match_all('/\w+/', $name, $matches);
-			
+
 			$ref = array_merge($_GET, $_POST);
 			while ($matches[0])
 				$ref = &$ref[array_shift($matches[0])];
-			
+
 			return isset($ref) ? $ref : $default;
 		}
 
 		/**
 		* Get all JavaScript elements as string
+		* @param string Glue
 		* @return string
 		*/
-		static public function getScripts() {
-			return implode('',self::$scripts);
+		static public function getScripts($glue) {
+			$local = '';
+			$elements = [];
+
+			foreach (self::$scripts as $script)
+				if ($script->isRemote())
+					$elements[] = '<script type="text/javascript" src="'.$script->getFile().'"></script>';
+				elseif (!\forge\components\Identity::isDeveloper() && $script->isMinifiable())
+					$local .= $script->getSource();
+				elseif ($script->isLocal())
+					$elements[] = '<script type="text/javascript" src="'.$script->getFile().'"></script>';
+				else
+					$elements[] = '<script type="text/javascript">'.$script->getSource().'</script>';
+
+			if (strlen($local)) {
+				$js = new JavaScript($local);
+				$hash = $js->getHash();
+				$repo = \forge\components\Files::getCacheRepository();
+				try {
+					$folder = $repo->getFolder('script');
+				}
+				catch (\forge\components\Files\exceptions\FileNotFound $e) {
+					$folder = $repo->createFolder('script');
+				}
+				$file = $hash.'.js';
+				try {
+					$folder->getFile($file);
+				}
+				catch (\forge\components\Files\exceptions\FileNotFound $e) {
+					$folder->createFile($file, \forge\JSMin::minify($local));
+				}
+				$elements[] = '<script type="text/javascript" src="/cache/script/'.$file.'"></script>';
+			}
+
+			return implode($glue, $elements);
 		}
 
 		/**
 		* Get all CSS elements as string
+		* @param string Glue
 		* @return string
 		*/
-		static public function getStyles() {
-			return implode('',self::$styles);
+		static public function getStyles($glue) {
+            $repo = \forge\components\Files::getCacheRepository();
+			$elements = [];
+
+            try {
+                $folder = $repo->getFolder('style');
+            } catch (\forge\components\Files\exceptions\FileNotFound $e) {
+                $folder = $repo->createFolder('style');
+            }
+
+			foreach (self::$styles as $style)
+				if ($style->isRemote())
+					$elements[] = '<link href="'.$style->getFile().'" rel="stylesheet" />';
+				elseif (!\forge\components\Identity::isDeveloper() && $style->isMinifiable()) {
+                    $css = new CSS($style->getSource());
+                    $hash = $css->getHash();
+                    $file = $hash.'.css';
+                    try {
+                        $folder->getFile($file);
+                    } catch (\forge\components\Files\exceptions\FileNotFound $e) {
+                        $folder->createFile($file, \forge\CssMin::minify($style->getSource()));
+                    }
+                    $elements[] = '<link href="/cache/style/'.$hash.'.css" rel="stylesheet" />';
+                }
+				elseif ($style->isLocal())
+					$elements[] = '<link href="'.$style->getFile().'" rel="stylesheet" />';
+				else
+					$elements[] = '<style type="text/css" media="screen">'.$style->getSource().'</style>';
+
+
+			return implode($glue, $elements);
+		}
+
+		/**
+		 * Get the page title
+		 * @return string
+		 */
+		static public function getTitle() {
+			return self::$title;
 		}
 
 		/**
 		* Get the complete header elements as string
+		* @param int Number of tab indentations
 		* @return string
 		*/
-		static public function header() {
-			return implode('',array(
-				self::meta(),
-				self::getStyles(),
-				self::getScripts()
-			));
+		static public function header($tabs=0) {
+			$glue = "\n";
+			for ($i=0;$i<$tabs;++$i)
+				$glue .= "\t";
+
+			return implode($glue, array_filter(array(
+				self::title(),
+				self::meta($glue),
+				self::getStyles($glue),
+				self::getScripts($glue)
+			)));
 		}
 
 		/**
@@ -202,16 +290,16 @@
 
 			if (empty($vars['value']))
 				$vars['value'] = null;
-			
-			self::addScriptFile('/script/tinymce/tinymce.min.js');
+
+			self::addScriptFile('/script/tinymce/tinymce.min.js', true);
 			self::addScriptFile('/components/Templates/script/editor.js');
-			
+
 			$id = uniqid();
 			$textarea = '<textarea name="'.htmlspecialchars($vars['name']).'" class="editable" id="'.$id.'">'.htmlentities($vars['value']).'</textarea>';
 
 			return $textarea;
 		}
-		
+
 		/**
 		 * Write an image here which is selected by the client depending on its
 		 * pixel density.
@@ -247,7 +335,7 @@
 
 			return $script;
 		}
-		
+
 		/**
 		 * Create an INPUT element based on default values and POST/GET data
 		 * @param $type string Type attribute
@@ -260,51 +348,52 @@
 		static public function input($type, $name, $value=null, $auto=true, $attr=array()) {
 			$attr['name'] = $name;
 			$attr['type'] = $type;
-			
+
 			switch ($attr['type']) {
 				case 'password':
 					$attr['value'] = null;
 					break;
-				
+
 				case 'checkbox':
 					$attr['value'] = 1;
-					
+
 					if ($auto && (self::getRequestField($name, false) !== false || $value))
 						$attr['checked'] = 'checked';
-					
+
 					break;
-					
+
 				case 'radio':
 					$attr['value'] = $value;
-					
+
 					if ($auto && self::getRequestField($name, false) === $value)
 						$attr['checked'] = 'checked';
-					
+
 					break;
-				
+
 				default:
 					$attr['value'] = $auto ? self::getRequestField($name, $value) : $value;
 					break;
 			}
-			
+
 			return self::display('components/Templates/tpl/inc.input.php', ['attributes' => $attr]);
 		}
 
 		/**
 		* Get META elements
+		* @param string Glue
 		* @return string
 		*/
-		static public function meta() {
+		static public function meta($glue) {
 			if (!is_array($meta = self::getMeta()))
 				return null;
 
-			$output = null;
+			$output = [];
 			foreach ($meta as $key => $value)
-				$output .= '<meta name="'.self::html($key).'" content="'.self::html($value).'" />';
+				$output[] = '<meta name="'.self::html($key).'" content="'.self::html($value).'" />';
 
-			return $output;
+			return implode($glue, $output);
 		}
-		
+
 		/**
 		 * Handle any response from a specific controller
 		 * @param string|array $controller
@@ -319,13 +408,47 @@
 
 				return $html;
 			}
-			
+
 			if (\forge\Controller::getController() == $controller && \forge\Controller::getCode() != \forge\Controller::RESULT_PENDING) {
-				$class = \forge\Controller::getCode() == \forge\Controller::RESULT_OK ? 'success' : 'error';
+				self::addStyleFile('/css/controller.css');
+			    $class = \forge\Controller::getCode() == \forge\Controller::RESULT_OK ? 'success' : 'error';
 				$html = '<p class="controller '.$class.'">'.self::html(\forge\Controller::getMessage()).'</p>';
 			}
-			
+
 			return $html;
+		}
+
+		/**
+		 * Load require.js and all available plugins
+		 */
+		static public function requireJS() {
+			self::addScriptFile('/script/require.js', true);
+
+			$plugins = [
+				'cookie' => '//cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
+				'jquery' => '//ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min'
+			];
+			foreach (\forge\Addon::getAddons(true) as $addon)
+				if (in_array('forge\components\Templates\RequireJS', class_implements($addon)))
+					$plugins = array_merge($plugins, $addon::getRequireJS());
+			ksort($plugins);
+
+			self::addScript(self::display('components/Templates/tpl/js.requirejs.php', ['plugins' => $plugins]));
+		}
+
+		static public function select($name, $options, $value=null, $auto=true, $attr=[]) {
+			$attr['name'] = $name;
+
+			$default = self::getRequestField($name, $value);
+
+			return self::display(
+				'components/Templates/tpl/inc.select.php',
+				[
+					'attributes' => $attr,
+					'default' => $default,
+					'options' => $options
+				]
+			);
 		}
 
 		/**
@@ -338,6 +461,14 @@
 		}
 
 		/**
+		 * Set the page title
+		 * @param string $title
+		 */
+		static public function setTitle($title) {
+			self::$title = $title;
+		}
+
+		/**
 		* Get thumbnail href
 		* @param string File path relative to site root
 		* @param int Width
@@ -346,5 +477,13 @@
 		*/
 		static public function thumb($file,$width,$height) {
 			return '/thumbnail/'.$width.'/'.$height.'/'.$file;
+		}
+
+		/**
+		 * Get the title element
+		 * @return string
+		 */
+		static public function title() {
+			return '<title>'.self::html(self::getTitle()).'</title>';
 		}
 	}

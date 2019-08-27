@@ -1,5 +1,3 @@
-//<?php self::addScriptFile('/script/ajax.js'); ?>
-
 function translate(event) {
     var message = event.target.parentNode.children[0].innerHTML;
     var translation = prompt(message);
@@ -12,7 +10,7 @@ function translate(event) {
         method: 'Controller',
         type: 'POST',
         error: function() {
-            event.target.parentNode.children[1].innerHTML = '<span style="color:red;"><?php echo _("Error"); ?></span>';
+            event.target.parentNode.children[1].innerHTML = '<span style="color:red;">Error</span>';
         },
         success: function() {
             event.target.parentNode.children[1].innerHTML = translation;

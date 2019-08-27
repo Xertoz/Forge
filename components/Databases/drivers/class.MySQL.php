@@ -60,8 +60,11 @@
 		public function buildCreate(\forge\components\Databases\Table $table) {
 			$create = 'CREATE TABLE `'.$this->prefix.$table->getTable().'` (';
 			$lines = array();
-			$indexes = ['primary' => [], 'key' => [], 'unique' => []];
+			$indexes = ['primary' => [], 'key' => [], 'unique' => [], 'foreign' => []];
 			foreach ($table->getColumns(true) as $column => $object) {
+				if ($object->isVirtual())
+					continue;
+				
 				$lines[] = $object->buildCreate($column);
 				foreach ($object->buildIndexes($column) as $key => $array)
 					foreach ($array as $index)
@@ -69,7 +72,8 @@
 			}
 			sort($indexes['primary']);
 			sort($indexes['key']);
-			$indexes = array_merge($indexes['primary'], $indexes['unique'], $indexes['key']);
+			sort($indexes['foreign']);
+			$indexes = array_merge($indexes['primary'], $indexes['unique'], $indexes['key'], $indexes['foreign']);
 			$create .= "\n  ".implode(",\n  ",array_merge($lines,$indexes))."\n) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 
 			return $create;

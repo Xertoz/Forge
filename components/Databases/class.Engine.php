@@ -49,6 +49,9 @@
 		public function bindWhere(\PDOStatement $query, Params $params) {
 			$bind = function(\PDOStatement $query, $where, &$n=1) use (&$bind, $params) {
 				foreach ($where as $column => $value) {
+					if ($value instanceof Table)
+						$value = $value->getId();
+					
 					list($operator, $column) = $params->getColumnOperator($column);
 					
 					switch ($operator) {
@@ -212,6 +215,8 @@
 					else {
 						$operators = array(
 							'is' => '=',
+							'not' => '!=',
+							'null' => 'IS NULL',
 							'gt' => '>',
 							'lt' => '<',
 							'in' => 'IN'
@@ -232,6 +237,10 @@
 									$operator = '!=';
 									$param = $t[1];
 								}
+							
+							case 'IS NULL':
+								$param = null;
+								break;
 						}
 
 						$statements[] = '`'.$t[1].'` '.$operator.' '.$param;

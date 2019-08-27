@@ -22,12 +22,13 @@
 
 		/**
 		* Display the administration panel
+		* @param \forge\components\SiteMap\db\Page Page
 		* @param string Name of the addon
 		* @param string Name of the view
 		* @return string
 		* @throws Exception
 		*/
-		static public function display($addon,$view) {
+		static public function display($page, $addon,$view) {
 			// Explicitly force authentication
 			\forge\components\Identity::auth();
 
@@ -37,6 +38,9 @@
 			// Argument typing
 			$addon = (string)$addon;
 			$view = (string)$view;
+
+			// Determine the CSS class of the page
+			$css = $addon.' '.$view;
 
 			// First off, find the component or module. If it cannot be found, show the 404 page and what not.
 			if (\forge\Addon::existsComponent($addon))
@@ -50,17 +54,41 @@
 			if (!class_exists($class = $addon.'\\Admin'))
 				throw new \forge\HttpException('The addon does not implement an administration interface',\forge\HttpException::HTTP_NOT_FOUND);
 			if (!in_array('forge\components\Admin\Administration', class_implements($class)))
-				throw new \forge\HttpException(_('The addon did not invoke a proper admin interface'),\forge\HttpException::HTTP_NOT_IMPLEMENTED);
+				throw new \forge\HttpException('The addon did not invoke a proper admin interface',\forge\HttpException::HTTP_NOT_IMPLEMENTED);
 
+			// Populate the menu with items
+			$menu = [];
+			foreach (\forge\components\Software::getAddons(true) as $addon2)
+				if (class_exists($addon2) && in_array('forge\\components\\Admin\\Menu', class_implements($addon2))) {
+					$items = $addon2::getAdminMenu($page, $addon, $view);
+					if (!is_array($items)) {
+						if ($items instanceof \forge\components\Admin\MenuItem)
+							$items = [$items];
+						else
+							continue;
+					}
+					
+					foreach ($items as $item)
+						if (!isset($menu[$item->getName()]))
+							$menu[$item->getName()] = $item;
+						else
+							$menu[$item->getName()]->merge($item);
+				}
+			
 			// If the view exists, then we should return the administration output
-			if (method_exists($class,$view))
+			if (method_exists($class,$view)) {
+				\forge\components\Templates::setTemplate('forge-admin');
+				
 				return \forge\components\Templates::display(
 					'components/Admin/tpl/page.view.php',
 					array(
 						'admin' => true,
+						'css' => $css,
+						'menu' => $menu,
 						'view' => $class::$view()
 					)
 				);
+			}
 
 			// If we haven't reached the return line above, we've 404'd  the view
 			throw new \forge\HttpException('View was not found',\forge\HttpException::HTTP_NOT_FOUND);

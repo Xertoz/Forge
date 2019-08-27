@@ -13,7 +13,7 @@
 	/**
 	 * A helper class for managing files on the virtual disk
 	 */
-	class ConfigFile extends File {
+	class ConfigFile extends PhysicalFile {
 		/**
 		 * Find the file in the virtual disk
 		 * @param string $name

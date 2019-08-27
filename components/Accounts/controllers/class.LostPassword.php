@@ -20,7 +20,7 @@
 		 */
 		public function process() {
 			if (empty($_POST['email']))
-				throw new \forge\HttpException(_('You must supply an email address'),
+				throw new \forge\HttpException('You must supply an email address',
 				\forge\HttpException::HTTP_BAD_REQUEST);
 			
 			$account = new \forge\components\Accounts\db\Account();
@@ -29,24 +29,24 @@
 				$account->select('user_email');
 			}
 			catch (\Exception $e) {
-				throw new \forge\HttpException(_('There is no account associated with that email address'),
+				throw new \forge\HttpException('There is no account associated with that email address',
 				\forge\HttpException::HTTP_BAD_REQUEST);
 			}
 			
 			$lost = new \forge\components\Accounts\db\LostPassword();
 			$lost->user = $account->getId();
-			$lost->key = md5(\forge\String::randomize(32));
+			$lost->key = md5(\forge\Strings::randomize(32));
 			$lost->until = time()+24*60*60;
 			$lost->insert();
 			
 			$mail = new \forge\components\Mailer\Mail();
 			$mail->AddAddress($account->user_email, $account->user_name_first.' '.$account->user_name_last);
-			$mail->Subject = _('Lost password');
+			$mail->Subject = self::l('Lost password');
 			$mail->Body = \forge\components\Accounts::getLostPasswordMessage($account, $lost);
 			$mail->IsHTML();
 			$mail->send();
 			
-			self::setResponse(_('We sent you an email containing information on how to proceed!'),
+			self::setResponse(self::l('We sent you an email containing information on how to proceed!'),
 					self::RESULT_OK);
 		}
 	}
