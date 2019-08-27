@@ -17,9 +17,11 @@
 		/**
 		 * Translate a string into the client's language
 		 * @param string English input string
+		 * @param string $sprintf Value(s) to pass into sprintf()
 		 * @return string Localized string
 		 */
-		static public function l(string $string) {
-			return \forge\components\Locale::getString($string);
+		static public function l(string $string, ...$sprintf) {
+			$i18n = \forge\components\Locale::getString($string);
+			return count($sprintf) ? call_user_func_array('sprintf', array_merge([$i18n], $sprintf)) : $i18n;
 		}
 	}

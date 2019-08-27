@@ -15,13 +15,17 @@
 				<li>
 					<a href="/<?php echo $page->page_url; ?>/Documentation/components">Components</a>
 					<ol>
-						<li><a href="/<?php echo $page->page_url; ?>/Documentation/components">Accounts</a></li>
+						<?php foreach (\forge\Addon::getComponents() as $component): ?>
+						<li><a href="/<?php echo $page->page_url; ?>/Documentation/component?component=<?=$component?>"><?=$component?></a></li>
+						<?php endforeach; ?>
 					</ol>
 				</li>
 				<li>
 					<a href="/<?php echo $page->page_url; ?>/Documentation/modules">Modules</a>
 					<ol>
-						<li><a href="/<?php echo $page->page_url; ?>/Documentation/modules">Text</a></li>
+						<?php foreach (\forge\Addon::getModules() as $module): ?>
+							<li><a href="/<?php echo $page->page_url; ?>/Documentation/module?module=<?=$module?>"><?=$module?></a></li>
+						<?php endforeach; ?>
 					</ol>
 				</li>
 				<li><a href="/<?php echo $page->page_url; ?>/Documentation/api">Tools</a></li>

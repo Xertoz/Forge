@@ -22,7 +22,7 @@
 					<h3 class="box-title"><?php echo self::l('API'); ?></h3>
 				</div>
 				<div class="box-body">
-					<p><?php echo self::l('These are all the available classes in the \\forge\\ namespace:'); ?></p>
+					<p><?php echo self::l('These are all the available classes in the <strong>\\forge\\</strong> namespace:'); ?></p>
 					<p><ol>
 						<?php foreach ($classes as $class): ?>
 						<li><a href="?class=<?php echo $class; ?>"><?php echo $class; ?></a></li>
