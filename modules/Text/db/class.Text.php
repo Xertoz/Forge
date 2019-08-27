@@ -30,8 +30,20 @@
 		];
 
 		/**
+		* Page ID
+		* @var int
+		*/
+		public $mobile_enabled = 'Boolean';
+
+		/**
 		* Page contents
 		* @var string
 		*/
 		public $text_content = 'Text';
+
+		/**
+		* Page contents
+		* @var string
+		*/
+		public $mobile_content = 'Text';
 	}
