@@ -35,9 +35,5 @@
 			<?php echo $content; ?>
 			<?php endif; ?>
 		</div>
-		<script src="/script/jquery-3.3.1.min.js"></script>
-		<script src="/templates/forge-admin/script/jquery.dataTables.min.js"></script>
-		<script src="/templates/forge-admin/script/bootstrap.min.js"></script>
-		<script src="/templates/forge-admin/script/adminlte.min.js"></script>
 	</body>
 </html>

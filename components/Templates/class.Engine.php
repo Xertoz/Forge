@@ -425,8 +425,11 @@
 			self::addScriptFile('/script/require.js', true);
 
 			$plugins = [
+				'adminlte' => ['/templates/forge-admin/script/adminlte.min', ['jquery']],
+				'bootstrap' => ['https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min', ['jquery']],
 				'cookie' => 'https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
-				'jquery' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min'
+				'jquery' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min',
+				'jquery.datatables' => ['/templates/forge-admin/script/jquery.dataTables.min', ['jquery']]
 			];
 			foreach (\forge\Addon::getAddons(true) as $addon)
 				if (in_array('forge\components\Templates\RequireJS', class_implements($addon)))
