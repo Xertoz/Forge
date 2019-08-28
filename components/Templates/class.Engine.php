@@ -425,8 +425,8 @@
 			self::addScriptFile('/script/require.js', true);
 
 			$plugins = [
-				'cookie' => '//cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
-				'jquery' => '//ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min'
+				'cookie' => 'https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
+				'jquery' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min'
 			];
 			foreach (\forge\Addon::getAddons(true) as $addon)
 				if (in_array('forge\components\Templates\RequireJS', class_implements($addon)))

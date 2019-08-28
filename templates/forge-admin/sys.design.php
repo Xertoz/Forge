@@ -18,7 +18,7 @@
 		<link rel="stylesheet" href="/templates/forge-admin/css/skin-blue.min.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	</head>
-	<body class="hold-transition skin-blue sidebar-mini">
+	<body class="hold-transition skin-blue sidebar-mini<?php if (\forge\Memory::cookie('admin_menu') === 'false') echo ' sidebar-collapse'; ?>">
 		<div class="wrapper">
 			<?php if (isset($page)): ?>
 			<?php require_once 'inc.navbar.php'; ?>

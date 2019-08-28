@@ -10,22 +10,9 @@
  	//require(['/templates/forge-admin/script/bootstrap.min.js'], function() {
  		//require(['/templates/forge-admin/script/adminlte.min.js']);
  	//});
- 	
-	/*$(document).ready(function() {
-		var sidebar = $('header > h1, body > nav');
-		var content = $('#admin-content');
-		var full = cookie.get('admin_menu') === 'true';
-		
-		if (!full) {
-			sidebar.css({width: '50px'});
-			content.css({'padding-left': '66px'});
-		}
-		
-		$('#sidebar-toggle').click(function() {
-			sidebar.animate({width: full ? '50px' : '230px'});
-			content.animate({'padding-left': full ? '66px' : '246px'});
-			
-			cookie.set('admin_menu', full = !full);
-		});
-	});*/
  //});
+require(['jquery', 'cookie'], function($, cookie) {
+	$('.sidebar-toggle').click(function(event) {
+		cookie.set('admin_menu', $('body').hasClass('sidebar-collapse'));
+	});
+});
