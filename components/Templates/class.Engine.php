@@ -428,6 +428,7 @@
 				'adminlte' => ['/templates/forge-admin/script/adminlte.min', ['jquery']],
 				'bootstrap' => ['https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min', ['jquery']],
 				'cookie' => 'https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
+				'icheck' => ['/templates/forge-admin/script/icheck.min', ['jquery']],
 				'jquery' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min',
 				'jquery.datatables' => ['/templates/forge-admin/script/jquery.dataTables.min', ['jquery']]
 			];
