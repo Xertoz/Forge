@@ -102,10 +102,10 @@
 		*/
 		public function view($id,$vars) {
 			$repo = \forge\components\Files\Repository::loadLink($id);
-			
+
 			if ($vars['SUB_URI'] !== false) {
 				try {
-					$node = $repo->getFolder($vars['SUB_URI']);
+					$node = $repo->get(urldecode($vars['SUB_URI']));
 					$repo = $node;
 				}
 				catch (\forge\components\Files\exceptions\FileNotFound $e) {
@@ -115,15 +115,14 @@
 			
 			$url = '/'.(empty($vars['SUB_URI']) ? $vars['PAGE_URI'] : $vars['PAGE_URI'].'/'.$vars['SUB_URI']);
 			
-			if ($repo->isFolder())
+			if ($repo instanceof \forge\components\Files\Repository)
 				return \forge\components\Templates::display(
 					'components/Files/tpl/page.repo.php',
 					['url' => $url, 'repo' => $repo]
 				);
 			else {
 				try {
-					$file = $repo->getFile();
-					$file->passthru();
+					$repo->passthru();
 				}
 				catch (\forge\components\Files\exceptions\FileNotFound $e) {
 					throw new \forge\HttpException('File not found', \forge\HttpException::HTTP_NOT_FOUND, $e);

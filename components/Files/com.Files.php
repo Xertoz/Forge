@@ -63,14 +63,6 @@
 		static public function getCacheRepository() {
 			return new Files\Repository(self::getConfig('cache'));
 		}
-		
-		/**
-		 * Get the repository for /files
-		 * @return Files\Repository
-		 */
-		static public function getFilesRepository() {
-			return new Files\Repository(self::getConfig('files'));
-		}
 
 		/**
 		 * Get the infobox for the dashboard as HTML source code

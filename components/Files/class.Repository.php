@@ -217,6 +217,10 @@
 			return $this->root->getId();
 		}
 
+		public function getHREF() {
+			return $this->root->link->page_url;
+		}
+
 		public function getName() {
 			return is_null($this->root->link) ? $this->root->name : $this->root->link->page_title;
 		}

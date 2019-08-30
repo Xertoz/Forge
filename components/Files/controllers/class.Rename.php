@@ -21,7 +21,7 @@
 		public function process() {
 			\forge\components\Identity::restrict('com.Files.Admin');
 			
-			$source = \forge\Post::getString('source');
+			/*$source = \forge\Post::getString('source');
 			if ($source === null)
 				throw new \forge\HttpException('A source file must be chosen',
 						\forge\HttpException::HTTP_BAD_REQUEST);
@@ -44,6 +44,6 @@
 						\forge\HttpException::HTTP_CONFLICT);
 			}
 			
-			self::setResponse(self::l('The file was successfully renamed!'), self::RESULT_OK);
+			self::setResponse(self::l('The file was successfully renamed!'), self::RESULT_OK);*/
 		}
 	}

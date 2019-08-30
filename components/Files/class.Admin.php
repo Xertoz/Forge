@@ -10,6 +10,9 @@
 
 	namespace forge\components\Files;
 
+	use forge\components\Templates;
+	use forge\HttpException;
+
 	/**
 	* File component for Forge
 	* Administration interface
@@ -26,6 +29,33 @@
 					'blob' => $blob
 				]
 			);
+		}
+
+		static public function file() {
+			\forge\components\Identity::restrict('com.Files.Admin');
+
+			try {
+				$node = new db\TreeNode(\forge\Get::getInt('id'));
+			}
+			catch (\Exception $e) {
+				throw new HttpException('File not found', HttpException::HTTP_NOT_FOUND);
+			}
+
+			$parents = [];
+			$current = $node;
+
+			while ($current->parent !== null) {
+				$current = new db\TreeNode($current->parent);
+				$parents[] = $current;
+			}
+
+			$repo = new Repository(end($parents)->getId());
+
+			return Templates::display('components/Files/tpl/adm.file.php', [
+				'node' => $node,
+				'parents' => $parents,
+				'repo' => $repo
+			]);
 		}
 
 		static public function index() {

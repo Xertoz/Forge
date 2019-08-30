@@ -35,12 +35,11 @@
 						'size' => self::l('Size'),
 						'actions' => null
 					], [
-						'name' => function($item) use ($path, $repo) {
-							$href = '?id='.$repo->getId().'&path=';
+						'name' => function($item) use ($page, $path, $repo) {
 							if (is_null($item->blob))
-								$href .= urlencode((empty($path) ? '' : $path.'/').$item->name);
+								$href = '?id='.$repo->getId().'&path='.urlencode((empty($path) ? '' : $path.'/').$item->name);
 							else
-								$href .= urlencode($path).'&file='.urlencode($item->name);
+								$href = '/'.$page->page_url.'/Files/file?id='.$item->getId();
 							return '<a href="'.$href.'"><i class="ion ion-'.(!is_null($item->blob)?'document':'folder').'"></i> '.self::html($item->name).'</a>';
 						},
 						'size' => function($item) { return \forge\Strings::bytesize($item->size); },
