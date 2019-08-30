@@ -45,44 +45,44 @@
 		// Split the subject up for inspection
 		$namespace = explode('\\', $subject);
 
-		// The root namespace must be forge, and we can discard it
-		if (array_shift($namespace) != 'forge')
-			return;
-
-		// Fetch the class name out of the array
+		// Figure out the vendor and class name
+		$vendor = array_shift($namespace);
 		$class = array_pop($namespace);
 
-		// Depending on the first subspace, choose a path
-		switch (array_shift($namespace)) {
-			default:
-				$path = 'api';
-				$type = 'class';
+		// Try to autoload what we can
+		switch ($vendor) {
+			case 'forge':
+				// Depending on the first subspace, choose a path
+				switch (array_shift($namespace)) {
+					default:
+						$path = 'api';
+						$name = 'class.'.$class.'.php';
+						break;
+
+					case 'components':
+						$path = 'components/'.(($count = count($namespace)) ? implode('/', $namespace) : $class);
+						$name = ($count ? 'class' : 'com').'.'.$class.'.php';
+						break;
+
+					case 'modules':
+						$path = 'modules/'.(($count = count($namespace)) ? implode('/', $namespace) : $class);
+						$name = ($count ? 'class' : 'mod').'.'.$class.'.php';
+						break;
+				}
 				break;
 
-			case 'components':
-				$path = 'components/'.(($count = count($namespace)) ? implode('/', $namespace) : $class);
-				$type = $count ? 'class' : 'com';
-				break;
-
-			case 'modules':
-				$path = 'modules/'.(($count = count($namespace)) ? implode('/', $namespace) : $class);
-				$type = $count ? 'class' : 'mod';
+			case 'Michelf':
+				$path = 'vendor/php-markdown/Michelf';
+				$name = $class.'.php';
 				break;
 		}
 
 		// Build a file path & name
-		$file = FORGE_PATH.'/'.$path.'/'.$type.'.'.$class.'.php';
+		$file = FORGE_PATH.'/'.$path.'/'.$name;
 
 		// If it exists, include it
 		if (file_exists($file))
 			require_once $file;
-		else {
-			// Try to find out if Forge generated a file for this automatically
-			$extend = FORGE_PATH.'/extend/'.$path.'/'.$type.'.'.$class.'.php';
-			
-			if (file_exists($extend))
-				require_once $extend;
-		}
 	}
 
 	// Set up the autoloader for Forge

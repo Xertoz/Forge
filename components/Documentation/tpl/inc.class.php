@@ -1,4 +1,12 @@
-<div class="col-md-8">
+<?php
+	use Michelf\Markdown;
+
+	function phpdoc_text($cmt) {
+		preg_match_all('/^\s*\* ?($|[^ \@\/].*)/m', $cmt, $matches);
+
+		return Markdown::defaultTransform(implode(PHP_EOL, $matches[1]));
+	}
+?><div class="col-md-8">
 	<div class="box box-primary">
 		<div class="box-header with-border">
 			<h3 class="box-title"><?php echo self::l('Description'); ?></h3>
@@ -8,7 +16,7 @@
 			</div>
 		</div>
 		<div class="box-body">
-			<p><?php echo self::html($ref->getDocComment()); ?></p>
+			<?=phpdoc_text($ref->getDocComment())?>
 		</div>
 	</div>
 	<div class="box box-primary">
@@ -34,7 +42,7 @@
 			</div>
 		</div>
 		<div class="box-body">
-			<p><?php echo self::html($ref->getMethod($method->name)->getDocComment()); ?></p>
+			<p><?=phpdoc_text($ref->getMethod($method->name)->getDocComment())?></p>
 			<?php if (count($method->getParameters())): ?>
 			<p><ul>
 				<?php foreach ($method->getParameters() as $param): ?>
