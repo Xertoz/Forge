@@ -67,16 +67,10 @@
 							$href .= self::html($parent->name ?? $repo->getHREF()).'/';
 						$href .= self::html($node->name);
 
-						if (strstr($node->name, '.') !== false)
-							switch ($type = MimeType::fromExtension($node->name)) {
-								default:
-									echo '<div class="alert alert-danger"><h4><i class="icon fa fa-warning"></i> '.self::l('Error!').'</h4><p>'.self::l('There\'s currently no way to preview a <b>%s</b> file type!', $type).'</p></div>';
-									break;
+						$type = MimeType::fromExtension($node->name);
+						$file = 'components/Files/tpl/preview/'.str_replace('/', '_', $type).'.php';
 
-								case 'image/jpeg':
-									echo '<img src="'.$href.'" style="max-width:100%;">';
-									break;
-							}
+						require file_exists($file) ? $file : 'preview/default.php';
 					?>
 				</div>
 			</div>

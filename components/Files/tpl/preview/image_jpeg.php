@@ -1,0 +1,1 @@
+<img src="<?=$href?>" style="max-width:100%;">
