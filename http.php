@@ -43,10 +43,23 @@
 		
 		// Make sure we are on a correct host
 		components\Websites::loadWebsite();
-		
-		// Factor a request handler and let it run
-		$handler = RequestHandler::factory($url);
-		$handler->handle();
+
+		if (strstr($_SERVER['HTTP_ACCEPT'], 'application/json') === false) {
+			// Factor a request handler and let it run
+			$handler = RequestHandler::factory($url);
+			$handler->handle();
+		}
+		else {
+			if (Controller::getCode() == Controller::RESULT_BAD)
+				header('HTTP/1.1 400 Bad Request');
+
+			echo json_encode([
+				'code' => Controller::getCode(),
+				'controller' => Controller::getController(),
+				'exception' => Controller::getException(),
+				'message' => Controller::getMessage()
+			]);
+		}
 		
 		// Close the connection to the HTTP client
 		header('Content-Encoding: none');

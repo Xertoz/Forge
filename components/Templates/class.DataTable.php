@@ -17,10 +17,30 @@
 	 */
 	class DataTable {
 		/**
+		 * @var bool Should the user be able to drag rows in this table?
+		 */
+		private $draggable = false;
+
+		/**
 		 * The iterable data
 		 * @var \Iterator
 		 */
 		private $iterable;
+
+		/**
+		 * @var bool Should the table be paginated?
+		 */
+		private $paging = false;
+
+		/**
+		 * @var bool Should the user be able to sort columns in this table?
+		 */
+		private $sortable = false;
+
+		/**
+		 * @var bool Should the user be able to search in this table?
+		 */
+		private $searchable = false;
 
 		/**
 		 * Initiate the table from an iterable variable
@@ -42,7 +62,56 @@
 				'attr' => $attributes,
 				'callbacks' => $callbacks,
 				'columns' => $columns,
-				'iterable' => $this->iterable
+				'iterable' => $this->iterable,
+				'table' => $this
 			]);
+		}
+
+		/**
+		 * Check or set whether this table's rows are draggable
+		 * @param bool $draggable
+		 * @return bool
+		 */
+		public function isDraggable($draggable=null) {
+			if (is_bool($draggable))
+				$this->draggable = $draggable;
+
+			return $this->draggable;
+		}
+
+		/**
+		 * Check or set whether this table's rows are paginated
+		 * @param bool $paging
+		 * @return bool
+		 */
+		public function isPaging($paging=null) {
+			if (is_bool($paging))
+				$this->paging = $paging;
+
+			return $this->paging;
+		}
+
+		/**
+		 * Check or set whether this table is searchable
+		 * @param bool $searchable
+		 * @return bool
+		 */
+		public function isSearchable($searchable=null) {
+			if (is_bool($searchable))
+				$this->searchable = $searchable;
+
+			return $this->searchable;
+		}
+
+		/**
+		 * Check or set whether this table's rows are sortable
+		 * @param bool $sortable
+		 * @return bool
+		 */
+		public function isSortable($sortable=null) {
+			if (is_bool($sortable))
+				$this->sortable = $sortable;
+
+			return $this->sortable;
 		}
 	}

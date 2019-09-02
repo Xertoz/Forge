@@ -7,7 +7,7 @@
  * to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  */
 
-require(['jquery', 'cookie', 'jquery.datatables', 'adminlte', 'icheck'], function($, cookie) {
+require(['jquery', 'cookie', 'adminlte', 'icheck'], function($, cookie) {
 	// Remember menu visibility
 	$('.sidebar-toggle').click(function(event) {
 		cookie.set('admin_menu', $('body').hasClass('sidebar-collapse'));

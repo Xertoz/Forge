@@ -17,14 +17,24 @@
 		static public function page() {
 			\forge\components\Identity::restrict('com.SiteMap.Admin');
 
-			$entry = !empty($_GET['id']) ? new db\Page($_GET['id']) : new db\Page();
+			$entry = new db\Page(\forge\Get::getInt('id'));
 			$instance = $entry->page_type ? new $entry->page_type : null;
+
+			$types = [null=>null];
+			$typeInstances = \forge\components\SiteMap::getPageTypes();
+			foreach ($typeInstances as $type)
+				$types[$type->getName()] = $type->getTitle();
+
+			$parents = [null=>null];
+			foreach (\forge\components\SiteMap::getAvailablePages() as $parent)
+				$parents[$parent->getId()] = $parent->page_title;
 
 			return \forge\components\Templates::display('components/SiteMap/tpl/acp.page.php',array(
 				'entry' => $entry,
 				'instance' => $instance,
-				'pages' => \forge\components\SiteMap::getAvailablePages(),
-				'types' => \forge\components\SiteMap::getPageTypes()
+				'parents' => $parents,
+				'typeInstances' => $typeInstances,
+				'types' => $types
 			));
 		}
 
@@ -40,15 +50,15 @@
 		static public function index() {
 			\forge\components\Identity::restrict('com.SiteMap.Admin');
 
-			$pages = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
+			$pages = new \forge\components\Templates\DataTable(new \forge\components\Databases\TableList([
 				'type' => new \forge\components\SiteMap\db\Page,
 				'order' => ['page_order' => 'DESC'],
 				'where' => ['page_parent' => empty($_GET['parent']) ? 0 : (int)$_GET['parent']]
 			]));
-			//$pages->isDraggable(true);
+			$pages->isDraggable(true);
 
 			return \forge\components\Templates::display('components/SiteMap/tpl/acp.menu.php',[
-				'pages' => new \forge\components\Templates\DataTable($pages)
+				'pages' => $pages
 			]);
 		}
 	}

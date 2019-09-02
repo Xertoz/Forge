@@ -14,7 +14,7 @@
 	/**
 	* Supply a site map sort of function to Forge. This component WILL handle URL translations etc.
 	*/
-	class SiteMap extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
+	class SiteMap extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox, \forge\components\Templates\RequireJS {
 		use \forge\Configurable;
 
 		/**
@@ -181,7 +181,7 @@
 
 		/**
 		* Return a list of available page types
-		* @return array
+		* @return array[SiteMap\Page]
 		* @throws Exception
 		*/
 		static public function getPageTypes() {
@@ -251,6 +251,19 @@
 			}
 
 			return $parents;
+		}
+
+		/**
+		 * Get the requirejs plugins
+		 * @return array
+		 */
+		static public function getRequireJS() {
+			$plugins = [];
+
+			if (\forge\components\Identity::hasPermission('com.SiteMap.Admin'))
+				$plugins['forge.sitemap'] = '/components/SiteMap/script/forge.sitemap';
+
+			return $plugins;
 		}
 
 		/**

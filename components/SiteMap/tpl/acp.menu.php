@@ -1,54 +1,57 @@
-<h1><?php echo self::l('Pages'); ?></h1>
-<div class="col-4-3">
-    <div class="panel">
-        <h1><?php echo self::l('Site structure'); ?></h1>
-        <?php echo self::response('SiteMap\Delete'); ?>
-        <?php echo self::response('SiteMap\Organize'); ?>
-        <?php echo $pages->draw(
-            array(
-                'page_title' => self::l('Title'),
-                'page_url' => self::l('URL'),
-                'actions' => null
-            ),
-            array(
-                'page_url' => function($r) {
-                    return '<a href="/'.self::html($r['page_url']).'">/'.self::html($r['page_url']).'</a>';
-                },
-                'actions' => function($r) use(&$page) {
-                    $output = '<input type="hidden" name="menu[]" value="'.$r['forge_id'].'" class="forge-sitemap-menu-row" />';
-                    if ($r->getChildren()->length())
-                        $output .= '<a href="?parent='.$r['forge_id'].'"><img src="/images/led/find.png" alt="'.self::l('View children')." title=".self::l('View children').'" /></a> ';
-                    $output .= '<button type="button" onclick="location =\'/'.$page->page_url.'/SiteMap/page?id='.$r['forge_id'].'\';">'.self::l('Edit').'</button>'.PHP_EOL;
-                    $output .= '<form action="/'.$page->page_url.'/SiteMap" method="POST">';
-                    $output .= '<input type="hidden" name="forge[controller]" value="SiteMap\Delete" />';
-                    $output .= self::input('hidden', 'page[id]', $r['forge_id'], false);
-                    $output .= '<button type="submit" onclick="return confirm(\''.sprintf(self::l('Do you want to delete the page %s?\n\nThis action is irreversible.'), self::html($r['page_title'])).'\');" class="red"'.($r['allowRemove'] ? '' : ' disabled').'>'.self::l('Delete').'</button>';
-                    $output .= '</form>';
-                    return $output;
-                }
-            ),
-            array('id' => 'forge-sitemap-menu')
-        ); ?>
-        <form action="/<?=$page->page_url?>/SiteMap" method="POST" name="sitemap_menu"></form>
-        <footer>
-            <button type="button" onclick="location = '/<?=$page->page_url?>/SiteMap/page';"><?php echo self::l('New page'); ?></button>
-            <button type="button" onclick="organize();" class="blue"><?php echo self::l('Save'); ?></button>
-        </footer>
-    </div>
-</div>
-<div class="col-4">
-    <div class="panel green">
-        <h1><?php echo self::l('Settings'); ?></h1>
-        <form>
-            <p>
-                <?php echo self::l('Homepage'); ?>:
-                <select>
-                    <option></option>
-                </select>
-            </p>
-        </form>
-        <footer>
-            <button type="submit" class="blue"><?php echo self::l('Save'); ?></button>
-        </footer>
-    </div>
-</div>
+<section class="content-header">
+	<h1>
+		<?=self::l('Pages')?>
+	</h1>
+	<ol class="breadcrumb">
+		<li class="active"><i class="fa fa-files-o"></i> <?=self::l('Pages')?></li>
+	</ol>
+</section>
+<section class="content container-fluid">
+	<div class="row">
+		<div class="col-md-9">
+			<div class="box">
+				<div class="box-header"><h3 class="box-title"><?=self::l('Site directory')?></h3></div>
+				<div class="box-body">
+					<div class="alert alert-danger hidden">
+						<h4><i class="icon fa fa-warning"></i> <?=self::l('Error')?></h4>
+						<p><?=self::l('The menu order could not be updated!')?></p>
+					</div>
+					<?=$pages->draw([
+							'page_title' => self::l('Title'),
+							'page_url' => self::l('URL')
+						], [
+							'page_title' => function($r) use(&$page) {
+								return '<a href="/'.$page->page_url.'/SiteMap/page?id='.$r['forge_id'].'">'.self::html($r['page_title']).'</a>';
+							},
+							'page_url' => function($r) {
+								return '<a href="/'.self::html($r['page_url']).'">/'.self::html($r['page_url']).'</a>';
+							}
+						], ['id' => 'forge-sitemap-menu', 'data-onrowreorder' => 'onRowReorder']
+					)?>
+				</div>
+				<div class="overlay hidden"><i class="fa fa-refresh fa-spin"></i></div>
+				<div class="box-footer">
+					<span class="pull-right"><button type="button" class="btn btn-success" onclick="location = '/<?=$page->page_url?>/SiteMap/page';"><?php echo self::l('New page'); ?></button></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="box">
+				<div class="box-header"><h3 class="box-title"><?=self::l('Settings')?></h3></div>
+				<div class="box-body">
+					<form>
+						<p>
+							<?php echo self::l('Homepage'); ?>:
+							<select>
+								<option></option>
+							</select>
+						</p>
+					</form>
+				</div>
+				<div class="box-footer">
+					<button type="submit" class="btn btn-primary"><?php echo self::l('Save'); ?></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

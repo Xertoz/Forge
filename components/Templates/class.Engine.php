@@ -10,6 +10,8 @@
 
 	namespace forge\components\Templates;
 
+	use forge\components\Templates;
+
 	/**
 	* The actual template engine
 	*/
@@ -422,15 +424,19 @@
 		 * Load require.js and all available plugins
 		 */
 		static public function requireJS() {
-			self::addScriptFile('/script/require.js', true);
+			self::addScriptFile('/vendor/requirejs/require.js', true);
 
 			$plugins = [
 				'adminlte' => ['/templates/forge-admin/script/adminlte.min', ['jquery']],
 				'bootstrap' => ['https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min', ['jquery']],
 				'cookie' => 'https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
+				'datatables.bootstrap' => '/vendor/datatables.net/datatables.bs.min',
+				'datatables.net' => '/vendor/datatables.net/datatables.min',
+				'datatables.rowReorder' => '/vendor/datatables.net/rowreorder.min',
+				'domReady' => '/vendor/domReady/domReady',
+				'forge' => '/script/forge',
 				'icheck' => ['/templates/forge-admin/script/icheck.min', ['jquery']],
-				'jquery' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min',
-				'jquery.datatables' => ['/templates/forge-admin/script/jquery.dataTables.min', ['jquery']]
+				'jquery' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min'
 			];
 			foreach (\forge\Addon::getAddons(true) as $addon)
 				if (in_array('forge\components\Templates\RequireJS', class_implements($addon)))

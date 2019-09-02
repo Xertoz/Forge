@@ -29,9 +29,6 @@
 				foreach ($_POST['menu'] as $id) {
 					$page = new \forge\components\SiteMap\db\Page($id);
 
-					if ($page->page_parent != $_POST['parent'])
-						throw new \Exception('Page has wrong parent');
-
 					$page->page_order = --$order;
 
 					$page->save();

@@ -4,7 +4,7 @@
 	Engine::addStyleFile('/templates/forge-admin/css/bootstrap.min.css');
 	Engine::addStyleFile('/templates/forge-admin/css/icheck.min.css');
 	Engine::addStyleFile('/templates/forge-admin/css/icheck-blue.css');
-	Engine::addStyleFile('/templates/forge-admin/css/dataTables.bootstrap.min.css');
+	Engine::addStyleFile('/vendor/datatables.net/datatables.min.css');
 	Engine::addStyleFile('/templates/forge-admin/css/adminlte.min.css');
 	Engine::addStyleFile('/templates/forge-admin/css/ionicons.min.css');
 	Engine::addStyleFile('/templates/forge-admin/css/font-awesome.min.css');
