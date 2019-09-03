@@ -31,12 +31,6 @@
 		protected $__engine;
 
 		/**
-		* Should the data be selected globally?
-		* @var bool
-		*/
-		static protected $global = false;
-
-		/**
 		* Should Forge handle this integrity in its default engine?
 		* @var bool
 		*/
@@ -113,18 +107,6 @@
 				$params->primary = true;
 				$params->increment = true;
 				$this->__columns['forge_id'] = new $idType($params);
-			}
-
-			// We should have a website ID if this is a local model
-			if (static::$global === false) {
-				$globalType = $this->__engine->getNamespace().'\Integer';
-				$this->__columns['forge_website'] = new $globalType(new Params(['index'=>true]));
-				try {
-					$this->__columns['forge_website']->set(\forge\components\Websites::getId());
-				}
-				catch (\Exception $e) {
-					$this->__columns['forge_website']->set(0);
-				}
 			}
 
 			// Loop over the members of this class for declared columns
@@ -354,14 +336,6 @@
 			if ($this->__columns[static::$__id]->getIncrement())
 				$this->__columns[static::$__id]->set($this->__engine->getPDO()->lastInsertId());
 		}
-
-		/**
-		* Is this model global?
-		* @return bool
-		*/
-		final public function isGlobal() {
-			return static::$global;
-		}
 		
 		/**
 		 * Should this model's integrity be handled?
@@ -457,8 +431,6 @@
 		*/
 		public function select($columns) {
 			$columns = !is_array($columns) ? array($columns) : $columns;
-			if (!$this->isGlobal() && !in_array(static::$__id, $columns))
-				$columns[] = 'forge_website';
 			
 			$params = new Params();
 			$params->type = $this;
@@ -483,7 +455,7 @@
 				$this->__columns[$column]->set($value);
 			
 			$this->__changed = false;
-			
+
 			return $this;
 		}
 

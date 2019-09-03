@@ -21,12 +21,6 @@
 		public $engine;
 
 		/**
-		* Treat the current request as a global one?
-		* @var bool
-		*/
-		public $global = false;
-
-		/**
 		 * Limit the amount of results?
 		 * @var int
 		 */

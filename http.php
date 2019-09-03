@@ -40,9 +40,6 @@
 		
 		// Handle any POST data
 		Controller::handle();
-		
-		// Make sure we are on a correct host
-		components\Websites::loadWebsite();
 
 		if (strstr($_SERVER['HTTP_ACCEPT'], 'application/json') === false) {
 			// Factor a request handler and let it run

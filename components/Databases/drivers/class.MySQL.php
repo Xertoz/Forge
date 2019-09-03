@@ -129,8 +129,13 @@
 		* @return PDOStatement
 		*/
 		public function buildSelect(\forge\components\Databases\Params $params) {
+			$columns = [];
+			foreach ($params->type->getColumns() as $column)
+				$columns[] = '`'.$column.'`';
+			$columns = implode(', ', $columns);
+
 			return $this->pdo->prepare(
-				'SELECT *
+				'SELECT '.$columns.'
 				FROM '.$this->prefix.$params->table.'
 				'.self::buildWhere($params).'
 				'.self::buildOrder($params).'

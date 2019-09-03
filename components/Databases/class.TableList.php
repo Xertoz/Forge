@@ -256,11 +256,6 @@
 			// Reset results
 			$this->result = array();
 
-			// Prepare the where columns
-			$values = array();
-			if (!$this->params->type->isGlobal() && !$this->params->global && !isset($this->params->where['forge_website']))
-				$this->params->where['forge_website'] = \forge\components\Websites::getId();
-
 			// Build the query
 			$this->query = $this->params->engine->buildSelect($this->params);
 
