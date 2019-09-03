@@ -19,7 +19,6 @@
 		*/
 		public function handle() {
 			$this->setContentType('text/html;charset=UTF-8');
-			\forge\components\Templates::addStyleFile('/css/admin.css');
 
 			switch ($this->getPath()) {
 				default: throw new \forge\HttpException('Not Found',\forge\HttpException::HTTP_NOT_FOUND); break;

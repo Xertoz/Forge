@@ -54,8 +54,6 @@
 			$addon = !empty($parts[0]) ? $parts[0] : 'Dashboard';
 			$view = !empty($parts[1]) ? $parts[1] : 'index';
 
-			\forge\components\Templates::addStyleFile('/css/admin.css');
-
 			return \forge\components\Admin::display($page, $addon, $view);
 		}
 	}
