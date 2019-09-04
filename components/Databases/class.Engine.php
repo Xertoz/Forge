@@ -237,6 +237,7 @@
 									$operator = '!=';
 									$param = $t[1];
 								}
+								break;
 							
 							case 'IS NULL':
 								$param = null;

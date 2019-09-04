@@ -75,11 +75,17 @@
 		 * Load permissions
 		 */
 		private function loadPermissions() {
-			$this->__permissions = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
+			if ($this->__permissions !== null)
+				return;
+
+			$result = new \forge\components\Databases\TableList([
 				'type' => new \forge\components\Identity\db\Permission,
-				'where' => array('identity'=>$this->getId()),
-				'limit' => 1000
-			]));
+				'where' => ['identity'=>$this->getId()]
+			]);
+
+			$this->__permissions = [];
+			foreach ($result as $permission)
+				$this->__permissions[] = $permission->permission;
 		}
 
 		/**

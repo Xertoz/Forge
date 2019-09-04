@@ -17,6 +17,11 @@
 		use \forge\Configurable;
 
 		/**
+		 * @var null|\forge\components\Identity\Identity The currently logged in identity
+		 */
+		static private $identity = null;
+
+		/**
 		* Permissions
 		* @var array
 		*/
@@ -86,7 +91,10 @@
 				return null;
 
 			try {
-				return new \forge\components\Identity\Identity(\forge\Memory::session('identity'));
+				if (self::$identity === null)
+					self::$identity = new \forge\components\Identity\Identity(\forge\Memory::session('identity'));
+
+				return self::$identity;
 			}
 			catch (\Exception $e) {
 				self::logout();

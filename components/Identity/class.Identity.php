@@ -137,12 +137,6 @@ class Identity {
 	 * @return bool
 	 */
 	final public function hasPermission($permission) {
-		$permissions = $this->identity->getPermissions();
-
-		foreach ($permissions as $test)
-			if ($test->permission == $permission)
-				return true;
-
-		return false;
+		return in_array($permission, $this->identity->getPermissions());
 	}
 }

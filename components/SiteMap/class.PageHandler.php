@@ -10,6 +10,8 @@
 
 	namespace forge\components\SiteMap;
 
+	use forge\components\Databases\TableList;
+
 	/**
 	* The view that accounts for administration requests.
 	*/
@@ -49,28 +51,29 @@
 				$type = new $this->page->page_type;
 			}
 			else {
+				// Compile all possible URLs
 				$folders = explode('/',$this->url);
+				$urls = [];
+				for ($i=count($folders);$i>0;--$i)
+					$urls[] = implode('/', array_slice($folders, 0, $i));
 
-				for ($i=count($folders);!$this->page->getId() && $i>0;$i--) {
-					$testuri = implode('/',array_slice($folders,0,$i));
-					try {
-						$this->page->page_url = $testuri;
-						$this->page->select('page_url');
+				// Look for the longest matching URL
+				$pages = new TableList([
+					'type' => new \forge\components\SiteMap\db\Page(),
+					'where' => [
+						'in:page_url' => $urls
+					],
+					'order' => ['page_url' => 'DESC'],
+					'limit' => 1
+				]);
 
-						/**
-						* Page plugin instance
-						* @var Page
-						*/
-						$type = new $this->page->page_type;
+				// If we have a match, make sure it is exact or dynamic
+				if ($pages->length() === 1) {
+					$this->page = $pages[0];
+					$type = new $this->page->page_type;
 
-						if ($this->page->page_url != $this->url && !$type->isDynamic()) {
-							$this->page = new \forge\components\SiteMap\db\Page();
-							break;
-						}
-					}
-					catch (\Exception $e) {
-						continue;
-					}
+					if ($this->page->page_url !== $this->url && !$type->isDynamic())
+						throw new \forge\HttpException('Page not found',\forge\HttpException::HTTP_NOT_FOUND);
 				}
 
 				// If we found nothing here, first look into the history before telling 404

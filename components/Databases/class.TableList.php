@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.TableList.php
-	* Copyright 2009-2012 Mattias Lindholm
+	* Copyright 2009-2019 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -19,12 +19,6 @@
 		 * @var int
 		 */
 		private $count = false;
-
-                /**
-                 * Current row from the result set
-                 * @var Table
-                 */
-                private $current;
 
 		/**
 		* Paramters passed to the constructor
@@ -45,16 +39,15 @@
 		private $query;
 
 		/**
+		 * @var array List of rows and columns fetched from the database
+		 */
+		private $result;
+
+		/**
 		* The total amount of rows available (not all might be fetched)
 		* @var int
 		*/
 		private $rows;
-
-		/**
-		* Data type to handle
-		* @var Table
-		*/
-		private $type;
 
 		/**
 		* Load a list of data table
@@ -154,33 +147,15 @@
 		* @return void
 		*/
 		public function rewind() {
-			$this->query();
+			$this->position = 0;
 		}
 
 		/**
-		* Fetch current element off array list
-		* @return DataObject
-		*/
-		public function current() {
-			return $this->current;
-		}
-
-		/**
-		 * Fetch a new row from the result set
-		 * @return void
+		 * Fetch current element off array list
+		 * @return Table
 		 */
-		private function fetch() {
-			++$this->position;
-			$row = $this->query->fetch(\PDO::FETCH_ASSOC);
-			if ($row !== false) {
-				$class = get_class($this->params->type);
-				$this->current = new $class;
-
-				foreach ($row as $column => $value)
-					$this->current->$column = $value;
-			}
-			else
-				$this->current = false;
+		public function current() {
+			return $this->result[$this->position];
 		}
 
 		/**
@@ -195,27 +170,21 @@
 		* Move one element further down the result set
 		*/
 		public function next() {
-			$this->fetch();
+			++$this->position;
 		}
 
 		/**
 		 * Does this offset exist?
 		 */
 		public function offsetExists($offset) {
-			return (is_int($offset) && $offset >= 0 && $offset < $this->rows);
+			return isset($this->result[$offset]);
 		}
 
 		/**
 		 * Get an offset
 		 */
 		public function offsetGet($offset) {
-			if ($offset < $this->position)
-				$this->query();
-
-			while ($this->position < $offset)
-				$this->next();
-
-			return $this->current;
+			return $this->result[$offset];
 		}
 
 		/**
@@ -233,11 +202,11 @@
 		}
 
 		/**
-		* ?
-		* @return ?
+		* Check if the current position exists
+		* @return bool
 		*/
 		public function valid() {
-			return $this->current() !== false;
+			return $this->position < $this->rows;
 		}
 
 		/**
@@ -253,9 +222,6 @@
 		* @return void
 		*/
 		private function query() {
-			// Reset results
-			$this->result = array();
-
 			// Build the query
 			$this->query = $this->params->engine->buildSelect($this->params);
 
@@ -264,7 +230,19 @@
 
 			// Run the query & fetch the results
 			$this->query->execute();
-			$this->position = -1;
-			$this->fetch();
+			$this->position = 0;
+			$this->result = $this->query->fetchAll(\PDO::FETCH_ASSOC);
+			$this->rows = count($this->result);
+
+			// Instantiate the results
+			$class = get_class($this->params->type);
+			foreach ($this->result as &$result) {
+				$instance = new $class;
+
+				foreach ($result as $column => $value)
+					$instance->$column = $value;
+
+				$result = $instance;
+			}
 		}
 	}
