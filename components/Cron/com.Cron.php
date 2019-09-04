@@ -10,6 +10,8 @@
 
 	namespace forge\components;
 
+	use forge\components\Admin\MenuItem;
+
 	/**
 	* Cron component
 	*/
@@ -21,21 +23,22 @@
 		* @var array
 		*/
 		static protected $permissions = ['Admin'];
-		
+
 		/**
 		 * Get the menu items
 		 * @param \forge\components\SiteMap\db\Page Page
 		 * @param string Addon
 		 * @param string View
-		 * @return array[AdminMenu]|MenuItem
+		 * @return MenuItem
+		 * @throws \Exception
 		 */
 		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Cron.Admin'))
 				return null;
 			
-			$menu = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
+			$menu = new MenuItem('developer', self::l('Developer'));
 			
-			$menu->appendChild(new \forge\components\Admin\MenuItem(
+			$menu->appendChild(new MenuItem(
 				'cron',
 				self::l('Cron jobs'),
 				'Cron'
@@ -67,19 +70,22 @@
 		static public function getLastRun($job) {
 			return \forge\components\Cron::getConfig('job.'.$job, 0);
 		}
-		
+
 		/**
 		 * Set the last time a job were run
+		 *
+		 * @return void
+		 * @throws \Exception
 		 * @var string $job
-		 * @return int
 		 */
 		static public function setLastRun($job) {
 			return \forge\components\Cron::setConfig('job.'.$job, time(), true);
 		}
-		
+
 		/**
 		 * Run scheduled cron jobs
 		 * @return void
+		 * @throws \Exception
 		 */
 		static public function runJobs() {
 			// Loop jobs and run those that are scheduled

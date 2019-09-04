@@ -17,6 +17,8 @@
 		/**
 		 * Process POST data
 		 * @return void
+		 * @throws \forge\HttpException
+		 * @throws \forge\components\Databases\exceptions\NoData
 		 */
 		public function process() {
 			// Get the logged in identity and account provider, if any

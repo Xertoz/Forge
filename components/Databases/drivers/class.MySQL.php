@@ -15,11 +15,10 @@
 	*/
 	class MySQL extends \forge\components\Databases\Engine {
 		/**
-		* Initiate the class and connect to the requested database
-		* @param SqlParams Parameters as loaded from configuration
-		* @return void
-		* @throws HttpException
-		*/
+		 * Initiate the class and connect to the requested database
+		 * @param \forge\components\Databases\Params $params
+		 * @throws \forge\HttpException
+		 */
 		public function __construct(\forge\components\Databases\Params $params) {
 			try {
 				$this->pdo = new \PDO(
@@ -53,10 +52,10 @@
 		}
 
 		/**
-		* Build a CREATE statement for a table
-		* @param Table Table
-		* @return string
-		*/
+		 * Build a CREATE statement for a table
+		 * @param \forge\components\Databases\Table $table
+		 * @return string
+		 */
 		public function buildCreate(\forge\components\Databases\Table $table) {
 			$create = 'CREATE TABLE `'.$this->prefix.$table->getTable().'` (';
 			$lines = array();
@@ -80,10 +79,10 @@
 		}
 
 		/**
-		* Prepare a query for deletion
-		* @param SqlParams Parameters
-		* @return PDOStatement
-		*/
+		 * Prepare a query for deletion
+		 * @param \forge\components\Databases\Params $params
+		 * @return bool|\PDOStatement
+		 */
 		public function buildDelete(\forge\components\Databases\Params $params) {
 			$where = array();
 			foreach ($params->where as $column)
@@ -97,10 +96,11 @@
 		}
 
 		/**
-		* Prepare a query for insertion
-		* @param SqlParams Parameters
-		* @return array
-		*/
+		 * Prepare a query for insertion
+		 * @param \forge\components\Databases\Table $table
+		 * @param \forge\components\Databases\Params $params
+		 * @return array
+		 */
 		public function buildInsert(\forge\components\Databases\Table $table,
 									\forge\components\Databases\Params $params) {
 			$def = $table->getColumns(true);
@@ -124,10 +124,10 @@
 		}
 
 		/**
-		* Prepare a query for selection
-		* @param SqlParams Parameters
-		* @return PDOStatement
-		*/
+		 * Prepare a query for selection
+		 * @param \forge\components\Databases\Params $params
+		 * @return bool|\PDOStatement
+		 */
 		public function buildSelect(\forge\components\Databases\Params $params) {
 			$columns = [];
 			foreach ($params->type->getColumns() as $column)
@@ -144,10 +144,10 @@
 		}
 
 		/**
-		* Prepare a query for updating
-		* @param SqlParams Parameters
-		* @return PDOStatement
-		*/
+		 * Prepare a query for updating
+		 * @param \forge\components\Databases\Params $params
+		 * @return bool|\PDOStatement
+		 */
 		public function buildUpdate(\forge\components\Databases\Params $params) {
 			$set = array();
 			foreach ($params->columns as $column)
@@ -239,10 +239,10 @@
 		}
 
 		/**
-		* Get the current CREATE statement
-		* @param Table Table
-		* @return string
-		*/
+		 * Get the current CREATE statement
+		 * @param \forge\components\Databases\Table $table
+		 * @return string
+		 */
 		public function getCreate(\forge\components\Databases\Table $table) {
 			try {
 				$create = $this->pdo->query(
@@ -257,11 +257,11 @@
 		}
 
 		/**
-		* Get a class name for a given type
-		* @param SqlParams Parameters
-		* @return string
-		* @throws Exception
-		*/
+		 * Get a class name for a given type
+		 * @param \forge\components\Databases\Params $params
+		 * @return string
+		 * @throws \Exception
+		 */
 		public function getType(\forge\components\Databases\Params $params) {
 			$class = $this->getNamespace().'\\'.$params->type;
 

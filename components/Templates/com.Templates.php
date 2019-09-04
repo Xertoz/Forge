@@ -10,6 +10,7 @@
 
 	namespace forge\components;
 
+	use forge\components\Admin\MenuItem;
 	use \forge\components\Templates\Engine;
 
 	/**
@@ -71,12 +72,12 @@
 		}
 
 		/**
-		* Display a template file
-		* @param mixed String or array of strings with path(s) to template files to use
-		* @param array Template variables to send to the file
-		* @return string Parsed template
-		* @throws Exception
-		*/
+		 * Display a template file
+		 * @param $files
+		 * @param array $variables
+		 * @return string Parsed template
+		 * @throws \forge\HttpException
+		 */
 		static public function display($files,array $variables=array()) {
 			if (file_exists(FORGE_PATH.'/templates/'.self::getTemplate().'/init.php'))
 				require_once FORGE_PATH.'/templates/'.self::getTemplate().'/init.php';
@@ -137,15 +138,16 @@
 		 * @param \forge\components\SiteMap\db\Page Page
 		 * @param string Addon
 		 * @param string View
-		 * @return array[AdminMenu]|MenuItem
+		 * @return MenuItem
+		 * @throws \Exception
 		 */
 		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Templates.Admin'))
 				return null;
 
-			$menu = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
+			$menu = new MenuItem('developer', self::l('Developer'));
 
-			$menu->appendChild(new \forge\components\Admin\MenuItem(
+			$menu->appendChild(new MenuItem(
 				'templates',
 				self::l('Templates'),
 				'Templates'
@@ -155,11 +157,11 @@
 		}
 
 		/**
-		* Get default template
-		* @param $hostname string Hostname to get the template for
-		* @return string
-		* @throws Exception
-		*/
+		 * Get default template
+		 * @param bool $hostname string Hostname to get the template for
+		 * @return string
+		 * @throws \forge\HttpException
+		 */
 		static public function getTemplate($hostname=false) {
 			if (\forge\components\Identity::isAdmin() && ($template = \forge\Memory::cookie('template')) != null) {
 				if (self::isTemplate($template))
@@ -231,12 +233,13 @@
 		}
 
 		/**
-		* Set default template
-		* @param string Template system name
-		* @param bool Write to config file
-		* @param $hostname string Hostname to get the template for
-		* @return void
-		*/
+		 * Set default template
+		 * @param string Template system name
+		 * @param bool $save
+		 * @param bool $hostname string Hostname to get the template for
+		 * @return void
+		 * @throws \Exception
+		 */
 		static public function setTemplate($template, $save=false, $hostname=false) {
 			$templates = self::getConfig('templates', array());
 			$templates[$hostname ? $hostname : $_SERVER['HTTP_HOST']] =  $template;

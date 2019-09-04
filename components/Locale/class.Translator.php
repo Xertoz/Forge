@@ -16,8 +16,8 @@
 	trait Translator {
 		/**
 		 * Translate a string into the client's language
-		 * @param string English input string
-		 * @param string $sprintf Value(s) to pass into sprintf()
+		 * @param string $string English input string
+		 * @param mixed ...$sprintf Value(s) to pass into sprintf()
 		 * @return string Localized string
 		 */
 		static public function l(string $string, ...$sprintf) {

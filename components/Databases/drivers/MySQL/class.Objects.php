@@ -140,7 +140,7 @@
 		
 		/**
 		 * Get the referenced model
-		 * @return \forge\components\Databases\Table
+		 * @return Objects
 		 */
 		public function get() {
 			return $this;

@@ -53,9 +53,11 @@
 
 		/**
 		 * Generate HTML table
-		 * @param array[string=>string] $columns List of columns to display (dataSource => columnTitle)
-		 * @param array[string=>function] $callbacks List of callbacks for some columns (dataSource -> callback)
-		 * @param array[string=>mixed] $attributes List of attributes for this table
+		 * @param array $columns
+		 * @param array $callbacks
+		 * @param array $attributes
+		 * @return string
+		 * @throws \forge\HttpException
 		 */
 		public function draw(array $columns, array $callbacks=[], array $attributes=[]) {
 			return Templates::display('components/Templates/tpl/inc.datatable.php', [

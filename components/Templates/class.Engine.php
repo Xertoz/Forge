@@ -87,11 +87,11 @@
 		}
 
 		/**
-		* Create a date picker instance
-		* @param array Template array
-		* @return string
-		* @throws Exception
-		*/
+		 * Create a date picker instance
+		 * @param array Template array
+		 * @return string
+		 * @throws \Exception
+		 */
 		static public function date($vars) {
 			if (empty($vars['name']))
 				throw new \Exception('A name must be set for the editor');
@@ -110,11 +110,12 @@
 		}
 
 		/**
-		* Display a specific template file with some variables
-		* @param string File path to invoke
-		* @param array Template variables
-		* @return string
-		*/
+		 * Display a specific template file with some variables
+		 * @param string File path to invoke
+		 * @param array $variables
+		 * @return string
+		 * @throws \Exception
+		 */
 		static public function display($file,array $variables=array()) {
 			try {
 				ob_start();
@@ -222,11 +223,11 @@
 		}
 
 		/**
-		* Create an editor instance here
-		* @param array Template array
-		* @return string
-		* @throws Exception
-		*/
+		 * Create an editor instance here
+		 * @param array Template array
+		 * @return string
+		 * @throws \Exception
+		 */
 		static public function editor($vars) {
 			if (empty($vars['name']))
 				throw new \Exception('A name must be set for the editor');
@@ -283,10 +284,11 @@
 		 * Create an INPUT element based on default values and POST/GET data
 		 * @param $type string Type attribute
 		 * @param $name string Name attribute
-		 * @param $auto bool Update the value according to client input?
 		 * @param $value string Value attribute
+		 * @param $auto bool Update the value according to client input?
 		 * @param $attr array Additional key-value array of attributes
 		 * @return string
+		 * @throws \Exception
 		 */
 		static public function input($type, $name, $value=null, $auto=true, $attr=array()) {
 			$attr['name'] = $name;

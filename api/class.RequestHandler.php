@@ -1,7 +1,7 @@
 <?php
 	/**
 	 * class.RequestHandler.php
-	 * Copyright 2012-2017 Mattias Lindholm
+	 * Copyright 2012-2019 Mattias Lindholm
 	 *
 	 * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	 * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -10,12 +10,14 @@
 
 	namespace forge;
 
+	use forge\components\Locale\Translator;
+
 	/**
 	 * A class to handle arbitrary HTTP requests through child classes
 	 */
 	abstract class RequestHandler {
 		use Configurable;
-		use \forge\components\Locale\Translator;
+		use Translator;
 
 		/**
 		 * The requested path this handler should work with
@@ -43,6 +45,7 @@
 		 * Create a new request handler for a given URL
 		 * @param $path string Requested path to create a handler for
 		 * @return RequestHandler
+		 * @throws HttpException
 		 */
 		final static public function factory($path) {
 			$handlers = self::getConfig('handlers', array());
@@ -55,8 +58,8 @@
 			$request = implode('/', array_slice($parts, $i));
 
 			if (!isset($handlers[$base]))
-				throw new \forge\HttpException('No request handler could be located',
-					\forge\HttpException::HTTP_NOT_FOUND);
+				throw new HttpException('No request handler could be located',
+					HttpException::HTTP_NOT_FOUND);
 
 			return new $handlers[$base]($base, $request);
 		}
@@ -71,7 +74,7 @@
 		
 		/**
 		 * Get this request's decoded path
-		 * @returns tring
+		 * @returns string
 		 */
 		final protected function getPathDecoded() {
 			return rawurldecode($this->path);
@@ -101,10 +104,10 @@
 
 		/**
 		 * Set the Content-Length header
-		 * @param $length Value to set the Content-Length field to
+		 * @param int $length Value to set the Content-Length field to
 		 * @return void
 		 */
-		final static public function setContentLength($length) {
+		final static public function setContentLength(int $length) {
 			header('Content-Length: '.(int)$length, true);
 		}
 
@@ -119,7 +122,7 @@
 
 		/**
 		 * Set the ETag header
-		 * @param $type string Value to set the ETag field to
+		 * @param string $etag string Value to set the ETag field to
 		 * @return void
 		 */
 		final static public function setETag($etag) {
@@ -128,7 +131,7 @@
 
 		/**
 		 * Set the Last-Modified header
-		 * @param $type string Value to set the Last-Modified field to
+		 * @param $time string Value to set the Last-Modified field to
 		 * @return void
 		 */
 		final static public function setLastModified($time) {
@@ -140,6 +143,7 @@
 		 * @param $base string Base directory that the handler will listen on
 		 * @param $handler RequestHandler The handler to register
 		 * @return void
+		 * @throws \Exception
 		 */
 		final static public function register($base, $handler) {
 			$handlers = self::getConfig('handlers');

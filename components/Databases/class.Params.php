@@ -51,10 +51,11 @@
 		public $where = array();
 
 		/**
-		* Construct the parameter object
-		* @param array Initial parameters
-		* @return void
-		*/
+		 * Construct the parameter object
+		 * @param array Initial parameters
+		 * @return void
+		 * @throws \Exception
+		 */
 		public function __construct($params=array()) {
 			// Loop over set parameters and assign them
 			foreach ($params as $key => $value)

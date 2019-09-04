@@ -76,11 +76,12 @@
 			
 			return $this->content;
 		}
-		
+
 		/**
 		 * Copy the file
 		 * @param string $to
 		 * @return \forge\components\Files\PhysicalFile
+		 * @throws \Exception
 		 */
 		public function copy($to) {
 			$new = static::jail($to);

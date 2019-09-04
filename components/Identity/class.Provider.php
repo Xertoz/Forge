@@ -25,7 +25,6 @@ abstract class Provider implements ProviderInterface {
 	/**
 	 * Load a new provider from its unique id
 	 * @param $identifier
-	 * @return \forge\components\Identity\Provider
 	 */
 	public function __construct($identifier) {
 		$this->identifier = (int)$identifier;
@@ -35,6 +34,7 @@ abstract class Provider implements ProviderInterface {
 	 * Create a new identity from the provider
 	 * @param int $identifier The provider's unique id for this identity
 	 * @return \forge\components\Identity\Identity
+	 * @throws \Exception
 	 */
 	final static protected function createIdentity($identifier) {
 		$identity = new db\Identity();
@@ -58,6 +58,7 @@ abstract class Provider implements ProviderInterface {
 	 * Get the identity instance for a provider
 	 * @param int $identifier
 	 * @return Identity
+	 * @throws \Exception
 	 */
 	static public function getIdentity($identifier) {
 		$identity = new db\Identity();

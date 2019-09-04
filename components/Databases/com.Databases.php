@@ -9,6 +9,7 @@
 	*/
 
 	namespace forge\components;
+	use forge\components\Admin\MenuItem;
 	use \PDO;
 
 	/**
@@ -42,19 +43,19 @@
 		static protected $permissions = ['Admin'];
 
 		/**
-		* Create a new database connection and save it for future use
-		*
-		* This procedure will attempt to connect to the server temporarily and close the connection upon finishing.
-		*
-		* @param string Driver
-		* @param string Hostname
-		* @param string Database
-		* @param string Table prefix
-		* @param string Username
-		* @param string Password
-		* @return string Connection ID
-		* @throws Exception
-		*/
+		 * Create a new database connection and save it for future use
+		 *
+		 * This procedure will attempt to connect to the server temporarily and close the connection upon finishing.
+		 *
+		 * @param $driver
+		 * @param $hostname
+		 * @param $database
+		 * @param $prefix
+		 * @param $username
+		 * @param $password
+		 * @return string Connection ID
+		 * @throws \Exception
+		 */
 		static public function addConnection($driver,$hostname,$database,$prefix,$username,$password) {
 			// Test the connection out
 			try {
@@ -101,13 +102,14 @@
 		}
 
 		/**
-		* Declare a new column of a model
-		* Use this method to extend existing class models when required
-		* @param string Model
-		* @param string Column
-		* @param mixed Parameters
-		* @return void
-		*/
+		 * Declare a new column of a model
+		 * Use this method to extend existing class models when required
+		 * @param $model
+		 * @param $column
+		 * @param $parameters
+		 * @return void
+		 * @throws \Exception
+		 */
 		static public function declareColumn($model, $column, $parameters) {
 			if (!in_array('forge\components\Databases\Table', class_parents($model)))
 				throw new \Exception('Model '.$model.' was not a table');
@@ -116,16 +118,16 @@
 		}
 
 		/**
-		* Delete a database connection
-		*
-		* This will destroy a connection's file, not close the connection. Should a connection be up to this
-		* database it will be maintained until closed elsewhere in the current request, but be unreachable
-		* in the next.
-		*
-		* @param string Connection ID
-		* @return void
-		* @throws Exception
-		*/
+		 * Delete a database connection
+		 *
+		 * This will destroy a connection's file, not close the connection. Should a connection be up to this
+		 * database it will be maintained until closed elsewhere in the current request, but be unreachable
+		 * in the next.
+		 *
+		 * @param string Connection ID
+		 * @return void
+		 * @throws \Exception
+		 */
 		static public function deleteConnection($connId) {
 			self::SecureConnectionId($connId);
 
@@ -140,6 +142,7 @@
 		/**
 		 * Get the infobox for the dashboard as HTML source code
 		 * @return string
+		 * @throws \forge\HttpException
 		 */
 		static public function getInfoBox() {
 			if (!\forge\components\Identity::getIdentity()->hasPermission('com.Databases.Admin'))
@@ -154,9 +157,10 @@
 		}
 
 		/**
-		* Initialize the component
-		* @return void
-		*/
+		 * Initialize the component
+		 * @return void
+		 * @throws \Exception
+		 */
 		static public function init() {
 			parent::init();
 
@@ -166,11 +170,11 @@
 		}
 
 		/**
-		* Select what connection to use as default from the available ones
-		* @param string Connection ID
-		* @return void
-		* @throws Exception
-		*/
+		 * Select what connection to use as default from the available ones
+		 * @param string Connection ID
+		 * @return void
+		 * @throws \Exception
+		 */
 		static public function setDefaultConnection($connId) {
 			// Make it secure.
 			self::SecureConnectionId($connId);
@@ -185,11 +189,11 @@
 		}
 
 		/**
-		* Check wether or not the given string is an eligible connection id
-		* @param string Connection id
-		* @return void
-		* @throws Exception
-		*/
+		 * Check wether or not the given string is an eligible connection id
+		 * @param string Connection id
+		 * @return void
+		 * @throws \Exception
+		 */
 		static private function secureConnectionId($connId) {
 			if (!is_string($connId) || empty($connId))
 				throw new \Exception('$ConnId needs to be set string');
@@ -255,21 +259,22 @@
 				if ($model::isHandled())
 					(new $model)->fixIntegrity();
 		}
-		
+
 		/**
 		 * Get the menu items
 		 * @param \forge\components\SiteMap\db\Page Page
 		 * @param string Addon
 		 * @param string View
-		 * @return array[AdminMenu]|MenuItem
+		 * @return MenuItem
+		 * @throws \Exception
 		 */
 		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Databases.Admin'))
 				return null;
 			
-			$menu = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
+			$menu = new MenuItem('developer', self::l('Developer'));
 			
-			$menu->appendChild(new \forge\components\Admin\MenuItem(
+			$menu->appendChild(new MenuItem(
 				'databases',
 				self::l('Databases'),
 				'Databases'
@@ -279,10 +284,11 @@
 		}
 
 		/**
-		* Get a list of all declared columns to a model
-		* @param string Model
-		* @return array
-		*/
+		 * Get a list of all declared columns to a model
+		 * @param string Model
+		 * @return array
+		 * @throws \Exception
+		 */
 		static public function getColumns($model) {
 			if (!in_array('forge\components\Databases\Table', class_parents($model)))
 				throw new \Exception('Model '.$model.' was not a table');
@@ -299,11 +305,11 @@
 		}
 
 		/**
-		* Start an SQL engine
-		* @param string Connection ID
-		* @return \forge\components\Databases\Engine
-		* @throws Exception
-		*/
+		 * Start an SQL engine
+		 * @param string Connection ID
+		 * @return \forge\components\Databases\Engine
+		 * @throws \Exception
+		 */
 		static public function startEngine($id) {
 			// Get the configuration
 			$config = self::getConfig('connections');
@@ -328,10 +334,11 @@
 		}
 
 		/**
-		* Get the an SQL engine
-		* @param string Request a specific engine by ID?
-		* @return \forge\components\Databases\Engine
-		*/
+		 * Get the an SQL engine
+		 * @param bool $id
+		 * @return \forge\components\Databases\Engine
+		 * @throws \Exception
+		 */
 		static public function getEngine($id=false) {
 			if ($id === false)
 				$id = self::getDefaultConnection();
@@ -343,10 +350,11 @@
 		}
 
 		/**
-		* Get the current connection handle
-		* @return PDO
-		* @deprecated
-		*/
+		 * Get the current connection handle
+		 * @return PDO
+		 * @throws \Exception
+		 * @deprecated
+		 */
 		static public function DB() {
 			return self::getEngine()->getPDO();
 		}

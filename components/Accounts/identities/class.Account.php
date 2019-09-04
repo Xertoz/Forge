@@ -30,6 +30,7 @@
 		 * @param string $password
 		 * @param bool $cookie
 		 * @throws \forge\HttpException
+		 * @throws \forge\components\Databases\exceptions\NoData
 		 */
 		static public function login($username, $password, $cookie=false) {
 			// Validate the login credentials
@@ -53,6 +54,7 @@
 		/**
 		 * Login an account by its id
 		 * @param int $id
+		 * @throws \forge\components\Databases\exceptions\NoData
 		 */
 		static public function loginAccount($id) {
 			$account = new \forge\components\Accounts\db\Account($id);

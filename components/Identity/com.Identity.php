@@ -10,6 +10,8 @@
 
 	namespace forge\components;
 
+	use forge\components\Admin\MenuItem;
+
 	/**
 	* Manage different user account types with a unified identification
 	*/
@@ -38,6 +40,7 @@
 		/**
 		 * Get the infobox for the dashboard as HTML source code
 		 * @return string
+		 * @throws \forge\HttpException
 		 */
 		static public function getInfoBox() {
 			if (!self::getIdentity()->hasPermission('com.Identity.Admin'))
@@ -62,6 +65,7 @@
 		 * @param int $limit
 		 * @param int $page
 		 * @return Identity\Identity[]
+		 * @throws \Exception
 		 */
 		static public function getIdentities($where=[], $order=[], $limit=25, $page=1) {
 			$where['master'] = 0;
@@ -85,6 +89,7 @@
 		/**
 		 * Get the currently logged in identity if any
 		 * @return Identity\Identity|null
+		 * @throws \Exception
 		 */
 		static public function getIdentity() {
 			if (!self::isAuthenticated())
@@ -120,6 +125,7 @@
 		 * Check if the current user has a certain permission
 		 * @param string $permission
 		 * @return bool
+		 * @throws \Exception
 		 */
 		static public function hasPermission($permission) {
 			if (!self::isAuthenticated())
@@ -143,19 +149,20 @@
 				$permissions = array_merge($permissions, $addon::getPermissions());
 			return $permissions;
 		}
-		
+
 		/**
 		 * Get the menu items
 		 * @param \forge\components\SiteMap\db\Page Page
 		 * @param string Addon
 		 * @param string View
-		 * @return array[AdminMenu]|MenuItem
+		 * @return MenuItem
+		 * @throws \Exception
 		 */
 		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Identity.Admin'))
 				return null;
 			
-			$menu = new \forge\components\Admin\MenuItem('identity', self::l('People'), '/'.$page->page_url.'/Identity', 'ion ion-ios-people');
+			$menu = new MenuItem('identity', self::l('People'), '/'.$page->page_url.'/Identity', 'ion ion-ios-people');
 			
 			if ($addon === '\\forge\\components\\Identity')
 				$menu->setActive();
@@ -181,6 +188,7 @@
 		/**
 		 * Is the user logged in?
 		 * @return bool
+		 * @throws \Exception
 		 */
 		static public function isAuthenticated() {
 			return \forge\Memory::session('identity') !== null;
@@ -189,6 +197,7 @@
 		/**
 		 * Check wether or not the user is a developer
 		 * @return bool
+		 * @throws \Exception
 		 */
 		static public function isDeveloper() {
 			return sha1(\forge\Memory::cookie('developer')) === self::getConfig('developer');
@@ -197,6 +206,7 @@
 		/**
 		 * Login to an identity
 		 * @param Identity\Identity $identity
+		 * @throws \Exception
 		 */
 		static public function login(Identity\Identity $identity) {
 			\forge\Memory::session('identity', $identity->getId());
@@ -205,6 +215,7 @@
 		/**
 		 * Log out of any identity
 		 * @return void
+		 * @throws \Exception
 		 */
 		static public function logout() {
 			foreach (self::getProviders() as $provider)
@@ -228,6 +239,7 @@
 		 * Set a new developer key
 		 * @param $key string Developer key
 		 * @return void
+		 * @throws \Exception
 		 */
 		static public function setDeveloperKey($key) {
 			self::setConfig('developer', sha1($key));

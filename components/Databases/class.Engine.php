@@ -34,7 +34,7 @@
 
 		/**
 		* Initiate the class and connect to the requested database
-		* @param SqlParams Parameters as loaded from configuration
+		* @param Params $params Parameters as loaded from configuration
 		* @return void
 		*/
 		abstract public function __construct(Params $params);
@@ -43,7 +43,6 @@
 		 * Bind values to the WHERE clause of a query
 		 * @param \PDOStatement $query The query to bind to
 		 * @param Params $params The parameters to run off of
-		 * @param int $n Start at this column
 		 * @return void
 		 */
 		public function bindWhere(\PDOStatement $query, Params $params) {
@@ -101,15 +100,15 @@
 
 		/**
 		* Prepare a query for deletion
-		* @param SqlParams Parameters
+		* @param Params $params Parameters
 		* @return \PDOStatement
 		*/
 		abstract public function buildDelete(Params $params);
 
 		/**
 		* Prepare a query for insertion
-		* @param Table Table
-		* @param SqlParams Parameters
+		* @param Table $table Table
+		* @param Params $params Parameters
 		* @return array
 		*/
 		abstract public function buildInsert(Table $table, Params $params);
@@ -127,14 +126,14 @@
 
 		/**
 		* Prepare a query for selection
-		* @param SqlParams Parameters
+		* @param Params $params Parameters
 		* @return \PDOStatement
 		*/
 		abstract public function buildSelect(Params $params);
 
 		/**
 		* Prepare a query for updating
-		* @param SqlParams Parameters
+		* @param Params $params Parameters
 		* @return \PDOStatement
 		*/
 		abstract public function buildUpdate(Params $params);
@@ -189,7 +188,7 @@
 
 		/**
 		* Get a class name for a given type
-		* @param SqlParams Parameters
+		* @param Params $params Parameters
 		* @return string
 		* @throws Exception
 		*/
@@ -197,8 +196,8 @@
 
 		/**
 		* Internal SQL compilation function
-		* @param array
-		* @param string
+		* @param array $where
+		* @param string|false $parent
 		* @return string
 		*/
 		final private function makeWhere($where,$parent=false) {

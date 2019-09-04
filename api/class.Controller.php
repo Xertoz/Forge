@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Controller.php
-	* Copyright 2012 Mattias Lindholm
+	* Copyright 2012-2019 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -10,11 +10,14 @@
 
 	namespace forge;
 
+	use forge\components\Locale\Translator;
+	use forge\components\SiteMap;
+
 	/**
 	* Controller class for handling HTTP POST data
 	*/
 	abstract class Controller {
-		use \forge\components\Locale\Translator;
+		use Translator;
 		
 		/**
 		 * Something went wrong while running the controller
@@ -43,7 +46,7 @@
 		
 		/**
 		 * The exception, if one was thrown
-		 * @var type \forge\HttpException
+		 * @var HttpException
 		 */
 		static protected $exception = null;
 		
@@ -51,10 +54,11 @@
 		 * Response message of the controller request
 		 */
 		static protected $message = null;
-		
+
 		/**
 		 * Search the POST data for a component request and run it
 		 * @return void
+		 * @throws \Exception
 		 */
 		static final public function handle() {
 			if (!isset($_POST['forge']['controller']))
@@ -68,20 +72,20 @@
 			catch (\Exception $e) {
 				return;
 			}
-			
+
 			$class = 'forge\\'.(Addon::existsComponent($addon) ? 'components' : 'modules').'\\'.$addon.'\\controllers\\'.$controller;
 
 			if (class_exists($class) && in_array('forge\\Controller', class_parents($class))) {
 				try {
 					(new $class)->process();
 				}
-				catch (\forge\HttpException $e) {
+				catch (HttpException $e) {
 					self::setResponse($e->getMessage(), self::RESULT_BAD);
 					self::$exception = $e;
 				}
 
 				if (self::getCode() == self::RESULT_OK && isset($_POST['forge']['redirect']))
-					\forge\components\SiteMap::redirect($_POST['forge']['redirect'], 302);
+					SiteMap::redirect($_POST['forge']['redirect'], 302);
 			}
 		}
 		
@@ -103,7 +107,7 @@
 		
 		/**
 		 * Get the exception, if one was thrown
-		 * @return \forge\HttpException
+		 * @return HttpException
 		 */
 		static final public function getException() {
 			return self::$exception;

@@ -141,11 +141,12 @@
 		}
 		
 		/**
-		* Get a string if it matches the regular expression
-		* @param string $param Parameter name
-		* @param mixed $default Default value if input was invalid
-		* @return string|null
-		*/
+		 * Get a string if it matches the regular expression
+		 * @param string $param Parameter name
+		 * @param string $expr Regular expression
+		 * @param mixed $default Default value if input was invalid
+		 * @return string|null
+		 */
 		static public function getRegexp($param, $expr, $default=null) {
 			$v = self::filter($param, \FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => $expr]]);
 			

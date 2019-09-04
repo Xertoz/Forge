@@ -26,6 +26,8 @@
 		/**
 		 * Get the infobox for the dashboard as HTML source code
 		 * @return string
+		 * @throws Databases\exceptions\NoData
+		 * @throws \forge\HttpException
 		 */
 		static public function getInfoBox() {
 			if (!\forge\components\Identity::getIdentity()->hasPermission('com.SiteMap.Admin'))
@@ -45,11 +47,11 @@
 		}
 
 		/**
-		* Get a list of pages at a desired level of the menu
-		* @param int Parent id
-		* @return array
-		* @throws Exception
-		*/
+		 * Get a list of pages at a desired level of the menu
+		 * @param int Parent id
+		 * @return Databases\TableList
+		 * @throws Databases\exceptions\NoData
+		 */
 		static public function getMenu($parent=0) {
 			$pages = new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
 				'type' => new \forge\components\SiteMap\db\Page,
@@ -70,6 +72,7 @@
 		/**
 		 * Set a new robot status
 		 * @param bool $enabled
+		 * @throws \Exception
 		 */
 		static public function setRobots($enabled) {
 			self::setConfig('robots', (bool)$enabled);
@@ -77,15 +80,15 @@
 		}
 
 		/**
-		* Create a new page
-		* @param string Title
-		* @param int Parent id
-		* @param string URL
-		* @param string Type
-		* @param mixed Page
-		* @return fcSmDbPage
-		* @throws Exception
-		*/
+		 * Create a new page
+		 * @param $title
+		 * @param $parent
+		 * @param $url
+		 * @param $type
+		 * @param $form
+		 * @return SiteMap\db\Page
+		 * @throws Databases\exceptions\NoData
+		 */
 		static public function createPage($title,$parent,$url,$type,$form) {
 			if (empty($title) || empty($url) || empty($type))
 				throw new \Exception('Invalid argument');
@@ -117,11 +120,11 @@
 		}
 
 		/**
-		* Delete a page
-		* @param int Page id
-		* @return void
-		* @throws Exception
-		*/
+		 * Delete a page
+		 * @param int Page id
+		 * @return void
+		 * @throws \Exception
+		 */
 		static public function deletePage($pageId) {
 			\forge\components\Databases::DB()->beginTransaction();
 
@@ -158,11 +161,11 @@
 		}
 
 		/**
-		* Set default page
-		* @param int Page id
-		* @return void
-		* @throws Exception
-		*/
+		 * Set default page
+		 * @param int Page id
+		 * @return void
+		 * @throws Databases\exceptions\NoData
+		 */
 		static public function setDefaultPage($id) {
 			if (!$id = intval($id))
 				throw new \Exception('INVALID_TYPE');
@@ -191,13 +194,14 @@
 					$types[] = new $class;
 			return $types;
 		}
-		
+
 		/**
 		 * Get the menu items
 		 * @param \forge\components\SiteMap\db\Page Page
 		 * @param string Addon
 		 * @param string View
 		 * @return array[AdminMenu]|MenuItem
+		 * @throws \Exception
 		 */
 		static public function getAdminMenu($page, $addon, $view) {
 			$menus = [];
@@ -225,10 +229,10 @@
 		}
 
 		/**
-		* Return a list of created pages
-		* @return \forge\components\Databases\TableList
-		* @throws Exception
-		*/
+		 * Return a list of created pages
+		 * @return \forge\components\Databases\TableList
+		 * @throws Databases\exceptions\NoData
+		 */
 		static public function getAvailablePages() {
 			return new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
 				'type' => new \forge\components\SiteMap\db\Page
@@ -236,11 +240,11 @@
 		}
 
 		/**
-		* Get all parents of page
-		* @param int Page ID
-		* @return array Parents
-		* @throws Exception
-		*/
+		 * Get all parents of page
+		 * @param int Page ID
+		 * @return array Parents
+		 * @throws Databases\exceptions\NoData
+		 */
 		static public function getParents($id) {
 			$parents = array();
 			$page = new \forge\components\SiteMap\db\Page($id);
@@ -256,6 +260,7 @@
 		/**
 		 * Get the requirejs plugins
 		 * @return array
+		 * @throws \Exception
 		 */
 		static public function getRequireJS() {
 			$plugins = [];
@@ -267,11 +272,12 @@
 		}
 
 		/**
-		* Check if page is parent of child
-		* @param PageEntry Child
-		* @param PageEntry Parent
-		* @return bool
-		*/
+		 * Check if page is parent of child
+		 * @param PageEntry Child
+		 * @param PageEntry Parent
+		 * @return bool
+		 * @throws Databases\exceptions\NoData
+		 */
 		static public function isParent($child,$parent) {
 			$parents = self::getParents($child->page_id);
 
@@ -283,22 +289,22 @@
 		}
 
 		/**
-		* Get title of page
-		* @param int Page id
-		* @return string
-		* @throws Exception
-		*/
+		 * Get title of page
+		 * @param int Page id
+		 * @return string
+		 * @throws Databases\exceptions\NoData
+		 */
 		static public function getTitle($id) {
 			$page = new \forge\components\SiteMap\db\Page($id);
 			return $page->page_title;
 		}
 
 		/**
-		* Get URI of page
-		* @param int Page id
-		* @return string
-		* @throws Exception
-		*/
+		 * Get URI of page
+		 * @param int Page id
+		 * @return string
+		 * @throws Databases\exceptions\NoData
+		 */
 		static public function getUri($id) {
 			$page = new \forge\components\SiteMap\db\Page($id);
 			return $page->page_url;
@@ -328,12 +334,13 @@
 		}
 
 		/**
-		* Go to a new location (redirect the visitor)
-		* @var mixed New location
-		* @var int HTTP status code
-		* @return void
-		* @throws Exception
-		*/
+		 * Go to a new location (redirect the visitor)
+		 *
+		 * @param $target
+		 * @param int $http
+		 * @return void
+		 * @throws \Exception
+		 */
 		static public function redirect($target,$http=307) {
 			if (!is_string($target))
 				throw new \Exception('Target is not of string type');

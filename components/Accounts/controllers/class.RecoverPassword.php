@@ -17,6 +17,8 @@
 		/**
 		 * Process POST data
 		 * @return void
+		 * @throws \forge\HttpException
+		 * @throws \forge\components\Databases\exceptions\NoData
 		 */
 		public function process() {
 			if (empty($_POST['key']))

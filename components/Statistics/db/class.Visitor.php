@@ -69,19 +69,21 @@
 			'Integer',
 			'default' => 1
 		];
-		
+
 		/**
 		 * Initiate this visitor before writing to database
 		 * @return void
+		 * @throws \Exception
 		 */
 		protected function beforeInsert() {
 			$this->__set('visits', 1);
 			$this->__set('arrived', date('Y-m-d H:i:s'));
 		}
-		
+
 		/**
 		 * Update this visitor before writing to database
 		 * @return void
+		 * @throws \Exception
 		 */
 		protected function beforeSave() {
 			$this->__set('visits', $this->__get('visits')+1);

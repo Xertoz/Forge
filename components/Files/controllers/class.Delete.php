@@ -17,6 +17,9 @@
 		/**
 		 * Process POST data
 		 * @return void
+		 * @throws \forge\HttpException
+		 * @throws \forge\components\Files\exceptions\FileNotFound
+		 * @throws \forge\components\Databases\exceptions\NoData
 		 */
 		public function process() {
 			\forge\components\Identity::restrict('com.Files.Admin');

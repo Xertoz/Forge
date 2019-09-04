@@ -16,8 +16,9 @@
 	class Permissions extends \forge\Controller {
 		/**
 		 * Process POST data
-		 * @throws \forge\HttpException
 		 * @return void
+		 * @throws \forge\HttpException
+		 * @throws \forge\components\Databases\exceptions\NoData
 		 */
 		public function process() {
 			\forge\components\Identity::restrict('com.Identity.Admin');

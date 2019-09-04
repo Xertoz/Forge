@@ -1,7 +1,7 @@
 <?php
 	/**
 	* forge.php
-	* Copyright 2009-2012 Mattias Lindholm
+	* Copyright 2009-2019 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -20,15 +20,15 @@
 	date_default_timezone_set('UTC');
 
 	/**
-	* Throw errors generated
-	* This function will ALWAYS throw an Exception
-	* @param int $errno
-	* @param string $msg
-	* @param string $file
-	* @param int $line
-	* @return void
-	* @throws Exception
-	*/
+	 * Throw errors generated
+	 * This function will ALWAYS throw an Exception
+	 * @param int $errno
+	 * @param string $msg
+	 * @param string $file
+	 * @param int $line
+	 * @return void
+	 * @throws \Exception
+	 */
 	function error_handler($errno, $msg, $file, $line) {
 		throw new \Exception($file.'('.$line.'): '.$msg, $errno);
 	}
@@ -51,6 +51,8 @@
 
 		// Try to autoload what we can
 		switch ($vendor) {
+			default: $path = $name = ''; break;
+
 			case 'forge':
 				// Depending on the first subspace, choose a path
 				switch (array_shift($namespace)) {

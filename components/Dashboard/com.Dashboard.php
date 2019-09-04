@@ -10,6 +10,7 @@
 
 	namespace forge\components;
 	use \forge\Component;
+	use forge\components\Admin\MenuItem;
 
 	/**
 	* Dashboard component
@@ -20,10 +21,10 @@
 		 * @param \forge\components\SiteMap\db\Page Page
 		 * @param string Addon
 		 * @param string View
-		 * @return array[AdminMenu]|MenuItem
+		 * @return MenuItem
 		 */
 		static public function getAdminMenu($page, $addon, $view) {
-			$menu = new \forge\components\Admin\MenuItem('dashboard', self::l('Dashboard'), '/'.\forge\components\Templates::getVar('page')->page_url, 'fa fa-dashboard');
+			$menu = new MenuItem('dashboard', self::l('Dashboard'), '/'.\forge\components\Templates::getVar('page')->page_url, 'fa fa-dashboard');
 
 			if ($addon === '\\forge\\components\\Dashboard')
 				$menu->setActive();

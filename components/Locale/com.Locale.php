@@ -10,6 +10,8 @@
 
 	namespace forge\components;
 
+	use forge\components\Admin\MenuItem;
+
 	/**
 	* Locale component
 	*/
@@ -32,6 +34,7 @@
 		 * Build a given locale
 		 * @param string $locale Locale to build
 		 * @return bool
+		 * @throws \Exception
 		 */
 		static public function buildLocale($locale) {
 			if (!self::isLocale($locale))
@@ -43,21 +46,22 @@
 
 			return phpmo_convert($path.'Forge.po', $path.'Forge.mo');
 		}
-		
+
 		/**
 		 * Get the menu items
 		 * @param \forge\components\SiteMap\db\Page Page
 		 * @param string Addon
 		 * @param string View
-		 * @return array[AdminMenu]|MenuItem
+		 * @return MenuItem
+		 * @throws \Exception
 		 */
 		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Locale.Admin'))
 				return null;
 			
-			$menu = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
+			$menu = new MenuItem('developer', self::l('Developer'));
 			
-			$menu->appendChild(new \forge\components\Admin\MenuItem(
+			$menu->appendChild(new MenuItem(
 				'locale',
 				self::l('Locale'),
 				'Locale'
@@ -96,6 +100,7 @@
 		 * Load a locale
 		 * @param string $locale Locale to load. Null value loads configured locale.
 		 * @return bool
+		 * @throws \Exception
 		 */
 		static public function loadLocale($locale=null) {
 			if ($locale == null)

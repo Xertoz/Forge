@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Addon.php
-	* Copyright 2009-2013 Mattias Lindholm
+	* Copyright 2009-2019 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -10,12 +10,14 @@
 
 	namespace forge;
 
+	use forge\components\Locale\Translator;
+
 	/**
 	* Modules and components must be derived from this class
 	*/
 	abstract class Addon {
 		use Versioning;
-		use \forge\components\Locale\Translator;
+		use Translator;
 
 		/**
 		* Define permissions issued
@@ -105,21 +107,21 @@
 		}
 
 		/**
-		* Get name
-		* @param Get full class name
-		* @return string
-		*/
+		 * Get name
+		 * @param bool $long Get full class name
+		 * @return string|false
+		 */
 		static final public function getName($long=false) {
 			$ref = explode('\\',get_called_class());
 			return $long ? get_called_class() : array_pop($ref);
 		}
 
 		/**
-		* Get list of tables
-		* @param $long bool Full name of the classes?
-		* @return array
-		* @throws Exception
-		*/
+		 * Get list of tables
+		 * @param $long bool Full name of the classes?
+		 * @return array
+		 * @throws \Exception
+		 */
 		static public function getTables($long=true) {
 			$tables = self::getNamespace('db');
 

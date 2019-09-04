@@ -49,10 +49,11 @@
 		static protected $__id = 'forge_id';
 
 		/**
-		* Add a column to this table model
-		* @param string Column name
-		* @param mixed Column properties
-		*/
+		 * Add a column to this table model
+		 * @param $column
+		 * @param $properties
+		 * @throws \Exception
+		 */
 		final public function addColumn($column, $properties) {
 			if (isset($this->__columns[$column]))
 				throw new \Exception('Double declaration of model column '.get_class($this).'->'.$column);
@@ -89,11 +90,11 @@
 		}
 
 		/**
-		* Initiate the instance
-		* @param int Select any specific row?
-		* @param \forge\components\Databases\Engine
-		* @return void
-		*/
+		 * Initiate the instance
+		 * @param bool $id
+		 * @param bool $engine
+		 * @throws exceptions\NoData
+		 */
 		public function __construct($id=false, $engine=false) {
 			// Retrieve the engine we will use for queries
 			$this->__engine = $engine !== false ? $engine : \forge\components\Databases::getEngine();
@@ -129,11 +130,11 @@
 		}
 
 		/**
-		* Get the column value?
-		* @param string Column name
-		* @return mixed
-		* @throws Exception
-		*/
+		 * Get the column value?
+		 * @param string Column name
+		 * @return mixed
+		 * @throws \Exception
+		 */
 		final public function __get($member) {
 			if (!isset($this->__columns[$member]))
 				throw new \Exception('A reference to an undeclared column was made');
@@ -142,12 +143,12 @@
 		}
 
 		/**
-		* Set a new column value?
-		* @param string Column name
-		* @param mixed New value
-		* @return void
-		* @throws Exception
-		*/
+		 * Set a new column value?
+		 * @param $member
+		 * @param $value
+		 * @return void
+		 * @throws \Exception
+		 */
 		final public function __set($member,$value) {
 			if (!isset($this->__columns[$member]))
 				throw new \Exception('A reference to an undeclared column was made');
@@ -185,10 +186,11 @@
 		}
 
 		/**
-		* Insert a new row into the database
-		* @return void
-		* @throws Exception
-		*/
+		 * Insert a new row into the database
+		 * @return void
+		 * @throws Exception
+		 * @throws \Exception
+		 */
 		public function delete() {
 			$params = new Params();
 
@@ -295,10 +297,11 @@
 		}
 
 		/**
-		* Insert a new row into the database
-		* @return void
-		* @throws Exception
-		*/
+		 * Insert a new row into the database
+		 * @return void
+		 * @throws Exception
+		 * @throws \Exception
+		 */
 		final public function insert() {
 			$this->beforeInsert();
 
@@ -347,20 +350,28 @@
 
 		/**
 		 * Does this offset exist?
+		 * @param int $offset
+		 * @return bool
 		 */
 		public function offsetExists($offset) {
 			return array_key_exists($offset, $this->__columns);
 		}
-		
+
 		/**
 		 * Get an offset
+		 * @param int $offset
+		 * @return Column
+		 * @throws \Exception
 		 */
 		public function offsetGet($offset) {
 			return $this->__get($offset);
 		}
-		
+
 		/**
 		 * Set an offset
+		 * @param int $offset
+		 * @param mixed $value
+		 * @throws \Exception
 		 */
 		public function offsetSet($offset, $value) {
 			$this->__set($offset, $value);
@@ -368,16 +379,18 @@
 		
 		/**
 		 * Unset an offset
+		 * @param int $offset
 		 */
 		public function offsetUnset($offset) {
 			/* void */
 		}
 
 		/**
-		* Save row changes to the database
-		* @param bool Force update even if there are no changes
-		* @return bool
-		*/
+		 * Save row changes to the database
+		 * @param bool Force update even if there are no changes
+		 * @return bool
+		 * @throws \Exception
+		 */
 		final public function save($force=false) {
 			if (!$force && !$this->__changed)
 				return;
@@ -424,11 +437,11 @@
 		}
 
 		/**
-		* Select a row from the table by the given constraints
-		* @param array Columns to bind
-		* @return Table
-		* @throws Exception
-		*/
+		 * Select a row from the table by the given constraints
+		 * @param array Columns to bind
+		 * @return Table
+		 * @throws exceptions\NoData
+		 */
 		public function select($columns) {
 			$columns = !is_array($columns) ? array($columns) : $columns;
 			
@@ -460,11 +473,12 @@
 		}
 
 		/**
-		* Write a row to the table by either insertion or updating
-		* @param bool Force update even if there are no changes
-		* @return void
-		* @throws Exception
-		*/
+		 * Write a row to the table by either insertion or updating
+		 * @param bool Force update even if there are no changes
+		 * @return void
+		 * @throws Exception
+		 * @throws \Exception
+		 */
 		final public function write($force=false) {
 			if ($this->getId() == 0)
 				$this->insert();

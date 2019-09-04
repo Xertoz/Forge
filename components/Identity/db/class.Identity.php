@@ -90,6 +90,7 @@
 
 		/**
 		 * Override the select function to add loading of permissions
+		 * @param $columns
 		 */
 		public function select($columns) {
 			call_user_func_array('parent::select', func_get_args());

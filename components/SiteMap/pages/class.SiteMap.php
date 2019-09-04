@@ -29,12 +29,13 @@
 		protected $dynamic = true;
 
 		/**
-		* View the page
-		* @param \forge\components\SiteMap\db\Page Page
-		* @param array Page vars
-		* @return string
-		* @throws Exception
-		*/
+		 * View the page
+		 * @param $page
+		 * @param $vars
+		 * @return string
+		 * @throws \forge\HttpException
+		 * @throws \forge\components\Databases\exceptions\NoData
+		 */
 		public function view($page, $vars) {
 			switch ($vars['SUB_URI']) {
 				default:
@@ -50,11 +51,12 @@
 					return $this->makeXSL();
 			}
 		}
-		
+
 		/**
-		* Generate sitemap.xml
-		* @return void
-		*/
+		 * Generate sitemap.xml
+		 * @return void
+		 * @throws \forge\components\Databases\exceptions\NoData
+		 */
 		protected function makeXML() {
 			// We will be needing an XML writer
 			$xml = new \XMLWriter();

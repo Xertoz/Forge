@@ -10,6 +10,8 @@
 
 	namespace forge\components;
 
+	use forge\components\Admin\MenuItem;
+
 	/**
 	* Database component
 	*/
@@ -19,10 +21,10 @@
 		 * @param \forge\components\SiteMap\db\Page Page
 		 * @param string Addon
 		 * @param string View
-		 * @return array[AdminMenu]|MenuItem
+		 * @return MenuItem
 		 */
 		static public function getAdminMenu($page, $addon, $view) {
-			$menu = new \forge\components\Admin\MenuItem('documentation', self::l('Documentation'), '/'.$page->page_url.'/Documentation', 'fa fa-book');
+			$menu = new MenuItem('documentation', self::l('Documentation'), '/'.$page->page_url.'/Documentation', 'fa fa-book');
 			
 			if ($addon === '\\forge\\components\\Documentation')
 				$menu->setActive();

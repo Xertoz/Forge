@@ -29,6 +29,7 @@ class Identity {
 	/**
 	 * Initialize an identity from one of its ids
 	 * @param int $id
+	 * @throws \Exception
 	 */
 	public function __construct($id) {
 		$this->identity = new db\Identity($id);
@@ -54,6 +55,7 @@ class Identity {
 	 * Bind another identity to this identity
 	 * @param Identity $identity
 	 * @return void
+	 * @throws \forge\components\Databases\exceptions\NoData
 	 */
 	public function bind(Identity $identity) {
 		foreach ($identity->getProviders() as $provider) {
@@ -117,7 +119,7 @@ class Identity {
 
 	/**
 	 * Get all permissions granted to this identity
-	 * @return \forge\components\Identity\db\Permission[]
+	 * @return \forge\components\Databases\TableList
 	 */
 	public function getPermissions() {
 		return $this->identity->getPermissions();

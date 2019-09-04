@@ -28,19 +28,21 @@
 		static protected $permissions = ['Admin'];
 
 		/**
-		* Set the current user ID
-		* @param int ID
-		* @return void
-		*/
+		 * Set the current user ID
+		 * @param int ID
+		 * @return void
+		 * @throws \Exception
+		 */
 		static public function login($uid) {
 			\forge\Memory::session('USER_AUTHENTICATION',(int)$uid);
 		}
-		
+
 		/**
 		 * Get the mail message to send for lost password requests
 		 * @param \forge\components\Accounts\db\Account $account
 		 * @param \forge\components\Accounts\db\LostPassword $lost
 		 * @return type
+		 * @throws \forge\HttpException
 		 */
 		static public function getLostPasswordMessage(Accounts\db\Account $account,
 		Accounts\db\LostPassword $lost) {
@@ -54,12 +56,12 @@
 		}
 
 		/**
-		* Confirm a user account
-		* @param int User ID
-		* @param string Confirmation hash
-		* @return bool
-		* @throws Exception
-		*/
+		 * Confirm a user account
+		 * @param $id
+		 * @param $key
+		 * @return bool
+		 * @throws Databases\exceptions\NoData
+		 */
 		static public function confirm($id,$key) {
 			$user = new \forge\components\Accounts\db\Account($id);
 
@@ -76,14 +78,19 @@
 		}
 
 		/**
-		* Create a new account
-		* @param string Account name
-		* @param string First name
-		* @param string Last name
-		* @param string E-mail address
-		* @param string Password
-		* @param string Password (confirm)
-		*/
+		 * Create a new account
+		 * @param $account
+		 * @param $nameFirst
+		 * @param $nameLast
+		 * @param $email
+		 * @param $password
+		 * @param $passwordConfirm
+		 * @param bool $sendMail
+		 * @return Accounts\db\Account
+		 * @throws Databases\exceptions\NoData
+		 * @throws \forge\HttpException
+		 * @throws \phpmailerException
+		 */
 		static public function createAccount($account,$nameFirst,$nameLast,$email,$password,$passwordConfirm,$sendMail=true) {
 			// Must have arguments.
 			if (empty($account) || empty($nameFirst) || empty($nameLast) || empty($email) || empty($password) || empty($passwordConfirm))
@@ -153,10 +160,11 @@
 
 			return $accountInstance;
 		}
-		
+
 		/**
 		 * Get the message to display when someone registers
 		 * @return string
+		 * @throws \forge\HttpException
 		 */
 		static public function getRegisteredMessage() {
 			return \forge\components\Templates::display([

@@ -10,6 +10,8 @@
 
 	namespace forge\components;
 
+	use forge\components\Admin\MenuItem;
+
 	/**
 	* Manage mails from (and to?) Forge
 	*/
@@ -21,21 +23,22 @@
 		* @var array
 		*/
 		static protected $permissions = ['Admin'];
-		
+
 		/**
 		 * Get the menu items
 		 * @param \forge\components\SiteMap\db\Page Page
 		 * @param string Addon
 		 * @param string View
-		 * @return array[AdminMenu]|MenuItem
+		 * @return MenuItem
+		 * @throws \Exception
 		 */
 		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Mailer.Admin'))
 				return null;
 			
-			$menu = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
+			$menu = new MenuItem('developer', self::l('Developer'));
 			
-			$menu->appendChild(new \forge\components\Admin\MenuItem(
+			$menu->appendChild(new MenuItem(
 				'mailer',
 				self::l('E-mail'),
 				'Mailer'
@@ -101,20 +104,28 @@
 		static public function isMail($string) {
 			return (bool)preg_match('/^[A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/',$string);
 		}
-		
+
 		/**
 		 * Set the from field
+		 * @param $name
+		 * @param $address
 		 * @return string
+		 * @throws \Exception
 		 */
 		static public function setSender($name, $address) {
 			self::setConfig('from.name', $name);
 			self::setConfig('from.address', $address);
 			self::writeConfig();
 		}
-		
+
 		/**
 		 * Set the SMTP info
+		 * @param bool $use
+		 * @param null $hostname
+		 * @param null $username
+		 * @param null $password
 		 * @return string
+		 * @throws \Exception
 		 */
 		static public function setSMTP($use=false, $hostname=null, $username=null, $password=null) {
 			self::setConfig('smtp', (bool)$use);

@@ -65,6 +65,7 @@
 
 		/**
 		 * Get the total number of messages in a locale
+		 * @param string $locale
 		 * @return int
 		 */
 		static public function getEntries($locale) {
@@ -113,7 +114,9 @@
 
 		/**
 		 * Get the messages missing in a locale (compared to en_US)
-		 * @return int
+		 * @param $locale
+		 * @return array
+		 * @throws \Exception
 		 */
 		static public function getMissing($locale) {
 			if (!\forge\components\Locale::isLocale($locale))
@@ -132,7 +135,9 @@
 
 		/**
 		 * Get the total number of messages missing in a locale (compared to en_US)
+		 * @param $locale
 		 * @return int
+		 * @throws \Exception
 		 */
 		static public function getMissingEntries($locale) {
 			if (!\forge\components\Locale::isLocale($locale))
@@ -165,6 +170,7 @@
 		 * Find out wether a message ever is used
 		 * @param string $message Message
 		 * @return bool
+		 * @throws \Exception
 		 */
 		static public function isMessage($message) {
 			$en_US = self::getLocale('en_US');
@@ -175,7 +181,7 @@
 		/**
 		 * Set an entire library of a locale
 		 * @param string $locale Locale to write to
-		 * $param array $library Library to write (array of Message => Translation)
+		 * @param array $library Library to write (array of Message => Translation)
 		 * @return void
 		 * @throws \Exception
 		 */
@@ -193,6 +199,7 @@
 		 * @param $message Message from en_US
 		 * @param $translation Translation in the locale
 		 * @return void
+		 * @throws \Exception
 		 */
 		static public function setMessage($locale, $message, $translation) {
 			if (!\forge\components\Locale::isLocale($locale))
@@ -212,6 +219,7 @@
 		/**
 		 * Scan for all messages used and update the en_US library
 		 * @return void
+		 * @throws \Exception
 		 */
 		static public function scanMessages() {
 			$library = [];

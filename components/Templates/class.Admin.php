@@ -28,9 +28,10 @@
 		}
 
 		/**
-		* View a specific template's info etc
-		* @return string
-		*/
+		 * View a specific template's info etc
+		 * @return string
+		 * @throws \forge\HttpException
+		 */
 		static public function view() {
 			\forge\components\Identity::restrict('com.Templates.Admin');
 

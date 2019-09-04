@@ -10,6 +10,8 @@
 
 	namespace forge\components;
 
+	use forge\components\Admin\MenuItem;
+
 	/**
 	* File manager
 	*/
@@ -36,29 +38,31 @@
 			self::setConfig('files', Files\Repository::createRepository()->getId());
 			self::writeConfig();
 		}
-		
+
 		/**
 		 * Get the menu items
 		 * @param \forge\components\SiteMap\db\Page Page
 		 * @param string Addon
 		 * @param string View
-		 * @return array[AdminMenu]|MenuItem
+		 * @return MenuItem
+		 * @throws \Exception
 		 */
 		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Files.Admin'))
 				return null;
 			
-			$menu = new \forge\components\Admin\MenuItem('files', self::l('Files'), '/'.$page->page_url.'/Files', 'ion ion-folder');
+			$menu = new MenuItem('files', self::l('Files'), '/'.$page->page_url.'/Files', 'ion ion-folder');
 			
 			if ($addon === '\\forge\\components\\Files')
 				$menu->setActive();
 			
 			return $menu;
 		}
-		
+
 		/**
 		 * Get the repository for /cache
 		 * @return Files\Repository
+		 * @throws Databases\exceptions\NoData
 		 */
 		static public function getCacheRepository() {
 			return new Files\Repository(self::getConfig('cache'));
@@ -67,6 +71,8 @@
 		/**
 		 * Get the infobox for the dashboard as HTML source code
 		 * @return string
+		 * @throws Databases\exceptions\NoData
+		 * @throws \forge\HttpException
 		 */
 		static public function getInfoBox() {
 			if (!\forge\components\Identity::getIdentity()->hasPermission('com.Files.Admin'))

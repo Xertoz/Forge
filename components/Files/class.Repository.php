@@ -23,6 +23,7 @@
 		/**
 		 * Initiate an existing repository
 		 * @param int $id
+		 * @throws \forge\components\Databases\exceptions\NoData
 		 */
 		public function __construct($id=null) {
 			if ($id !== null)
@@ -41,9 +42,10 @@
 
 		/**
 		 * Create a new file in the repository
-		 * @param string Path and file name
-		 * @param string File contents
-		 * @return Files\db\TreeNode
+		 * @param $filename
+		 * @param string $content
+		 * @return db\TreeNode
+		 * @throws \forge\components\Databases\exceptions\NoData
 		 */
 		public function createFile($filename, $content='') {
 			// Todo: Add folders
@@ -92,7 +94,8 @@
 		/**
 		 * Create a new folder
 		 * @param string $name Name of the folder
-		 * @return \forge\components\Files\db\TreeNode
+		 * @return Repository
+		 * @throws \forge\components\Databases\exceptions\NoData
 		 */
 		public function createFolder($name) {
 			$node = new db\TreeNode;
@@ -106,6 +109,7 @@
 		/**
 		 * Create a new tree
 		 * @return \forge\components\Files\db\TreeNode
+		 * @throws \forge\components\Databases\exceptions\NoData
 		 */
 		static public function createRepository() {
 			$tree = new db\TreeNode;
@@ -178,7 +182,8 @@
 		/**
 		 * Get a particular file relative to this path
 		 * @param string $path Path to the requested file
-		 * @return \forge\components\Files\PhysicalFile
+		 * @return File
+		 * @throws exceptions\FileNotFound
 		 */
 		public function getFile($path='') {
 			try {
@@ -197,7 +202,9 @@
 		/**
 		 * Get a particular folder relative to this path
 		 * @param string $path Path to the requested folder
-		 * @return \forge\components\Files\Repository
+		 * @return Repository
+		 * @throws \forge\components\Databases\exceptions\NoData
+		 * @throws exceptions\FileNotFound
 		 */
 		public function getFolder($path='') {
 			try {
@@ -228,7 +235,8 @@
 		/**
 		 * Get a node
 		 * @param type $path
-		 * @return \forge\components\Files\TreeNode
+		 * @return \forge\components\Databases\Table|db\TreeNode
+		 * @throws \forge\components\Databases\exceptions\NoData
 		 */
 		private function getNode($path) {
 			if (strlen($path) == 0)
@@ -282,7 +290,8 @@
 		/**
 		 * Create a new repository from an already loaded node
 		 * @param \forge\components\Files\db\TreeNode $node
-		 * @return \forge\components\Files\db\TreeNode
+		 * @return Repository
+		 * @throws \forge\components\Databases\exceptions\NoData
 		 */
 		static public function newFromNode(db\TreeNode $node) {
 			$repo = new self;
@@ -298,9 +307,10 @@
 
 		/**
 		 * Upload multiple files to a folder
-		 * @param array $file $_FILE entry of the file
-		 * @return File
-		 * @throws \Exception
+		 * @param array $files $_FILE entry of the file
+		 * @return array
+		 * @throws \forge\components\Databases\exceptions\NoData
+		 * @throws exceptions\FileNotFound
 		 */
 		public function uploadFiles($files) {
 			// The uploaded files should exist

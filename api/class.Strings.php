@@ -1,7 +1,7 @@
 <?php
 	/**
-	* api.strings.php
-	* Copyright 2008-2012 Mattias Lindholm
+	* class.Strings.php
+	* Copyright 2008-2019 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -47,20 +47,20 @@
 				if ($String[$i] == ' ') {
 					$Short = substr($String,0,strlen($Short)-(strlen($Short)-$i)).'...';
 					if (strlen($Short) > $Length)
-						$Short = \forge\Strings::shorten($Short,$Length);
+						$Short = Strings::shorten($Short,$Length);
 					return $Short;
 				}
 	
 			// Return the shortened
 			return $Short;
 		}
-	
+
 		/**
-		* Convert given bytes into a proper size
-		* @param mixed Byte number to convert
-		* @return string Converted size
-		* @throws Exception
-		*/
+		 * Convert given bytes into a proper size
+		 * @param mixed Byte number to convert
+		 * @return string Converted size
+		 * @throws \Exception
+		 */
 		static public function bytesize($number) {
 			if (!is_numeric($number))
 				throw new \Exception('Argument 1 is not expected number');

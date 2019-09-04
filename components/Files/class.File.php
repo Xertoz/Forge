@@ -31,11 +31,11 @@
 		 * @var string
 		 */
 		private $path;
-		
+
 		/**
 		 * Open an existing file
-		 * @param int db\Blob Blob
-		 * @throws \Exception
+		 * @param db\Blob $blob
+		 * @param db\TreeNode|null $node
 		 */
 		public function __construct(db\Blob $blob, db\TreeNode $node=null) {
 			$this->blob = $blob;

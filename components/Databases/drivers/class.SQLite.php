@@ -15,11 +15,10 @@
 	*/
 	class SQLite extends \forge\components\Databases\drivers\MySQL {
 		/**
-		* Initiate the class and connect to the requested database
-		* @param SqlParams Parameters as loaded from configuration
-		* @return void
-		* @throws HttpException
-		*/
+		 * Initiate the class and connect to the requested database
+		 * @param \forge\components\Databases\Params $params
+		 * @throws \forge\HttpException
+		 */
 		public function __construct(\forge\components\Databases\Params $params) {
 			try {
 				$this->pdo = new \PDO('sqlite:'.$params->hostname);
@@ -31,11 +30,11 @@
 		}
 
 		/**
-		* Get a class name for a given type
-		* @param SqlParams Parameters
-		* @return string
-		* @throws Exception
-		*/
+		 * Get a class name for a given type
+		 * @param \forge\components\Databases\Params $params
+		 * @return string
+		 * @throws \Exception
+		 */
 		public function getType(\forge\components\Databases\Params $params) {
 			$class = 'forge\\components\\Databases\\drivers\\MySQL\\'.$params->type;
 

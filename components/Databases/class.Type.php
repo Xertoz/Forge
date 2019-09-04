@@ -91,9 +91,10 @@
 		protected $table = null;
 
 		/**
-		* Construct an instance
-		* @return void
-		*/
+		 * Construct an instance
+		 * @param Params|null $params
+		 * @return void
+		 */
 		public function __construct(Params $params=null) {
 			if (!is_null($params))
 				foreach ($params as $key => $value)
@@ -127,8 +128,10 @@
 		}
 
 		/**
-		* Build the indexes part for a CREATE statement
-		*/
+		 * Build the indexes part for a CREATE statement
+		 * @param string $column
+		 * @return array|bool
+		 */
 		public function buildIndexes($column) {
 			if ($this->virtual === true)
 				return false;

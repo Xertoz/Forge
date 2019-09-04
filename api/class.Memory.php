@@ -1,7 +1,7 @@
 <?php
 	/**
 	* api.sessions.php
-	* Copyright 2009-2012 Mattias Lindholm
+	* Copyright 2009-2019 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -16,11 +16,12 @@
 	 */
 	final class Memory {
 		/**
-		* Recall or remember a cookie variable
-		* @param string Key
-		* @param string Value
-		* @return bool
-		*/
+		 * Recall or remember a cookie variable
+		 * @param string Key
+		 * @param string Value
+		 * @return bool
+		 * @throws \Exception
+		 */
 		static public function cookie() {
 			switch (func_num_args()) {
 				default:
@@ -36,13 +37,14 @@
 					return setcookie((string)func_get_arg(0),(string)func_get_arg(1),time()+30*24*3600,'/');
 			}
 		}
-	
+
 		/**
-		* Recall or remember a session variable
-		* @param string Key
-		* @param mixed Value
-		* @return mixed
-		*/
+		 * Recall or remember a session variable
+		 * @param string Key
+		 * @param mixed Value
+		 * @return mixed
+		 * @throws \Exception
+		 */
 		static public function session() {
 			switch (func_num_args()) {
 				default:

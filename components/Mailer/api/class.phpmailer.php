@@ -695,47 +695,51 @@ class PHPMailer
         $this->Mailer = 'qmail';
     }
 
-    /**
-     * Add a "To" address.
-     * @param string $address
-     * @param string $name
-     * @return bool true on success, false if address already used
-     */
+	/**
+	 * Add a "To" address.
+	 * @param string $address
+	 * @param string $name
+	 * @return bool true on success, false if address already used
+	 * @throws phpmailerException
+	 */
     public function addAddress($address, $name = '')
     {
         return $this->addAnAddress('to', $address, $name);
     }
 
-    /**
-     * Add a "CC" address.
-     * @note: This function works with the SMTP mailer on win32, not with the "mail" mailer.
-     * @param string $address
-     * @param string $name
-     * @return bool true on success, false if address already used
-     */
+	/**
+	 * Add a "CC" address.
+	 * @note: This function works with the SMTP mailer on win32, not with the "mail" mailer.
+	 * @param string $address
+	 * @param string $name
+	 * @return bool true on success, false if address already used
+	 * @throws phpmailerException
+	 */
     public function addCC($address, $name = '')
     {
         return $this->addAnAddress('cc', $address, $name);
     }
 
-    /**
-     * Add a "BCC" address.
-     * @note: This function works with the SMTP mailer on win32, not with the "mail" mailer.
-     * @param string $address
-     * @param string $name
-     * @return bool true on success, false if address already used
-     */
+	/**
+	 * Add a "BCC" address.
+	 * @note: This function works with the SMTP mailer on win32, not with the "mail" mailer.
+	 * @param string $address
+	 * @param string $name
+	 * @return bool true on success, false if address already used
+	 * @throws phpmailerException
+	 */
     public function addBCC($address, $name = '')
     {
         return $this->addAnAddress('bcc', $address, $name);
     }
 
-    /**
-     * Add a "Reply-to" address.
-     * @param string $address
-     * @param string $name
-     * @return bool
-     */
+	/**
+	 * Add a "Reply-to" address.
+	 * @param string $address
+	 * @param string $name
+	 * @return bool
+	 * @throws phpmailerException
+	 */
     public function addReplyTo($address, $name = '')
     {
         return $this->addAnAddress('Reply-To', $address, $name);
@@ -2071,14 +2075,14 @@ class PHPMailer
         return $this->attachment;
     }
 
-    /**
-     * Attach all file, string, and binary attachments to the message.
-     * Returns an empty string on failure.
-     * @access protected
-     * @param string $disposition_type
-     * @param string $boundary
-     * @return string
-     */
+	/**
+	 * Attach all file, string, and binary attachments to the message.
+	 * Returns an empty string on failure.
+	 * @access protected
+	 * @param string $disposition_type
+	 * @param string $boundary
+	 * @return string
+	 */
     protected function attachAll($disposition_type, $boundary)
     {
         // Return text of body
@@ -2182,10 +2186,9 @@ class PHPMailer
      * Returns an empty string on failure.
      * @param string $path The full path to the file
      * @param string $encoding The encoding to use; one of 'base64', '7bit', '8bit', 'binary', 'quoted-printable'
-     * @throws phpmailerException
-     * @see EncodeFile(encodeFile
+	 * @return string
+     *@see EncodeFile(encodeFile
      * @access protected
-     * @return string
      */
     protected function encodeFile($path, $encoding = 'base64')
     {
@@ -3088,8 +3091,7 @@ class PHPMailer
      * @param string $name
      * @param mixed $value
      * NOTE: will not work with arrays, there are no arrays to set/reset
-     * @throws phpmailerException
-     * @return bool
+	 * @return bool
      * @todo Should this not be using __set() magic function?
      */
     public function set($name, $value = '')
@@ -3238,14 +3240,15 @@ class PHPMailer
         return $body;
     }
 
-    /**
-     * Create the DKIM header and body in a new message header.
-     * @access public
-     * @param string $headers_line Header lines
-     * @param string $subject Subject
-     * @param string $body Body
-     * @return string
-     */
+	/**
+	 * Create the DKIM header and body in a new message header.
+	 * @access public
+	 * @param string $headers_line Header lines
+	 * @param string $subject Subject
+	 * @param string $body Body
+	 * @return string
+	 * @throws phpmailerException
+	 */
     public function DKIM_Add($headers_line, $subject, $body)
     {
         $DKIMsignatureType = 'rsa-sha1'; // Signature & hash algorithms

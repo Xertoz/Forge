@@ -779,11 +779,11 @@ class SMTP
         return fwrite($this->smtp_conn, $data);
     }
 
-    /**
-     * Get the latest error.
-     * @access public
-     * @return array
-     */
+	/**
+	 * Get the latest error.
+	 * @access public
+	 * @return string|null
+	 */
     public function getError()
     {
         return $this->error;

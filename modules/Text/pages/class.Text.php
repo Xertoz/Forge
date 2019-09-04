@@ -27,17 +27,21 @@
 		const SEO_PRIORITY = 0.5;
 
 		/**
-		* Get creation form
-		* @return string
-		*/
+		 * Get creation form
+		 * @return string
+		 * @throws \forge\HttpException
+		 */
 		public function getCreationForm() {
 			return \forge\components\Templates::display('modules/Text/tpl/inc.create.php');
 		}
 
 		/**
-		* Get edit form
-		* @return string
-		*/
+		 * Get edit form
+		 * @param $id
+		 * @return string
+		 * @throws \forge\HttpException
+		 * @throws \forge\components\Databases\exceptions\NoData
+		 */
 		public function getEditForm($id) {
 			$text = new \forge\modules\Text\db\Text();
 			$text->page_id = $id;
@@ -46,12 +50,12 @@
 		}
 
 		/**
-		* Perform edit
-		* @param int Page id
-		* @param array Page data
-		* @return void
-		* @throws Exception
-		*/
+		 * Perform edit
+		 * @param $pageId
+		 * @param $pageData
+		 * @return void
+		 * @throws \forge\components\Databases\exceptions\NoData
+		 */
 		public function edit($pageId,$pageData) {
 			$text = new \forge\modules\Text\db\Text();
 			$text->page_id = $pageId;
@@ -63,12 +67,13 @@
 		}
 
 		/**
-		* Create the page!
-		* @var int Page id
-		* @var array Form data
-		* @return void
-		* @throws Exception
-		*/
+		 * Create the page!
+		 *
+		 * @param $id
+		 * @param $page
+		 * @return void
+		 * @throws \forge\components\Databases\exceptions\NoData
+		 */
 		public function create($id,$page) {
 			$text = new \forge\modules\Text\db\Text();
 			$text->page_id = $id;
@@ -79,11 +84,12 @@
 		}
 
 		/**
-		* Delete the page
-		* @var int Page id
-		* @return void
-		* @throws Exception
-		*/
+		 * Delete the page
+		 *
+		 * @return void
+		 * @throws \forge\components\Databases\exceptions\NoData
+		 * @var int Page id
+		 */
 		public function delete($id) {
 			$page = new \forge\modules\Text\db\Text();
 			$page->page_id = $id;
@@ -97,12 +103,13 @@
 		}
 
 		/**
-		* View the page
-		* @param int Page id
-		* @param array Page vars
-		* @return string
-		* @throws Exception
-		*/
+		 * View the page
+		 * @param $id
+		 * @param $vars
+		 * @return string
+		 * @throws \forge\HttpException
+		 * @throws \forge\components\Databases\exceptions\NoData
+		 */
 		public function view($id,$vars) {
 			$page = new \forge\modules\Text\db\Text();
 			$page->page_id = $id;

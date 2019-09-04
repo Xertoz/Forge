@@ -9,6 +9,7 @@
 	*/
 
 	namespace forge\components;
+	use forge\components\Admin\MenuItem;
 	use \forge\components\Databases;
 
 	/**
@@ -56,11 +57,11 @@
 		}
 
 		/**
-		* Install a module
-		* @param string Archive (ZIP) path & name
-		* @return bool
-		* @throws Exception
-		*/
+		 * Install a module
+		 * @param string Archive (ZIP) path & name
+		 * @return void
+		 * @throws \Exception
+		 */
 		static public function installModule($file) {
 			// Create the ZIP reader
 			$zip = new \ZipArchive();
@@ -94,7 +95,7 @@
 
 		/**
 		* Get information regarding the status of an addon
-		* @param string Addon's controller
+		* @param \forge\Configurable $controller Addon's controller
 		* @return array
 		*/
 		static private function getAddonStatus($controller) {
@@ -119,21 +120,22 @@
 				'database' => count($models) ? $database : -1
 			);
 		}
-		
+
 		/**
 		 * Get the menu items
 		 * @param \forge\components\SiteMap\db\Page Page
 		 * @param string Addon
 		 * @param string View
-		 * @return array[AdminMenu]|MenuItem
+		 * @return MenuItem
+		 * @throws \Exception
 		 */
 		static public function getAdminMenu($page, $addon, $view) {
 			if (!\forge\components\Identity::hasPermission('com.Software.Admin'))
 				return null;
 			
-			$menu = new \forge\components\Admin\MenuItem('developer', self::l('Developer'));
+			$menu = new MenuItem('developer', self::l('Developer'));
 			
-			$menu->appendChild(new \forge\components\Admin\MenuItem(
+			$menu->appendChild(new MenuItem(
 				'software',
 				self::l('Modules'),
 				'Software'

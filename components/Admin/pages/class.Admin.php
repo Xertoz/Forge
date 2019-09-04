@@ -29,12 +29,13 @@
 		protected $dynamic = true;
 
 		/**
-		* Create the page!
-		* @var int Page id
-		* @var array Form data
-		* @return void
-		* @throws Exception
-		*/
+		 * Create the page!
+		 *
+		 * @param $id
+		 * @param $page
+		 * @return void
+		 * @throws \forge\components\Databases\exceptions\NoData
+		 */
 		public function create($id,$page) {
 			$page = new \forge\components\SiteMap\db\Page($id);
 			$page->allowRemove = false;
@@ -42,12 +43,12 @@
 		}
 
 		/**
-		* View the page
-		* @param \forge\components\SiteMap\db\Page Page
-		* @param array Page vars
-		* @return string
-		* @throws Exception
-		*/
+		 * View the page
+		 * @param $page
+		 * @param $vars
+		 * @return string
+		 * @throws \forge\HttpException
+		 */
 		public function view($page, $vars) {
 			$parts = explode('/',$vars['SUB_URI']);
 

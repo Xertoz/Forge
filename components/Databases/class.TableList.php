@@ -50,11 +50,12 @@
 		private $rows;
 
 		/**
-		* Load a list of data table
-		* @param \forge\components\Databases\Params|array $params Parameters
-		* @return void
-		* @throws Exception
-		*/
+		 * Load a list of data table
+		 * @param \forge\components\Databases\Params|array $params Parameters
+		 * @return void
+		 * @throws \Exception
+		 * @throws Exception
+		 */
 		public function __construct($params) {
 			// Save the arguments
 			if (is_array($params))
@@ -175,6 +176,8 @@
 
 		/**
 		 * Does this offset exist?
+		 * @param $offset
+		 * @return bool
 		 */
 		public function offsetExists($offset) {
 			return isset($this->result[$offset]);
@@ -182,6 +185,8 @@
 
 		/**
 		 * Get an offset
+		 * @param $offset
+		 * @return mixed
 		 */
 		public function offsetGet($offset) {
 			return $this->result[$offset];
@@ -189,6 +194,8 @@
 
 		/**
 		 * Set an offset
+		 * @param $offset
+		 * @param $value
 		 */
 		public function offsetSet($offset, $value) {
 			/* void */
@@ -196,6 +203,7 @@
 
 		/**
 		 * Unset an offset
+		 * @param $offset
 		 */
 		public function offsetUnset($offset) {
 			/* void */

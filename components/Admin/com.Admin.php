@@ -21,13 +21,13 @@
 		static protected $permissions = ['Admin'];
 
 		/**
-		* Display the administration panel
-		* @param \forge\components\SiteMap\db\Page Page
-		* @param string Name of the addon
-		* @param string Name of the view
-		* @return string
-		* @throws Exception
-		*/
+		 * Display the administration panel
+		 * @param $page
+		 * @param $addon
+		 * @param $view
+		 * @return string
+		 * @throws \forge\HttpException
+		 */
 		static public function display($page, $addon,$view) {
 			// Explicitly force authentication
 			\forge\components\Identity::auth();

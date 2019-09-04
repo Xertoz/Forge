@@ -16,8 +16,8 @@
 	class Bind extends \forge\Controller {
 		/**
 		 * Process POST data
-		 * @throws \forge\HttpException
 		 * @return void
+		 * @throws \Exception
 		 */
 		public function process() {
 			try {

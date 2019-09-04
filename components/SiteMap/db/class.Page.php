@@ -111,18 +111,20 @@
 		];
 
 		/**
-		* Update timestamps on insertion
-		* @return void
-		*/
+		 * Update timestamps on insertion
+		 * @return void
+		 * @throws \Exception
+		 */
 		protected function beforeInsert() {
 			$this->__set('page_created',time());
 			$this->__set('page_updated',time());
 		}
 
 		/**
-		* Update timestamps on update
-		* @return void
-		*/
+		 * Update timestamps on update
+		 * @return void
+		 * @throws \Exception
+		 */
 		protected function beforeSave() {
 			$this->__set('page_updated',time());
 		}

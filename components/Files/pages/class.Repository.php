@@ -63,12 +63,13 @@
 		}*/
 
 		/**
-		* Create the repository!
-		* @var int Page id
-		* @var array Form data
-		* @return void
-		* @throws Exception
-		*/
+		 * Create the repository!
+		 * @return void
+		 * @throws Exception*@throws \forge\components\Databases\exceptions\NoData
+		 * @throws \forge\components\Databases\exceptions\NoData
+		 * @var array Form data
+		 * @var int Page id
+		 */
 		public function create($id,$page) {
 			$repo = \forge\components\Files\Repository::createRepository();
 			$repo->link = $id;
@@ -94,12 +95,12 @@
 		}*/
 
 		/**
-		* View the page
-		* @param int Page id
-		* @param array Page vars
-		* @return string
-		* @throws Exception
-		*/
+		 * View the page
+		 * @param $id
+		 * @param $vars
+		 * @return string
+		 * @throws \forge\HttpException
+		 */
 		public function view($id,$vars) {
 			$repo = \forge\components\Files\Repository::loadLink($id);
 

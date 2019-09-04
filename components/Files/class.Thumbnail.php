@@ -121,10 +121,10 @@
 		private $MemoryLimit;
 
 		/**
-		* Initialize from a file
-		* @param string File
-		* @return void
-		*/
+		 * Initialize from a file
+		 * @param string File
+		 * @throws \Exception
+		 */
 		public function __construct($File) {
 			// It's a file, at least?
 			if (!is_file($File))
@@ -164,9 +164,10 @@
 		}
 
 		/**
-		* Load image
-		* @return void
-		*/
+		 * Load image
+		 * @return void
+		 * @throws \Exception
+		 */
 		private function Load() {
 			// Is the image too big?
 			if (($this->SrcHeight*$this->SrcWidth)*Thumbnail::PixelBytes+Thumbnail::TrueColorMemory > $this->MemoryLimit-memory_get_usage())
@@ -210,13 +211,14 @@
 		}
 
 		/**
-		* Create a thumbnail
-		* @param int Width
-		* @param int Height
-		* @param int Dimensioning
-		* @param int Resizing
-		* @return string File path
-		*/
+		 * Create a thumbnail
+		 * @param $Width
+		 * @param $Height
+		 * @param int $Dimension
+		 * @param int $Resize
+		 * @return string File path
+		 * @throws \Exception
+		 */
 		public function Get($Width,$Height,$Dimension=Thumbnail::DIMENSION_STATIC,$Resize=Thumbnail::RESIZE_FULLY) {
 			// Save the size
 			$this->TmbWidth = $Width;

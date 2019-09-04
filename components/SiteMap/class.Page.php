@@ -51,9 +51,10 @@
 		const SEO_PRIORITY = '1';
 
 		/**
-		* Get page type title
-		* @return string
-		*/
+		 * Get page type title
+		 * @return string
+		 * @throws \Exception
+		 */
 		public function getTitle() {
 			if (empty($this->title))
 				throw new \Exception('Invalid page type');
@@ -134,11 +135,4 @@
 		* @throws Exception
 		*/
 		abstract public function view($page,$vars);
-
-		/**
-		* Get all dynamic children
-		*/
-		public static function getChildren($pid) {
-			return array();
-		}
 	}

@@ -16,8 +16,8 @@
 	trait Pluginnable {
 		/**
 		* Get a specific plugin
-		* @param string Plugin name
-		* @param string Plugin type
+		* @param string $name Plugin name
+		* @param string|false $type Plugin type
 		* @return callback Plugin
 		* @throws \Exception
 		*/
@@ -35,7 +35,7 @@
 
 		/**
 		* Get all available plugins for this addon
-		* @param string Any specific plugin type to return?
+		* @param string|false $type Any specific plugin type to return?
 		* @return array
 		*/
 		static public function getPlugins($type=false) {
@@ -68,8 +68,8 @@
 
 		/**
 		* Check if a declared plugin is of the right descent
-		* @param string Plugin name
-		* @param string Plugin type
+		* @param string $name Plugin name
+		* @param string|false $type Plugin type
 		* @return bool
 		*/
 		static public function isPlugin($name,$type=false) {

@@ -17,6 +17,7 @@
 		/**
 		 * Process POST data
 		 * @return void
+		 * @throws \forge\HttpException
 		 */
 		public function process() {
 			if (empty($_POST['account']))
