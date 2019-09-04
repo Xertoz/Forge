@@ -427,8 +427,8 @@
 			self::addScriptFile('/vendor/requirejs/require.js', true);
 
 			$plugins = [
-				'adminlte' => ['/templates/forge-admin/script/adminlte.min', ['jquery']],
-				'bootstrap' => ['https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min', ['jquery']],
+				'adminlte' => ['/vendor/AdminLTE/dist/js/adminlte.min', ['jquery']],
+				'bootstrap' => ['/vendor/AdminLTE/bower_components/bootstrap/dist/js/bootstrap', ['jquery']],
 				'cookie' => 'https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
 				'datatables.bootstrap' => '/vendor/datatables.net/datatables.bs.min',
 				'datatables.net' => '/vendor/datatables.net/datatables.min',

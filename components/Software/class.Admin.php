@@ -10,6 +10,8 @@
 
 	namespace forge\components\Software;
 
+	use forge\components\Templates\DataTable;
+
 	/**
 	* Software component of Forge 4
 	* Administration interface
@@ -60,7 +62,11 @@
 			foreach ($modules as &$module)
 				$module = \forge\components\Software::getModuleStatus($module);
 
+
 			// Show window.
-			return \forge\components\Templates::display('components/Software/tpl/acp.list.php',array('components'=>$components,'modules'=>$modules));
+			return \forge\components\Templates::display('components/Software/tpl/acp.list.php', [
+				'components' => new DataTable($components),
+				'modules' => new DataTable($modules)
+			]);
 		}
 	}

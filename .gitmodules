@@ -7,3 +7,6 @@
 [submodule "vendor/domReady"]
 	path = vendor/domReady
 	url = git@github.com:requirejs/domReady.git
+[submodule "vendor/AdminLTE"]
+	path = vendor/AdminLTE
+	url = git@github.com:ColorlibHQ/AdminLTE.git
