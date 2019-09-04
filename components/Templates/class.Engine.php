@@ -1,7 +1,7 @@
 <?php
 	/**
 	* class.Engine.php
-	* Copyright 2011-2014 Mattias Lindholm
+	* Copyright 2011-2019 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -44,54 +44,46 @@
 
 		/**
 		* Add some JavaScript to the header element
-		* @param string
+		* @param string $script JavaScript source code or SCRIPT element
 		* @return void
 		*/
-		static public function addScript($script) {
-			if (is_string($script))
-				$script = new JavaScript($script);
-
+		static public function addScript(string $script) {
 			foreach (self::$scripts as $subject)
-				if ($subject->getHash() == $script->getHash())
+				if ($subject === $script)
 					return;
 
 			self::$scripts[] = $script;
 		}
 
 		/**
-		 * Add an external JavaScript file to the header element
-		 * @param string $file File name
-		 * @param bool $preserve Do not minify the source
+		 * Add an JavaScript file to the header element
+		 * @param string $file File URL
 		 * @return void
 		 */
-		static public function addScriptFile($file, $preserve=false) {
-			self::addScript(new JavaScript($file, JavaScript::TYPE_FILE, !$preserve));
+		static public function addScriptFile(string $file) {
+			self::addScript('<script src="'.self::html($file).'"></script>');
 		}
 
 		/**
 		* Add some CSS to the header element
-		* @param string
+		* @param string $style CSS source code or LINK element
 		* @return void
 		*/
-		static public function addStyle($style) {
-			if (is_string($style))
-				$style = new CSS($style);
-
+		static public function addStyle(string $style) {
 			foreach (self::$styles as $subject)
-				if ($subject->getHash() == $style->getHash())
+				if ($subject === $style)
 					return;
 
 			self::$styles[] = $style;
 		}
 
 		/**
-		 * Add an external CSS file to the header element
-		 * @param string $file File name
-		 * @param bool $preserve Do not minify the source
+		 * Add a CSS file to the header element
+		 * @param string $file File URL
 		 * @return void
 		 */
-		static public function addStyleFile($file, $preserve=false) {
-			self::addStyle(new CSS($file, CSS::TYPE_FILE, !$preserve));
+		static public function addStyleFile($file) {
+			self::addStyle('<link href="'.self::html($file).'" rel="stylesheet" type="text/css">');
 		}
 
 		/**
@@ -167,79 +159,28 @@
 
 		/**
 		* Get all JavaScript elements as string
-		* @param string Glue
+		* @param string $glue Glue
 		* @return string
 		*/
 		static public function getScripts($glue) {
-			$local = '';
 			$elements = [];
 
 			foreach (self::$scripts as $script)
-				if ($script->isRemote())
-					$elements[] = '<script type="text/javascript" src="'.$script->getFile().'"></script>';
-				elseif (!\forge\components\Identity::isDeveloper() && $script->isMinifiable())
-					$local .= $script->getSource();
-				elseif ($script->isLocal())
-					$elements[] = '<script type="text/javascript" src="'.$script->getFile().'"></script>';
-				else
-					$elements[] = '<script type="text/javascript">'.$script->getSource().'</script>';
-
-			if (strlen($local)) {
-				$js = new JavaScript($local);
-				$hash = $js->getHash();
-				$repo = \forge\components\Files::getCacheRepository();
-				try {
-					$folder = $repo->getFolder('script');
-				}
-				catch (\forge\components\Files\exceptions\FileNotFound $e) {
-					$folder = $repo->createFolder('script');
-				}
-				$file = $hash.'.js';
-				try {
-					$folder->getFile($file);
-				}
-				catch (\forge\components\Files\exceptions\FileNotFound $e) {
-					$folder->createFile($file, \forge\JSMin::minify($local));
-				}
-				$elements[] = '<script type="text/javascript" src="/cache/script/'.$file.'"></script>';
-			}
+				$elements[] = $script[0] === '<' ? $script : '<script>'.$script.'</script>';
 
 			return implode($glue, $elements);
 		}
 
 		/**
 		* Get all CSS elements as string
-		* @param string Glue
+		* @param string $glue Glue
 		* @return string
 		*/
 		static public function getStyles($glue) {
-            $repo = \forge\components\Files::getCacheRepository();
 			$elements = [];
 
-            try {
-                $folder = $repo->getFolder('style');
-            } catch (\forge\components\Files\exceptions\FileNotFound $e) {
-                $folder = $repo->createFolder('style');
-            }
-
 			foreach (self::$styles as $style)
-				if ($style->isRemote())
-					$elements[] = '<link href="'.$style->getFile().'" rel="stylesheet" />';
-				elseif (!\forge\components\Identity::isDeveloper() && $style->isMinifiable()) {
-                    $css = new CSS($style->getSource());
-                    $hash = $css->getHash();
-                    $file = $hash.'.css';
-                    try {
-                        $folder->getFile($file);
-                    } catch (\forge\components\Files\exceptions\FileNotFound $e) {
-                        $folder->createFile($file, \forge\CssMin::minify($style->getSource()));
-                    }
-                    $elements[] = '<link href="/cache/style/'.$hash.'.css" rel="stylesheet" />';
-                }
-				elseif ($style->isLocal())
-					$elements[] = '<link href="'.$style->getFile().'" rel="stylesheet" />';
-				else
-					$elements[] = '<style type="text/css" media="screen">'.$style->getSource().'</style>';
+				$elements[] = $style[0] === '<' ? $style : '<style>'.$style.'</style>';
 
 
 			return implode($glue, $elements);
