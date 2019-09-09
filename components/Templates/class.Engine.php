@@ -378,7 +378,7 @@
 				'datatables.rowReorder' => '/vendor/datatables.net/rowreorder.min',
 				'domReady' => '/vendor/domReady/domReady',
 				'forge' => '/script/forge',
-				'icheck' => ['/templates/forge-admin/script/icheck.min', ['jquery']],
+				'icheck' => ['/vendor/AdminLTE/plugins/iCheck/icheck.min', ['jquery']],
 				'jquery' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min'
 			];
 			foreach (\forge\Addon::getAddons(true) as $addon)
