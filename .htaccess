@@ -11,5 +11,5 @@ Options +FollowSymlinks -Indexes
 RewriteEngine on
 RewriteBase /
 RewriteRule ^(css|images|script|tools)/(.*)$ $1/$2 [NE,NC,PT]
-RewriteRule ^(templates|components|modules|vendor)/(.*).(css|png|jpg|gif|svg|js|ico|swf|xml|xsl|flv|mp3|mp4|ttf|woff2)$ $1/$2.$3 [NE,NC,PT]
+RewriteRule ^(templates|components|modules|vendor)/(.*).(html|css|png|jpg|gif|svg|js|ico|swf|xml|xsl|flv|mp3|mp4|ttf|woff2)$ $1/$2.$3 [NE,NC,PT]
 RewriteRule ^(.*)$ http.php?%{QUERY_STRING} [L]
