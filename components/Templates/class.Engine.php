@@ -367,18 +367,18 @@
 		 * Load require.js and all available plugins
 		 */
 		static public function requireJS() {
-			self::addScriptFile('/vendor/requirejs/require.js', true);
+			self::addScriptFile('/vendor/requirejs/r.js/require.js', true);
 
 			$plugins = [
-				'adminlte' => ['/vendor/AdminLTE/dist/js/adminlte.min', ['jquery']],
-				'bootstrap' => ['/vendor/AdminLTE/bower_components/bootstrap/dist/js/bootstrap', ['jquery']],
+				'adminlte' => ['/vendor/almasaeed2010/adminlte/dist/js/adminlte.min', ['jquery']],
+				'bootstrap' => ['/vendor/almasaeed2010/adminlte/bower_components/bootstrap/dist/js/bootstrap', ['jquery']],
 				'cookie' => 'https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
-				'datatables.bootstrap' => '/vendor/datatables.net/datatables.bs.min',
-				'datatables.net' => '/vendor/datatables.net/datatables.min',
-				'datatables.rowReorder' => '/vendor/datatables.net/rowreorder.min',
+				'datatables.bootstrap' => '/vendor/datatables/datatables/media/js/dataTables.bootstrap.min',
+				'datatables.net' => '/vendor/datatables/datatables/media/js/jquery.dataTables.min',
+				'datatables.rowReorder' => '/vendor/datatables/rowreorder/js/dataTables.rowReorder',
 				'domReady' => '/vendor/domReady/domReady',
 				'forge' => '/script/forge',
-				'icheck' => ['/vendor/AdminLTE/plugins/iCheck/icheck.min', ['jquery']],
+				'icheck' => ['/vendor/almasaeed2010/adminlte/plugins/iCheck/icheck.min', ['jquery']],
 				'jquery' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min'
 			];
 			foreach (\forge\Addon::getAddons(true) as $addon)

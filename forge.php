@@ -49,33 +49,25 @@
 		$vendor = array_shift($namespace);
 		$class = array_pop($namespace);
 
+		// Only handle \forge
+		if ($vendor !== 'forge')
+			return;
+
 		// Try to autoload what we can
-		switch ($vendor) {
-			default: $path = $name = ''; break;
-
-			case 'forge':
-				// Depending on the first subspace, choose a path
-				switch (array_shift($namespace)) {
-					default:
-						$path = 'api';
-						$name = 'class.'.$class.'.php';
-						break;
-
-					case 'components':
-						$path = 'components/'.(($count = count($namespace)) ? implode('/', $namespace) : $class);
-						$name = ($count ? 'class' : 'com').'.'.$class.'.php';
-						break;
-
-					case 'modules':
-						$path = 'modules/'.(($count = count($namespace)) ? implode('/', $namespace) : $class);
-						$name = ($count ? 'class' : 'mod').'.'.$class.'.php';
-						break;
-				}
+		switch (array_shift($namespace)) {
+			default:
+				$path = 'api';
+				$name = 'class.'.$class.'.php';
 				break;
 
-			case 'Michelf':
-				$path = 'vendor/php-markdown/Michelf';
-				$name = $class.'.php';
+			case 'components':
+				$path = 'components/'.(($count = count($namespace)) ? implode('/', $namespace) : $class);
+				$name = ($count ? 'class' : 'com').'.'.$class.'.php';
+				break;
+
+			case 'modules':
+				$path = 'modules/'.(($count = count($namespace)) ? implode('/', $namespace) : $class);
+				$name = ($count ? 'class' : 'mod').'.'.$class.'.php';
 				break;
 		}
 
@@ -89,3 +81,6 @@
 
 	// Set up the autoloader for Forge
 	spl_autoload_register('forge\autoload', true, false);
+
+	// Set up the Composer autoloader
+	require_once 'vendor/autoload.php';

@@ -1,0 +1,60 @@
+{
+  "name": "arosdigital/forge",
+  "description": "Manage your website content easily with this CMS",
+  "type": "project",
+  "readme": "README.md",
+  "license": "Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License",
+  "authors": [{
+	"name": "Mattias Lindholm",
+	"email": "mattias@xertoz.se",
+	"homepage": "http://www.xertoz.se",
+	"role": "Developer"
+  }],
+  "support": {
+	"email": "mattias@xertoz.se",
+	"issues": "https://github.com/Xertoz/Forge/issues",
+	"source": "https://github.com/Xertoz/Forge"
+  },
+  "repositories": [{
+	"type": "package",
+	"package": {
+	  "name": "requirejs/r.js",
+	  "version": "2.3.6",
+	  "source": {
+		"type": "git",
+		"url": "https://github.com/requirejs/r.js.git",
+		"reference": "tags/2.3.6"
+	  }
+	}
+  }, {
+	"type": "package",
+	"package": {
+	  "name": "requirejs/domReady",
+	  "version": "2.0.1",
+	  "source": {
+		"type": "git",
+		"url": "https://github.com/requirejs/domReady.git",
+		"reference": "tags/2.0.1"
+	  }
+	}
+  }, {
+	"type": "package",
+	"package": {
+	  "name": "datatables/rowreorder",
+	  "version": "1.2.5",
+	  "source": {
+		"type": "git",
+		"url": "https://github.com/DataTables/RowReorder.git",
+		"reference": "tags/1.2.5"
+	  }
+	}
+  }],
+  "require": {
+	"almasaeed2010/adminlte": "~2.4",
+    "michelf/php-markdown": "~1.8",
+	"requirejs/domReady": "~2.0",
+	"requirejs/r.js": "~2.3",
+    "datatables/datatables": "~1.10",
+	"datatables/rowreorder": "~1.2"
+  }
+}
