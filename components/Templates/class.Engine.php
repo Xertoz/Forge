@@ -91,6 +91,7 @@
 		 * @param array Template array
 		 * @return string
 		 * @throws \Exception
+		 * @deprecated
 		 */
 		static public function date($vars) {
 			if (empty($vars['name']))
@@ -115,6 +116,7 @@
 		 * @param array $variables
 		 * @return string
 		 * @throws \Exception
+		 * @deprecated
 		 */
 		static public function display($file,array $variables=array()) {
 			try {
@@ -217,6 +219,7 @@
 		* Escape string to HTML
 		* @param string Raw input
 		* @return string Escaped HTML
+		* @deprecated
 		*/
 		static public function html($input) {
 			return htmlspecialchars($input);
@@ -227,6 +230,7 @@
 		 * @param array Template array
 		 * @return string
 		 * @throws \Exception
+		 * @deprecated
 		 */
 		static public function editor($vars) {
 			if (empty($vars['name']))
@@ -250,6 +254,7 @@
 		 * @param array $images Array with density => file
 		 * @param array $attributes Additional HTML attributes
 		 * @return string
+		 * @deprecated
 		 */
 		static public function image($images, $attributes=[]) {
 			$script = '<script type="text/javascript">';
@@ -289,6 +294,7 @@
 		 * @param $attr array Additional key-value array of attributes
 		 * @return string
 		 * @throws \Exception
+		 * @deprecated
 		 */
 		static public function input($type, $name, $value=null, $auto=true, $attr=array()) {
 			$attr['name'] = $name;
@@ -343,6 +349,7 @@
 		 * Handle any response from a specific controller
 		 * @param string|array $controller
 		 * @return string
+		 * @deprecated
 		 */
 		static public function response($controller) {
 			$html = null;
@@ -376,7 +383,7 @@
 				'datatables.bootstrap' => '/vendor/datatables/datatables/media/js/dataTables.bootstrap.min',
 				'datatables.net' => '/vendor/datatables/datatables/media/js/jquery.dataTables.min',
 				'datatables.rowReorder' => '/vendor/datatables/rowreorder/js/dataTables.rowReorder',
-				'domReady' => '/vendor/domReady/domReady',
+				'domReady' => '/vendor/requirejs/domReady/domReady',
 				'forge' => '/script/forge',
 				'icheck' => ['/vendor/almasaeed2010/adminlte/plugins/iCheck/icheck.min', ['jquery']],
 				'jquery' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min'
@@ -389,6 +396,16 @@
 			self::addScript(self::display('components/Templates/tpl/js.requirejs.php', ['plugins' => $plugins]));
 		}
 
+		/**
+		 * @param $name
+		 * @param $options
+		 * @param null $value
+		 * @param bool $auto
+		 * @param array $attr
+		 * @return string
+		 * @throws \Exception
+		 * @deprecated
+		 */
 		static public function select($name, $options, $value=null, $auto=true, $attr=[]) {
 			$attr['name'] = $name;
 
@@ -427,6 +444,7 @@
 		* @param int Width
 		* @param int Height
 		* @return string Thumbnail path
+		* @deprecated
 		*/
 		static public function thumb($file,$width,$height) {
 			return '/thumbnail/'.$width.'/'.$height.'/'.$file;

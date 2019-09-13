@@ -52,7 +52,7 @@
 		public function view($page, $vars) {
 			$parts = explode('/',$vars['SUB_URI']);
 
-			$addon = !empty($parts[0]) ? $parts[0] : 'Dashboard';
+			$addon = !empty($parts[0]) ? $parts[0] : 'Admin';
 			$view = !empty($parts[1]) ? $parts[1] : 'index';
 
 			return \forge\components\Admin::display($page, $addon, $view);

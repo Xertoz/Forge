@@ -15,7 +15,7 @@
 	/**
 	* File manager
 	*/
-	class Files extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox, \forge\components\Templates\RequireJS {
+	class Files extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Admin\InfoBox, \forge\components\Templates\RequireJS {
 		use \forge\Configurable;
 		
 		/**
@@ -88,7 +88,7 @@
 				$size += Files\Repository::newFromNode($node)->getSize();
 			$free = \forge\Strings::bytesize($size);
 
-			return \forge\components\Templates::display('components/Files/tpl/inc.infobox.php',array('free'=>$free));
+			return \forge\components\Templates::view('infobox', ['free' => $free]);
 		}
 		
 		static public function getRequireJS() {

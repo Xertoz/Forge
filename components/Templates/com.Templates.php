@@ -1,7 +1,7 @@
 <?php
 	/**
 	* com.Templates.php
-	* Copyright 2010-2013 Mattias Lindholm
+	* Copyright 2010-2019 Mattias Lindholm
 	*
 	* This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 	* To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter
@@ -77,6 +77,7 @@
 		 * @param array $variables
 		 * @return string Parsed template
 		 * @throws \forge\HttpException
+		 * @deprecated
 		 */
 		static public function display($files,array $variables=array()) {
 			if (file_exists(FORGE_PATH.'/templates/'.self::getTemplate().'/init.php'))
@@ -254,5 +255,52 @@
 		*/
 		static public function setVar($key,$value) {
 			self::$vars[$key] = $value;
+		}
+
+		/**
+		 * Parse a view with given variables through Smarty.
+		 * The template's view will be used if it exists, otherwise the file in Addon/tpl will be used.
+		 * @param string $view Name of the view to display or "template/view" if a specific template is to be used.
+		 * @param array[string => mixed] $vars Array of variables to pass into the view.
+		 * @return string Returns the parsed view.
+		 * @throws \Exception
+		 */
+		static public function view(string $view, array $vars=[]) {
+			// Figure out if a template was requested
+			$view = explode('/', $view);
+			$template = count($view) === 1 ? self::getTemplate() : $view[0];
+			$view = count($view) === 1 ? $view[0] : $view[1];
+
+			// Who called?
+			$ns = explode('/', debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)[0]['file']);
+			array_pop($ns);
+			$addon = array_pop($ns);
+
+			// Find the view file
+			$file = FORGE_PATH.'/templates/'.$template.'/'.$addon.'/'.$view.'.tpl';
+			if (!file_exists($file))
+				$file = FORGE_PATH.'/'.end($ns).'/'.$addon.'/tpl/'.$view.'.tpl';
+			if (!file_exists($file))
+				throw new \Exception('View not found: '.$view);
+
+			// Set up Smarty
+			$smarty = new \Smarty();
+			$smarty->setTemplateDir(FORGE_PATH.'/templates/'.$template.'/');
+			$smarty->setCompileDir(FORGE_PATH.'/files/smarty/'.$template.'_c/');
+			$smarty->setConfigDir(FORGE_PATH.'/files/smarty/config/');
+			$smarty->setCacheDir(FORGE_PATH.'/files/smarty/cache/');
+
+			// Register some functions
+			$smarty->registerPlugin('modifier', 'l', 'forge\\components\\Templates::l');
+			$smarty->registerPlugin('function', 'header', function($params) {
+				return Engine::header($params['tabs'] ?? 0);
+			});
+
+			// Assign vars
+			foreach (array_merge(self::$vars, $vars) as $key => $mixed)
+				$smarty->assign($key, $mixed);
+
+			// Parse the view and return it
+			return $smarty->fetch($file);
 		}
 	}

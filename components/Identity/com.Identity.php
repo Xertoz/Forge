@@ -15,7 +15,7 @@
 	/**
 	* Manage different user account types with a unified identification
 	*/
-	class Identity extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
+	class Identity extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Admin\InfoBox {
 		use \forge\Configurable;
 
 		/**
@@ -46,16 +46,13 @@
 			if (!self::getIdentity()->hasPermission('com.Identity.Admin'))
 				return null;
 
-			return Templates::display(
-				'components/Identity/tpl/inc.infobox.php',
-				[
-					'total' => (new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
-						'type' => new \forge\components\Identity\db\Identity(),
-						'limit' => 1,
-						'where' => ['master' => 0]
-					])))->getPages()
-				]
-			);
+			return Templates::view('infobox', [
+				'total' => (new \forge\components\Databases\TableList(new \forge\components\Databases\Params([
+					'type' => new \forge\components\Identity\db\Identity(),
+					'limit' => 1,
+					'where' => ['master' => 0]
+				])))->getPages()
+			]);
 		}
 
 		/**

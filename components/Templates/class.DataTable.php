@@ -17,6 +17,21 @@
 	 */
 	class DataTable {
 		/**
+		 * @var array[string] The table attributes
+		 */
+		private $attributes = [];
+
+		/**
+		 * @var array[string=>function] The callbacks to be used
+		 */
+		private $callbacks = [];
+
+		/**
+		 * @var array[string] The output columns
+		 */
+		private $columns = [];
+
+		/**
 		 * @var bool Should the user be able to drag rows in this table?
 		 */
 		private $draggable = false;
@@ -52,6 +67,15 @@
 		}
 
 		/**
+		 * Getting this object as string is equal to calling ->draw()
+		 * @return string
+		 * @throws \forge\HttpException
+		 */
+		public function __toString() {
+			return $this->draw();
+		}
+
+		/**
 		 * Generate HTML table
 		 * @param array $columns
 		 * @param array $callbacks
@@ -59,11 +83,15 @@
 		 * @return string
 		 * @throws \forge\HttpException
 		 */
-		public function draw(array $columns, array $callbacks=[], array $attributes=[]) {
+		public function draw(array $columns=[], array $callbacks=[], array $attributes=[]) {
+			$this->columns = array_merge($this->columns, $columns);
+			$this->callbacks = array_merge($this->callbacks, $callbacks);
+			$this->attributes = array_merge($this->attributes, $attributes);
+
 			return Templates::display('components/Templates/tpl/inc.datatable.php', [
-				'attr' => $attributes,
-				'callbacks' => $callbacks,
-				'columns' => $columns,
+				'attr' => $this->attributes,
+				'callbacks' => $this->callbacks,
+				'columns' => $this->columns,
 				'iterable' => $this->iterable,
 				'table' => $this
 			]);
@@ -115,5 +143,17 @@
 				$this->sortable = $sortable;
 
 			return $this->sortable;
+		}
+
+		public function setAttributes($attributes) {
+			$this->attributes = $attributes;
+		}
+
+		public function setCallbacks($callbacks) {
+			$this->callbacks = $callbacks;
+		}
+
+		public function setColumns($columns) {
+			$this->columns = $columns;
 		}
 	}

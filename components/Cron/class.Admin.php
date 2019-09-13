@@ -10,15 +10,48 @@
 
 	namespace forge\components\Cron;
 
+	use forge\components\Admin\Administration;
+	use forge\components\Cron;
+	use forge\components\Identity;
+	use forge\components\Templates;
+	use forge\components\Templates\DataTable;
+	use forge\HttpException;
+
 	/**
 	* Software component of Forge 4
 	* Administration interface
 	*/
-	class Admin implements \forge\components\Admin\Administration {
+	class Admin implements Administration {
+		/**
+		 * Display the list of cron jobs
+		 * @return string
+		 * @throws HttpException
+		 * @throws \Exception
+		 */
 		static public function index() {
-			\forge\components\Identity::restrict('com.Cron.Admin');
+			Identity::restrict('com.Cron.Admin');
+
+			$jobs = Cron::getJobs();
+			$jobs = count($jobs) ? new DataTable($jobs) : null;
+			if ($jobs instanceof DataTable) {
+				$jobs->setColumns(['name' => 'Name', 'interval' => 'Interval', 'last' => 'Last run']);
+				$jobs->setCallbacks([
+					'name' => function($r) {
+						return (string)$r;
+					},
+					'interval' => function($r) {
+						/**
+						 * @var Job $r
+						 */
+						return $r::getCanonicalInterval();
+					},
+					'last' => function($r) {
+						return date('Y-m-d H:i:s', Cron::getLastRun($r));
+					}
+				]);
+			}
 
 			// Show the view
-			return \forge\components\Templates::display('components/Cron/tpl/adm.index.php', ['jobs' => \forge\components\Cron::getJobs()]);
+			return Templates::view('admin_jobs', ['jobs' => $jobs]);
 		}
 	}

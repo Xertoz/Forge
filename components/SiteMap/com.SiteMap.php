@@ -14,7 +14,7 @@
 	/**
 	* Supply a site map sort of function to Forge. This component WILL handle URL translations etc.
 	*/
-	class SiteMap extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox, \forge\components\Templates\RequireJS {
+	class SiteMap extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Admin\InfoBox, \forge\components\Templates\RequireJS {
 		use \forge\Configurable;
 
 		/**
@@ -38,12 +38,7 @@
 				'limit' => 1
 			]));
 
-			return \forge\components\Templates::display(
-				'components/SiteMap/tpl/inc.infobox.php',
-				array(
-					'pages' => $accounts->getPages()
-				)
-			);
+			return \forge\components\Templates::view('infobox', ['pages' => $accounts->getPages()]);
 		}
 
 		/**

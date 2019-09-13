@@ -10,15 +10,35 @@
 
 	namespace forge\components;
 
+	use forge\components\Admin\Menu;
+	use forge\components\Admin\MenuItem;
+	use forge\components\Templates\Engine;
+
 	/**
 	* Administration component
 	*/
-	final class Admin extends \forge\Component {
+	final class Admin extends \forge\Component implements Menu {
 		/**
 		* Permissions
 		* @var array
 		*/
 		static protected $permissions = ['Admin'];
+
+		/**
+		 * Get the menu items
+		 * @param \forge\components\SiteMap\db\Page Page
+		 * @param string Addon
+		 * @param string View
+		 * @return MenuItem
+		 */
+		static public function getAdminMenu($page, $addon, $view) {
+			$menu = new MenuItem('dashboard', self::l('Dashboard'), '/'.Templates::getVar('page')->page_url, 'fa fa-dashboard');
+
+			if ($addon === '\\forge\\components\\Admin')
+				$menu->setActive();
+
+			return $menu;
+		}
 
 		/**
 		 * Display the administration panel
@@ -77,17 +97,15 @@
 			
 			// If the view exists, then we should return the administration output
 			if (method_exists($class,$view)) {
-				\forge\components\Templates::setTemplate('forge-admin');
-				
-				return \forge\components\Templates::display(
-					'components/Admin/tpl/page.view.php',
-					array(
-						'admin' => true,
-						'css' => $css,
-						'menu' => $menu,
-						'view' => $class::$view()
-					)
-				);
+				Engine::requireJS();
+
+				return Templates::view('forge-admin/view', [
+					'admin' => true,
+					'css' => $css,
+					'ident' => Identity::getIdentity(),
+					'menu' => $menu,
+					'view' => $class::$view()
+				]);
 			}
 
 			// If we haven't reached the return line above, we've 404'd  the view

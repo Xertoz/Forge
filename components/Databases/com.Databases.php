@@ -15,7 +15,7 @@
 	/**
 	* Database component
 	*/
-	class Databases extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Dashboard\InfoBox {
+	class Databases extends \forge\Component implements \forge\components\Admin\Menu, \forge\components\Admin\InfoBox {
 		use \forge\Configurable;
 		
 		/**
@@ -148,12 +148,9 @@
 			if (!\forge\components\Identity::getIdentity()->hasPermission('com.Databases.Admin'))
 				return null;
 
-			return \forge\components\Templates::display(
-				'components/Databases/tpl/inc.infobox.php',
-				array(
-					'databases' => count(\forge\components\Databases::getConfig('connections'))
-				)
-			);
+			return \forge\components\Templates::view('infobox', [
+				'databases' => count(self::getConfig('connections'))
+			]);
 		}
 
 		/**

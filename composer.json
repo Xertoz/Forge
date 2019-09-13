@@ -55,6 +55,7 @@
 	"requirejs/domReady": "~2.0",
 	"requirejs/r.js": "~2.3",
     "datatables/datatables": "~1.10",
-	"datatables/rowreorder": "~1.2"
+	"datatables/rowreorder": "~1.2",
+	"smarty/smarty": "~3.1"
   }
 }
