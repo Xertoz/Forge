@@ -11,9 +11,15 @@
 	namespace forge;
 
 	use forge\components\Cron;
+	use forge\components\Databases\TableList;
 	use forge\components\Identity;
 	use forge\components\Locale;
+	use forge\components\SiteMap;
+	use forge\components\SiteMap\db\History;
+	use forge\components\SiteMap\db\Page;
 	use forge\components\Statistics;
+	use forge\components\Templates;
+	use forge\components\Templates\Engine;
 
 	// Load the Forge system
 	require_once 'forge.php';
@@ -47,9 +53,87 @@
 		Controller::handle();
 
 		if (strstr($_SERVER['HTTP_ACCEPT'], 'application/json') === false) {
-			// Factor a request handler and let it run
-			$handler = RequestHandler::factory($url);
-			$handler->handle();
+			// Did the user hit up the root index?
+			if (!$url) try {
+				$page = new Page();
+				$page->page_default = true;
+				$page->select('page_default');
+				/**
+				 * @var \forge\components\SiteMap\Page $type
+				 */
+				$type = new $page->page_type($page);
+			}
+			catch (\Exception $e) {
+				throw new HttpException('Page not found', HttpException::HTTP_NOT_FOUND);
+			}
+			else {
+				// Compile all possible URLs
+				$folders = explode('/', $url);
+				$urls = [];
+				for ($i=count($folders);$i>0;--$i)
+					$urls[] = implode('/', array_slice($folders, 0, $i));
+
+				// Look for the longest matching URL
+				$pages = new TableList([
+					'type' => new \forge\components\SiteMap\db\Page(),
+					'where' => [
+						'in:page_url' => $urls
+					],
+					'order' => ['page_url' => 'DESC'],
+					'limit' => 1
+				]);
+
+				// If we have a match, make sure it is exact or dynamic
+				if ($pages->length() === 1) {
+					$page = $pages[0];
+
+					/**
+					 * @var \forge\components\SiteMap\Page $type
+					 */
+					$type = new $page->page_type($page);
+
+					if ($page->page_url !== $url && !$type->isDynamic())
+						throw new HttpException('Page not found', HttpException::HTTP_NOT_FOUND);
+				}
+
+				// If we found nothing here, first look into the history before telling 404
+				if (!isset($page)) {
+					$history = new History();
+					$history->url = $url;
+
+					// Just tell the client 404 if we lack history
+					try {
+						$history->select('url');
+					}
+					catch (\Exception $e) {
+						throw new HttpException('Page not found',HttpException::HTTP_NOT_FOUND);
+					}
+
+					// Are we going to redirect?
+					if ($history->http === HttpException::HTTP_MOVED_PERMANENTLY)
+						SiteMap::redirect($history->redirect, $history->http);
+
+					// Otherwise, just throw a new exception
+					throw new HttpException('Page not found', $history->http);
+				}
+			}
+
+			Engine::setTitle($page->page_title);
+			Templates::setMeta(array(
+				'description' => $page->meta_description,
+				'keywords' => $page->meta_keywords,
+				'language' => Locale::getLocale()
+			));
+			Templates::setVar('page', $page);
+			Templates::setVar('type', $type);
+
+			$uri = ($s = strpos($_SERVER['REQUEST_URI'],'?')) !== false ? substr($_SERVER['REQUEST_URI'],1,--$s) : substr($_SERVER['REQUEST_URI'],1);
+
+			echo $type->view($page,array(
+				'REQ_URI' => $uri,
+				'PAGE_URI' => $page->page_url,
+				'SUB_URI' => substr($uri,1+strlen($page->page_url))
+			));
 		}
 		else {
 			if (Controller::getCode() == Controller::RESULT_BAD)
@@ -78,15 +162,11 @@
 		Cron::runJobs();
 	}
 	catch (HttpException $e) {
-		// Tell the user about the error in HTML
-		RequestHandler::setContentType('text/html;charset=UTF-8');
-		
 		// Set the appropriate response header
 		header($e->getHttpHeader(),$e->getCode());
 		require file_exists($file = 'errors/'.$e->getCode().'.html') ? $file : 'errors/500.html';
 	}
 	catch (\Exception $e) {
-		RequestHandler::setContentType('text/html;charset=UTF-8');
 		header('HTTP/1.1 500 Internal Server Error');
 		
 		if (Identity::isDeveloper())

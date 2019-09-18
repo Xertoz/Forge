@@ -439,18 +439,6 @@
 		}
 
 		/**
-		* Get thumbnail href
-		* @param string File path relative to site root
-		* @param int Width
-		* @param int Height
-		* @return string Thumbnail path
-		* @deprecated
-		*/
-		static public function thumb($file,$width,$height) {
-			return '/thumbnail/'.$width.'/'.$height.'/'.$file;
-		}
-
-		/**
 		 * Get the title element
 		 * @return string
 		 */

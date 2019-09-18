@@ -16,8 +16,8 @@
 	<link rel="icon" href="/templates/forge-admin/img/blog.png">
 	<script src="/templates/forge-admin/design.js"></script>
 </head>
-<body class="hold-transition {if isset($page)}skin-blue sidebar-mini{else}login-page{/if}{if isset($smarty.cookies.admin_menu) && $smarty.cookies.admin_menu === 'false'} sidebar-collapse{/if}">
-{if isset($page)}
+<body class="hold-transition {if $forge.ident}skin-blue sidebar-mini{else}login-page{/if}{if isset($smarty.cookies.admin_menu) && $smarty.cookies.admin_menu === 'false'} sidebar-collapse{/if}">
+{if $forge.ident}
 <div class="wrapper">
     {include file='navbar.tpl'}
     {include file='sidebar.tpl'}

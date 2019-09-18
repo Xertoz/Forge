@@ -1,4 +1,4 @@
-	{if isset($page)}
+	{if $forge.ident}
 		</div>
 		<footer class="main-footer">
 			<div class="pull-right hidden-xs"><b>{'Version'|l}</b> {FORGE_VERSION}</div>

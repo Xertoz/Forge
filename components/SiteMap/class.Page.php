@@ -51,6 +51,15 @@
 		const SEO_PRIORITY = '1';
 
 		/**
+		 * @var \forge\components\SiteMap\db\Page
+		 */
+		protected $page;
+
+		public function __construct(db\Page $page) {
+			$this->page = $page;
+		}
+
+		/**
 		 * Get page type title
 		 * @return string
 		 * @throws \Exception

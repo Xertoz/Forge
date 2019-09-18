@@ -57,11 +57,11 @@
 		
 		public function passthru() {
 			$modified = filemtime($this->path);
-			
-			\forge\RequestHandler::setContentType(MimeType::fromExtension($this->node->name));
-			\forge\RequestHandler::setContentLength(filesize($this->path));
-			\forge\RequestHandler::setLastModified($modified);
-			\forge\RequestHandler::setETag($this->blob->hash);
+
+			header('Content-Type: '.MimeType::fromExtension($this->node->name));
+			header('Content-Length: '.filesize($this->path));
+			header('Last-Modified: '.$modified);
+			header('ETag: '.$this->blob->hash);
 			
 			if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])
 					&& strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $modified)

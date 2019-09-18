@@ -12,6 +12,7 @@
 
 	use forge\components\Admin\MenuItem;
 	use \forge\components\Templates\Engine;
+	use forge\components\Templates\ViewHelper;
 
 	/**
 	* Manage templates
@@ -272,16 +273,15 @@
 			$view = count($view) === 1 ? $view[0] : $view[1];
 
 			// Who called?
-			$ns = explode('/', debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)[0]['file']);
-			array_pop($ns);
-			$addon = array_pop($ns);
+			$ns = explode('/', substr(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)[0]['file'], strlen(FORGE_PATH)));
+			$addon = $ns[2];
 
 			// Find the view file
 			$file = FORGE_PATH.'/templates/'.$template.'/'.$addon.'/'.$view.'.tpl';
 			if (!file_exists($file))
-				$file = FORGE_PATH.'/'.end($ns).'/'.$addon.'/tpl/'.$view.'.tpl';
+				$file = FORGE_PATH.'/'.$ns[1].'/'.$addon.'/tpl/'.$view.'.tpl';
 			if (!file_exists($file))
-				throw new \Exception('View not found: '.$view);
+				throw new \Exception('View not found: '.$file);
 
 			// Set up Smarty
 			$smarty = new \Smarty();
@@ -295,10 +295,16 @@
 			$smarty->registerPlugin('function', 'header', function($params) {
 				return Engine::header($params['tabs'] ?? 0);
 			});
+			$smarty->registerPlugin('function', 'input', function($params) {
+				return Engine::input($params['type'], $params['name'], $params['value'] ?? null, $params['auto'] ?? true, $params);
+			});
 
 			// Assign vars
 			foreach (array_merge(self::$vars, $vars) as $key => $mixed)
 				$smarty->assign($key, $mixed);
+
+			// Assign the magic forge variable
+			$smarty->assign('forge', new ViewHelper);
 
 			// Parse the view and return it
 			return $smarty->fetch($file);

@@ -125,23 +125,7 @@
 				if (!$install->isChecked())
 					goto results;
 
-				// Install the handlers
-				$handlers = [
-					'user' => 'forge\components\Accounts\UserHandler',
-					'cache' => 'forge\components\Files\CacheRequest',
-					'thumbnail' => 'forge\components\Files\ThumbnailRequest',
-					null => 'forge\components\SiteMap\PageHandler',
-					'json' => 'forge\components\JSON\JSONHandler',
-					'identity' => 'forge\components\Identity\RequestHandler'
-				];
-				foreach ($handlers as $base => $handler)
-					try {
-						\forge\RequestHandler::register($base, $handler);
-						$install->add(true, sprintf('Installing handler on %s', '/'.$base));
-					}
-					catch (\Exception $e) {
-						$install->add(false, sprintf('Installing handler on %s', '/'.$base));
-					}
+				// TODO: Install default pages that replace handlers
 
 				// Write the developer key
 				try {
