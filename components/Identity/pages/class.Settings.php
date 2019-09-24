@@ -42,7 +42,7 @@
 			Identity::auth();
 
 			// Display the settings page
-			return Templates::view('settings', [
+			return Templates::view('page_settings', [
 				'identity' => Identity::getIdentity(),
 				'providers' => Identity::getProviders()
 			]);

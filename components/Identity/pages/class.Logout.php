@@ -42,6 +42,6 @@
 			Identity::logout();
 
 			// Display the log out page
-			return Templates::view('logout');
+			return Templates::view('page_logout');
 		}
 	}

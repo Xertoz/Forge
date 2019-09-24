@@ -47,7 +47,7 @@
 			foreach (Identity::getProviders() as $provider)
 				$forms[] = $provider::showLogin();
 
-			$view = substr(Get::getString('from'), 0, strlen('/admin')) === '/admin' ? 'forge-admin/login' : 'login';
+			$view = substr(Get::getString('from'), 0, strlen('/admin')) === '/admin' ? 'forge-admin/page_login' : 'page_login';
 
 			// Display the log out page
 			return Templates::view($view, ['forms' => $forms]);

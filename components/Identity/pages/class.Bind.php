@@ -59,6 +59,6 @@
 					throw new HttpException('Duplicate account types', HttpException::HTTP_CONFLICT);
 
 			// Display the bind page
-			return Templates::view('bind', ['provider' => $target::showBind()]);
+			return Templates::view('page_bind', ['provider' => $target::showBind()]);
 		}
 	}
