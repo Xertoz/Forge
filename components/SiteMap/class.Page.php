@@ -55,7 +55,7 @@
 		 */
 		protected $page;
 
-		public function __construct(db\Page $page) {
+		public function __construct(db\Page $page=null) {
 			$this->page = $page;
 		}
 
