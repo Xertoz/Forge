@@ -1,0 +1,18 @@
+{
+  "name": "arosdigital/forge",
+  "description": "Build and deploy websites",
+  "type": "project",
+  "readme": "README.md",
+  "license": "Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License",
+  "authors": [{
+	"name": "Mattias Lindholm",
+	"email": "mattias@arosdigital.se",
+	"homepage": "http://www.xertoz.se",
+	"role": "Maintainer"
+  }],
+  "support": {
+	"email": "mattias@arosdigital.se",
+	"issues": "https://github.com/Xertoz/Forge/issues",
+	"source": "https://github.com/Xertoz/Forge"
+  }
+}
