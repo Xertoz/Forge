@@ -29,7 +29,7 @@
   }, {
 	"type": "package",
 	"package": {
-	  "name": "requirejs/domReady",
+	  "name": "requirejs/domready",
 	  "version": "2.0.1",
 	  "source": {
 		"type": "git",
@@ -52,7 +52,7 @@
   "require": {
 	"almasaeed2010/adminlte": "~2.4",
     "michelf/php-markdown": "~1.8",
-	"requirejs/domReady": "~2.0",
+	"requirejs/domready": "~2.0",
 	"requirejs/r.js": "~2.3",
     "datatables/datatables": "~1.10",
 	"datatables/rowreorder": "~1.2",
